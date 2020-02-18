@@ -1,0 +1,96 @@
+.k-grid-header, .k-header, .k-grid-header-wrap, .k-grouping-header, .k-grouping-header .k-group-indicator, .k-grid td, .k-grid-footer, .k-grid-footer-wrap, .k-grid-content-locked, .k-grid-footer-locked, .k-grid-header-locked, .k-filter-row > td, .k-filter-row > th {
+  border-color: rgba(0, 0, 0, 0.08);
+  background-color: #fff !important;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+.k-grid-header .k-header > .k-link {
+  color: rgba(0, 0, 0, 0.50) !important;
+  font-size: 0.75rem !important;
+  font-weight: 550 !important;
+  text-align: center;
+}
+
+.Grid-header {
+  color: #4285F4 !important;
+  font-size: 20px !important;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 550 !important;
+  line-height: 1.6 !important;
+  letter-spacing: 0.0075em !important;
+}
+
+.check-box-color {
+  color: rgba(0, 0, 0, 0.54) !important;
+  font-weight: 600 !important;
+}
+
+.column {
+  width: 100%;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  width: 90%;
+  margin-left: 40px;;
+  /* padding: 16px; */
+  text-align: center;
+  text-align: left;
+  background-color: #f1f1f1;
+}
+
+.k-grid-toolbar > * + * {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+/* .k-button {
+  background-color: #ffffff !important;
+} */
+
+.k-grid-content, .k-grid-content-locked, .k-pager-wrap {
+  white-space: normal;
+}
+.k-grid-pager {
+  padding: 8px;
+  border-width: 1px 0 0;
+  border-color: inherit;
+  font-size: inherit;
+}
+.k-pager-wrap {
+  color: #333333;
+  background-color: #ffffff !important;
+}
+.k-pager-wrap {
+  padding: 8px 8px;
+  border-width: 1px;
+  line-height: 1.4285714286;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  cursor: default;
+  flex: 0 0 auto;
+}
+.k-grid th{
+  border-width: 0 !important;
+}
+
+.apartment_grid_data,  tbody{
+  text-align: center !important;
+}
+
+.apartment_grid_toolbar_div, .k-grid-toolbar{
+  padding: 0px;
+}
+
+.k-checkbox:checked + .k-checkbox-label::before{
+    border-color: #215CA0;
+    background-color: #215CA0;
+}
+
+.apartment_grid_toolbar_div input{
+  border-radius: 0.52rem !important;
+}
