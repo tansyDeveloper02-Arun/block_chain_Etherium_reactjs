@@ -1,6 +1,19 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Block Chain Run
+## Block Chain 
+
+## truffle configuration:
+
+## truffle installation
+npm install -g truffle@3.4.6
+
+truffle version
+     Truffle v5.1.12 (core: 5.1.12)
+     Solidity - 0.4.19 (solc-js)
+     Node v12.0.0
+     Web3.js v1.2.1
+
+create a smart contract using below comands
 
 truffle develop
 
@@ -11,7 +24,7 @@ truffle migrate
 ## Available Scripts
 
 In the project directory, you can run:
-
+### npm install
 ### `npm start`
 
 Runs the app in the development mode.<br />
