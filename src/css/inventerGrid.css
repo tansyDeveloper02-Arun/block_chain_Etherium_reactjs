@@ -99,3 +99,16 @@
   color: #215CA0 !important;
   text-decoration: underline !important;
 }
+
+.k-grid th, .k-grid td{
+  border-style: none !important;
+}
+
+.k-virtual-content{
+  /* overflow-y */
+  overflow-y: hidden;
+}
+
+.apartment_grid_data, .k-grid-header{
+  padding:0px !important;
+}

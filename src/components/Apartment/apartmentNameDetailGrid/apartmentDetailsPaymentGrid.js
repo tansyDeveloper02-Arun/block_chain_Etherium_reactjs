@@ -313,7 +313,7 @@ class Apartment extends React.Component {
 
                             <Grid
                                 className="apartment_grid_data"
-                                style={{ fontFamily: "Lato ,Arial, Franklin Gothic Book", fontSize: "14px", fontWeight: "400" }}
+                                style={{ fontFamily: "Lato ,Arial, Franklin Gothic Book", fontSize: "14px", fontWeight: "400", boxShadow:"rgba(0, 0, 0, 0.3) 0px 0px 0px, rgba(0, 0, 0, 0.22) 0px 0px 4px"}}
                                 data={this.state.items}
                                 // data={orderBy(this.state.data.slice(this.state.skip, this.state.take + this.state.skip), this.state.sort)}
                                 skip={this.state.skip}

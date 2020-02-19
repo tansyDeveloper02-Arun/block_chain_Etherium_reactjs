@@ -10,13 +10,22 @@ export function MyCommandCell({ editField }) {
             console.log(this)
             const UPDATE_URL = "/apartment/detail/grid/details?id=" + this.props.dataItem.ProductID
             return inEdit ? null : (<td className="">
-                <Link 
+                {this.props.dataItem.Payment_status !== "Paid" ? <Link 
                     to={UPDATE_URL}
                     title="Edit"
                     className="anchor_tag"
                     style={{ padding: "0px" }}>
                     {this.props.dataItem.Payment_status}
                 </Link>
+                :
+                <label 
+                    to={UPDATE_URL}
+                    title="Edit"
+                    // className="anchor_tag"
+                    style={{ padding: "0px" }}>
+                    {this.props.dataItem.Payment_status}
+                </label>}
+                
             </td >
             );
         }
