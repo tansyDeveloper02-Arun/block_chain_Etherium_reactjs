@@ -1,7 +1,7 @@
 .k-grid-header, .k-header, .k-grid-header-wrap, .k-grouping-header, .k-grouping-header .k-group-indicator, .k-grid td, .k-grid-footer, .k-grid-footer-wrap, .k-grid-content-locked, .k-grid-footer-locked, .k-grid-header-locked, .k-filter-row > td, .k-filter-row > th {
   border-color: rgba(0, 0, 0, 0.08);
   background-color: #fff !important;
-  color: rgba(0, 0, 0, 0.87);
+  color: #414141;
   font-size: 0.8125rem;
   font-weight: 400;
   line-height: 28px;
@@ -9,8 +9,8 @@
 
 .k-grid-header .k-header > .k-link {
   color: rgba(0, 0, 0, 0.50) !important;
-  font-size: 0.75rem !important;
-  font-weight: 550 !important;
+  font-size: 0.95rem !important;
+  /* font-weight: 550 !important; */
   text-align: center;
 }
 
@@ -93,4 +93,9 @@
 
 .apartment_grid_toolbar_div input{
   border-radius: 0.52rem !important;
+}
+
+.k-grid .anchor_tag{
+  color: #215CA0 !important;
+  text-decoration: underline !important;
 }

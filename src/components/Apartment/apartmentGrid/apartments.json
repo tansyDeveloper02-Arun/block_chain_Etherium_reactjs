@@ -26,7 +26,8 @@
         "productType": "Assist",
         "MaintainInventory": "No",
         "Inventory": 0,
-        "Active": "active"
+        "Active": "active",
+        "Occupied": "True"
     },
     {
         "ProductID": 2,
@@ -55,7 +56,8 @@
         "productType": "Assist",
         "MaintainInventory": "No",
         "Inventory": 0,
-        "Active": "active"
+        "Active": "active",
+        "Occupied": "True"
     },
     {
         "ProductID": 3,
@@ -84,7 +86,8 @@
         "productType": "Assist",
         "MaintainInventory": "No",
         "Inventory": 0,
-        "Active": "active"
+        "Active": "active",
+        "Occupied": "True"
     },
     {
         "ProductID": 4,
@@ -113,7 +116,8 @@
         "productType": "Assist",
         "MaintainInventory": "No",
         "Inventory": 0,
-        "Active": "active"
+        "Active": "active",
+        "Occupied": "True"
     },
     {
         "ProductID": 5,
@@ -142,7 +146,8 @@
         "productType": "Assist",
         "MaintainInventory": "No",
         "Inventory": 0,
-        "Active": "active"
+        "Active": "active",
+        "Occupied": "True"
     },
     {
         "ProductID": 6,
@@ -171,7 +176,8 @@
         "productType": "Assist",
         "MaintainInventory": "No",
         "Inventory": 0,
-        "Active": "active"
+        "Active": "active",
+        "Occupied": "True"
     },
     {
         "ProductID": 7,
@@ -200,7 +206,8 @@
         "productType": "Assist",
         "MaintainInventory": "No",
         "Inventory": 0,
-        "Active": "active"
+        "Active": "active",
+        "Occupied": "True"
     },
     {
         "ProductID": 8,
@@ -229,7 +236,8 @@
         "productType": "Assist",
         "MaintainInventory": "No",
         "Inventory": 0,
-        "Active": "active"
+        "Active": "active",
+        "Occupied": "True"
     },
     {
         "ProductID": 9,
@@ -258,7 +266,8 @@
         "productType": "Assist",
         "MaintainInventory": "No",
         "Inventory": 0,
-        "Active": "active"
+        "Active": "active",
+        "Occupied": "True"
     },
     {
         "ProductID": 10,
@@ -285,9 +294,10 @@
         "contactNumber": 9676123450,
         "product": "Visa Renewal",
         "productType": "Assist",
-        "MaintainInventory": "No",
+        "MaintainInventory": "Yes",
         "Inventory": 0,
-        "Active": "active"
+        "Active": "active",
+        "Occupied": "True"
     },
     {
         "ProductID": 11,
@@ -316,7 +326,8 @@
         "productType": "Assist",
         "MaintainInventory": "No",
         "Inventory": 0,
-        "Active": "active"
+        "Active": "active",
+        "Occupied": "False"
     },
     {
         "ProductID": 12,
@@ -345,6 +356,7 @@
         "productType": "Assist",
         "MaintainInventory": "No",
         "Inventory": 0,
-        "Active": "active"
+        "Active": "active",
+        "Occupied": "True"
     }
 ]

@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, GridColumn as Column, GridToolbar } from '@progress/kendo-react-grid';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import products from './apartments.json';
-import { MyCommandCell } from './actioneditbutton.js';
+import { MyCommandCell } from './actionEditPaymentStatusbutton.js';
 import { filterBy } from '@progress/kendo-data-query';
 import { Input } from '@progress/kendo-react-inputs';
 import MyInventoryAnchorTag from './GridAnchorTag.js';
@@ -21,8 +21,16 @@ class Apartment extends React.Component {
         super(props);
         this.state = this.createState(0, 10);
         this.state.search= false;
+        
         this.pageChange = this.pageChange.bind(this);
-
+        for (let i = 0; i <= products.length; i++) {
+            if(products[i] !== undefined){
+                if(products[i]['ProductID'].toString() === this.props.location.search.slice(4)){
+                    this.state.apartmentName = products[i]['ProductName']
+                    this.state.unitName = products[i]['UnitsInStock']
+                }
+            }
+        }
     }
 
     lastSelectedIndex = 0;
@@ -167,21 +175,18 @@ class Apartment extends React.Component {
 
     }
     onClickEditButton = () => {
-
         this.setState({
             flagdisabled: true
         })
-
-
     }
     render() {
-
-        
+        var url = "/apartment/detail/grid" + this.props.location.search
+        var url2 = "/apartment/detail/grid/details" + this.props.location.search
         return (
             <div>
                 <br />
                 <div style={{ textAlign: "left", fontSize: "12px", marginLeft: "50px", color: "black" }}>
-                <Link to="">Apartment Admin</Link> > <Link to="">Apartments</Link> 
+                <Link to="">Apartment Admin</Link> > <Link to="/apartment/grid">Apartments</Link> > <Link to={url}>Apartment Details Grid</Link> > <Link to={url2}>Apartment Details Grid Details</Link> 
                 </div>
                 <br />
                 <div className="" style={{ margin:"16px" }}>
@@ -192,7 +197,7 @@ class Apartment extends React.Component {
                         >
                             <div
                                     style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", float: "left", marginBottom:"10px", fontSize: "20px", fontWeight: "500", color: "rgba (0,0,0,0.87)" }}
-                                ><span className="Grid-header" style={{color:"#4285F4 !important"}}>Apartments</span> 
+        ><span className="Grid-header" style={{color:"#4285F4 !important"}}>{this.state.apartmentName}- Apartment, Unit - {this.state.unitName}</span> 
                                 {this.state.deleteButton === true ? 
                                     <label style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", marginLeft: "10px", color: "rgba (0,0,0,0.87)" }}>{this.state.count} row(s) selected</label>
                                     : null}
@@ -308,7 +313,7 @@ class Apartment extends React.Component {
 
                             <Grid
                                 className="apartment_grid_data"
-                                style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", fontSize: "14px", fontWeight: "400" }}
+                                style={{ fontFamily: "Lato ,Arial, Franklin Gothic Book", fontSize: "14px", fontWeight: "400" }}
                                 data={this.state.items}
                                 // data={orderBy(this.state.data.slice(this.state.skip, this.state.take + this.state.skip), this.state.sort)}
                                 skip={this.state.skip}
@@ -329,8 +334,8 @@ class Apartment extends React.Component {
                                         sort: e.sort
                                     });
                                 }}
-                            >
-                                <Column
+                            >   
+                                {/* <Column
                                     className="check-box-color"
                                     field="selected"
                                     width="50px"
@@ -338,14 +343,13 @@ class Apartment extends React.Component {
                                     headerSelectionValue={
                                         this.state.items.findIndex(dataItem => dataItem.selected === false) === -1
                                     }
-                                />
-                                
-                                <Column field="product" title="Appartment Name" />
-                                <Column field="productType" title="Units" />
-                                <Column field="MaintainInventory" title="Occupied" />
-                                <Column field="MaintainInventory" title="Rented" />
+                                /> */}
+                                {/* <Column filterable={false} cell={this.CommandCell} title="Unit #"/> */}
+                                <Column field="Month" title="Month" />
+                                <Column field="Amount" title="Amount" />
+                                <Column filterable={false} cell={this.CommandCell} title="Status"/>
                                 {/* <Column field="Inventory" title="Inventory" /> */}
-                                <Column filterable={false} cell={this.CommandCell} title="Edit"/> 
+                                 
                             </Grid>
                         </ExcelExport>
 

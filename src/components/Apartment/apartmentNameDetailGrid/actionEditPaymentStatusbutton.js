@@ -7,14 +7,15 @@ export function MyCommandCell({ editField }) {
             const { dataItem } = this.props;
 
             const inEdit = dataItem[editField];
-            const UPDATE_URL = "/home/update-role?id=" + this.props.dataItem.ProductID
+            console.log(this)
+            const UPDATE_URL = "/apartment/detail/grid/details?id=" + this.props.dataItem.ProductID
             return inEdit ? null : (<td className="">
                 <Link 
                     to={UPDATE_URL}
                     title="Edit"
-                    className=""
+                    className="anchor_tag"
                     style={{ padding: "0px" }}>
-                    {this.props.dataItem.Amount}
+                    {this.props.dataItem.Payment_status}
                 </Link>
             </td >
             );

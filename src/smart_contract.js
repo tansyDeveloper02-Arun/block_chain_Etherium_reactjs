@@ -55,7 +55,6 @@ class App extends Component{
       get_units_visible:true,
       Get_units :units_identifier2
     })
-    console.log(units_identifier2)
   }
 
   onSetUnitSubmit= async (event) => {
@@ -67,7 +66,6 @@ class App extends Component{
         to:contractor
       });
 
-    console.log(units_identifier2.transactionHash)
     this.setState({
       set_unit_transaction_visible:true,
       set_unit_transaction_hash:units_identifier2.transactionHash
