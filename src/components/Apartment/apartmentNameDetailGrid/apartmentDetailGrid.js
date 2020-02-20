@@ -229,14 +229,14 @@ class Apartment extends React.Component {
                                 {this.state.count > 1 ? 
                                     <div className="editDiv">
                                         <button
-                                            className="k-button deleteButton"
+                                            className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0" }}
                                             disabled
 
                                         ><span className="k-icon k-i-pencil"></span>
                                         </button>
                                         <Link
-                                            className="k-button deleteButton"
+                                            className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
                                             disabled
 
@@ -245,14 +245,14 @@ class Apartment extends React.Component {
                                     </div> :
                                     <div>
                                     <Link
-                                        className="k-button deleteButton"
+                                        className="k-button"
                                         style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0" }}
                                         to="/apartment/edit"
                                     >
                                         <span className="k-icon k-i-pencil"></span>
                                     </Link>
                                     <Link
-                                            className="k-button deleteButton"
+                                            className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
                                             to="/apartment/add-unit"
                                         >Add Unit
@@ -262,7 +262,7 @@ class Apartment extends React.Component {
                             }</div> : null}
                                 {this.state.deleteButton === true ?
                                 <button
-                                    className="k-button deleteButton" style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0" }}
+                                    className="k-button" style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0" }}
                                 >
                                     <span className="k-icon k-i-delete " ></span>
                                 </button>
