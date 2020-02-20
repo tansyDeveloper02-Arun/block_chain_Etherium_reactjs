@@ -1,13 +1,13 @@
 import React from "react";
 import '../../../css/header.css';
 import '../../../css/Productdetail.css';
-import { Input } from '@progress/kendo-react-inputs';
-import { DropDownList, ComboBox } from '@progress/kendo-react-dropdowns';
+// import { Input } from '@progress/kendo-react-inputs';
+// import { DropDownList } from '@progress/kendo-react-dropdowns';
 // import { Ripple } from '@progress/kendo-react-ripple';
 import { Button } from '@progress/kendo-react-buttons';
 // import { Upload } from '@progress/kendo-react-upload';
 // import { ImageUpload } from "../../imageUpload";
-
+import products from './apartments.json';
 import { Link } from "react-router-dom";
 
 class ProductDetail extends React.Component {
@@ -18,14 +18,29 @@ class ProductDetail extends React.Component {
       success: false,
       value: new Date()
     };
+    for (let i = 0; i <= products.length; i++) {
+      if(products[i] !== undefined){
+          if(products[i]['ProductID'].toString() === this.props.location.search.slice(4)){
+              this.state.apartmentName = products[i]['ProductName']
+              this.state.unitName = products[i]['UnitsInStock']
+              this.state.Amount = products[i]['Amount']
+              this.state.Month = products[i]['Month']
+              
+          }
+      }
+  }
   }
   type=["Goods","Service"]
   inventory=["Finished goods","inventory asset","Work in progress"]
   purchase=["Advetising and marketing","Automobile expenses","Bad debt","bank fees and charges","Consult expenses","contract assets","salaries and employee wages","internet expenses","other expenses"]
   sizes = ["Discount", "income", "general income", "interest income","late fee income","other charges","sales","Shipping charge"];
+  onClickButton = (event) => {
+    this.props.history.push('/apartment/detail/grid/details'+ this.props.location.search);
+  }
   render() {
     var url = "/apartment/detail/grid" + this.props.location.search
     var url2 = "/apartment/detail/grid/details" + this.props.location.search
+    var url3 = "/apartment/detail/grid/details/Payment" + this.props.location.search
     return (
       <div>
         <div>
@@ -37,55 +52,51 @@ class ProductDetail extends React.Component {
               marginLeft: "45px",
               color: "black"
             }}> 
-            <Link to="">Apartment Admin</Link> > <Link to="/apartment/grid">Apartments</Link> > <Link to={url}>Apartment Details Grid</Link> > <Link to={url2}>Apartment Details Grid Details</Link>  >  <Link to="/home/product/grid">Apartment Payment Pending Details</Link>
+            <Link to="">Apartment Admin</Link> > <Link to="/apartment/grid">Apartments</Link> > <Link to={url}>Apartment Details Grid</Link> > <Link to={url2}>Apartment Details Grid Details</Link>  >  <Link to={url3}>Apartment Payment Pending Details</Link>
           </div>
         </div>
-
         <div className="row example-wrapper row_setting">
-        <div className="col-xs-10 col-sm-10 col-md-6">
+        <div className="col-sm">
             <div className="" style={{ textAlign:"left"}}>
               <div className="card-block">
-                <form className="k-form apartment_payment_detail_form" autocomplete="off" onSubmit={this.handleSubmit} style={{ color: "#333" }}>
-
-                  <fieldset autocomplete="off" className="fieldset_line">
-                    
-                    <div class="section__header">
-                      <h2 class="section__title">
+                <form className="k-form apartment_payment_detail_form"  onSubmit={this.handleSubmit} style={{ color: "#333" }}>
+                  <fieldset  className="fieldset_line">
+                    <div className="section__header">
+                      <h2 className="section__title">
                         Payment 
                       </h2>
                     </div>
-                    {/* <ImageUpload /> */}
-                    <div className="col-xs-12 col-sm-12 example-col" style={{ paddingLeft:"0px"}}>
-                      <p style={{ lineHeight: '2.5em' }}>
-                        <input type="checkbox" id="c1" className="k-checkbox" />
-                        <label className="k-checkbox-label" htmlFor="c1">Active</label><br />
-                      </p>
+                    <div className="row">
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                        Name<span style={{paddingLeft:"40px"}}>:</span> <span style={{paddingLeft:"18px"}}> {this.state.apartmentName}</span>
+                      </div>
                     </div>
-                    <div className="mb-3" >
-                      <DropDownList data={this.type} required label="Type" style={{ width: '100%' }} />
+                    <div className="row">
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      Unit<span style={{paddingLeft:"54px"}}>:</span> <span style={{paddingLeft:"18px"}}>{this.state.unitName}</span>
+                      </div>
+                      
                     </div>
-
-                    <div className="mb-3">
-                      <Input
-                        name="username"
-                        style={{ width: "100%" }}
-                        label="Name"
-                        // placeholder="First Name"
-                        pattern={"[A-Za-z]+"}
-                        minLength={2}
-                        required
-                      />
+                    <div className="row">
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                        Amount<span style={{paddingLeft:"28px"}}>:</span><span style={{paddingLeft:"20px"}}>{this.state.Amount}</span>
+                      </div>
                     </div>
-                    <div className="mb-3" >
-                      <ComboBox  label="Manufacturer" style={{ width: '100%' }} required/>
+                    <div className="row">
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                        Month<span style={{paddingLeft:"38px"}}>:</span> <span style={{paddingLeft:"18px"}}>{this.state.Month}</span>
+                      </div>
                     </div>
-
-                    <div className="mb-3" >
-                      <DropDownList label="Brand" style={{ width: '100%' }} required/>
+                    <div className="row">
+                        <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                        Balance<span style={{paddingLeft:"24px"}}>:</span> <span style={{paddingLeft:"18px"}}>1500</span>
+                        </div>
                     </div>
                     <div style={{ display: "flex", float: "right", width: "100px" }}>
-                    <Button class="button-save-details" >Save</Button>
+                    {/* <Button className="button-cancel-details"  >Save</Button> */}
+                    <Button className="button-cancel-details" onClick={() => { this.onClickButton("cancel") }} >Cancel</Button>
                   </div>
+                  
                   </fieldset>
                   
                 </form>

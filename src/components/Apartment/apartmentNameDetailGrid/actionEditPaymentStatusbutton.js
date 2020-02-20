@@ -7,7 +7,6 @@ export function MyCommandCell({ editField }) {
             const { dataItem } = this.props;
 
             const inEdit = dataItem[editField];
-            console.log(this)
             const UPDATE_URL = "/apartment/detail/grid/details/Payment?id=" + this.props.dataItem.ProductID
             return inEdit ? null : (<td className="">
                 {this.props.dataItem.Payment_status !== "Paid" ? <Link 

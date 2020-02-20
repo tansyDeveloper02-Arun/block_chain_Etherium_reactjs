@@ -112,3 +112,7 @@
 .apartment_grid_data, .k-grid-header{
   padding:0px !important;
 }
+
+.input_field{
+  border-radius: 0.25em !important;
+}

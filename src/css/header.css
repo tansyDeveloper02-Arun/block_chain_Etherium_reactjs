@@ -332,13 +332,14 @@
   position: relative;
   padding-bottom: 20px;
   margin-bottom: 30px;
+  color: #0056b3;
 }
 .heading-29190:before, .heading-29190:after {
   position: absolute;
   content: "";
   width: 50px;
   height: 2px;
-  background: #000;
+  background: #0056b3;
   left: 50%;
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);

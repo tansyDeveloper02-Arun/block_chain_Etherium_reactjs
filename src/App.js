@@ -11,6 +11,7 @@ import apartmentDetailGrid from "./components/Apartment/apartmentNameDetailGrid/
 import apartmentDetailGridDetail from "./components/Apartment/apartmentNameDetailGrid/apartmentDetailsPaymentGrid";
 import apartmentDetailPaymentDetail from "./components/Apartment/apartmentNameDetailGrid/apartmentDetailsPaymentDetail";
 import contract from "./smart_contract";
+import 'bootstrap/dist/css/bootstrap.min.css';
 // import ApartmentDetails from './'
 class App extends Component{
 
