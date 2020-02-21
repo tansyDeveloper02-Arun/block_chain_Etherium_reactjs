@@ -10,6 +10,9 @@ import apartmentGrid from "./components/Apartment/apartmentGrid/apartmentGrid";
 import apartmentDetailGrid from "./components/Apartment/apartmentNameDetailGrid/apartmentDetailGrid";
 import apartmentDetailGridDetail from "./components/Apartment/apartmentNameDetailGrid/apartmentDetailsPaymentGrid";
 import apartmentDetailPaymentDetail from "./components/Apartment/apartmentNameDetailGrid/apartmentDetailsPaymentDetail";
+import addNewApartment from "./components/Apartment/apartmentNameDetailGrid/addNewApartment";
+import addNewUnit from "./components/Apartment/apartmentNameDetailGrid/addNewUnit";
+
 import contract from "./smart_contract";
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import ApartmentDetails from './'
@@ -28,6 +31,9 @@ class App extends Component{
             <Route exact path='/apartment/detail/grid/details' component={apartmentDetailGridDetail} />
             <Route exact path='/apartment/detail/grid/details/Payment' component={apartmentDetailPaymentDetail} />
             <Route exact path='/contract-code' component={contract} />
+            <Route exact path='/apartment/grid/add' component={addNewApartment} />
+            <Route exact path='/apartment/new-unit/add' component={addNewUnit} />
+            
             {/* <Route exact path='/login' component={Login} />
             <Route exact path='/forgot-password' component={forgotPassword} />
             <Route exact path='/home/homepage' component={HomePage} /> */}

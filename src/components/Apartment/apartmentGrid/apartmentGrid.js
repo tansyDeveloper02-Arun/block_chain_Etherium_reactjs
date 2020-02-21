@@ -164,7 +164,10 @@ class Apartment extends React.Component {
             })
 
         }
-
+        if (event === "add_new_apartment") {
+            this.props.history.push("/apartment/grid/add")
+        }
+        
     }
     onClickEditButton = () => {
 
@@ -294,7 +297,7 @@ class Apartment extends React.Component {
                             <button
                                     title="Add"
                                     type="button"
-                                    to="#"
+                                    onClick={() => { this.onClickButton("add_new_apartment") }}
                                     className="k-button role-main-Link-plus-button"
                                     style={{ float: "right",color: "#fff", backgroundColor:"#215CA0" }}
                                 >
