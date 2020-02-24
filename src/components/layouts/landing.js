@@ -19,7 +19,7 @@ export class Landing extends React.Component {
             </div>
             <div className="col-md-6 col-lg-4">
               <div className="service-29128 text-center">
-              <b><Link to="/tenant_admin">Tenant Admin</Link></b>
+              <b><Link to="/tenant/grid">Tenant Admin</Link></b>
               </div>
             </div>
             <div className="col-md-6 col-lg-4">

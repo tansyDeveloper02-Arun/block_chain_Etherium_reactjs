@@ -22,7 +22,17 @@ class Apartment extends React.Component {
         this.state = this.createState(0, 10);
         this.state.search= false;
         this.pageChange = this.pageChange.bind(this);
-
+        this.state.tenant = false;
+        if(this.props.location.pathname === "/tenant/apartment/grid"){
+            this.state.tenant = true;
+            for (let i = 0; i <= products.length; i++) {
+                if(products[i] !== undefined){
+                    if(products[i]['ProductID'].toString() === this.props.location.search.slice(4)){
+                        this.state.buildingName = products[i]['ProductName']
+                    }
+                }
+            }
+        }
     }
 
     lastSelectedIndex = 0;
@@ -44,11 +54,13 @@ class Apartment extends React.Component {
         ],
         search: false,
         deleteButton: false,
+        tenant: this.props,
         count: 0,
         flagdisabled: ""
     }
     CommandCell = MyCommandCell({
-        editField: this.editField
+        editField: this.editField,
+        tenant:this.state.tenant
     });
 
 
@@ -178,13 +190,16 @@ class Apartment extends React.Component {
 
     }
     render() {
-
-        
+        var url = "/tenant/apartment/grid" + this.props.location.search
         return (
             <div>
                 <div className="" style={{ margin:"16px" }}>
                     <div style={{ textAlign: "left", fontSize: "12px", color: "black" }}>
-                        <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link><Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span> </Link> 
+                        <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link>
+                        {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span></Link>: 
+                        <Link className="link_tag_2" to="/tenant/grid"><span> Tenants</span><span className="link_tag_2_curve"></span></Link>}
+                        {this.state.tenant === false ? null: 
+                        <Link className="link_tag_3" to={url}><span> Tenants Name Grid</span><span className="link_tag_3_curve"></span></Link>}
                     </div>
                     <br/>
                     <div className="apartment_grid_toolbar_div">
@@ -194,7 +209,9 @@ class Apartment extends React.Component {
                         >
                             <div
                                     style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", float: "left", marginBottom:"10px", fontSize: "20px", fontWeight: "500", color: "rgba (0,0,0,0.87)" }}
-                                ><span className="Grid-header" style={{color:"#4285F4 !important"}}>APARTMENTS</span> 
+                                >
+                                    {this.state.tenant=== true ? 
+                                    <span className="Grid-header" style={{color:"#4285F4 !important"}}>{this.state.buildingName}- Apartment</span> : <span className="Grid-header" style={{color:"#4285F4 !important"}}>APARTMENTS</span> }
                                 {this.state.deleteButton === true ? 
                                     <label style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", marginLeft: "10px", color: "rgba (0,0,0,0.87)" }}>{this.state.count} row(s) selected</label>
                                     : null}
@@ -341,7 +358,7 @@ class Apartment extends React.Component {
                                         this.state.items.findIndex(dataItem => dataItem.selected === false) === -1
                                     }
                                 />
-                                <Column filterable={false} cell={this.CommandCell} title="Appartment Name"/>
+                                <Column filterable={false} cell={this.CommandCell} title="Name"/>
                                 {/* <Column field="product" title="Appartment Name" /> */}
                                 <Column field="productType" title="Units" />
                                 <Column field="Discontinued" title="Occupied" />

@@ -21,20 +21,8 @@ class Apartment extends React.Component {
         super(props);
         this.state = this.createState(0, 10);
         this.state.search= false;
-        
         this.pageChange = this.pageChange.bind(this);
-        for (let i = 0; i <= products.length; i++) {
-            if(products[i] !== undefined){
-                if(products[i]['ProductID'].toString() === this.props.location.search.slice(4)){
-                    this.state.apartmentName = products[i]['ProductName']
-                }
-            }
-        }
-        if(this.props.location.pathname === "/tenant/apartment/detail/grid"){
-            this.state.tenant = true;
-        }else{
-            this.state.tenant = false;
-        }
+
     }
 
     lastSelectedIndex = 0;
@@ -60,8 +48,7 @@ class Apartment extends React.Component {
         flagdisabled: ""
     }
     CommandCell = MyCommandCell({
-        editField: this.editField,
-        tenant:this.props
+        editField: this.editField
     });
 
 
@@ -177,32 +164,27 @@ class Apartment extends React.Component {
             })
 
         }
-
+        if (event === "add_new_apartment") {
+            this.props.history.push("/tenant/apartment/grid/add")
+        }
+        
     }
     onClickEditButton = () => {
+
         this.setState({
             flagdisabled: true
         })
+
+
     }
     render() {
-        var url1 = "/apartment/detail/grid" + this.props.location.search
-        var url = "/tenant/apartment/grid" + this.props.location.search
-        var url2 = "/tenant/apartment/detail/grid" + this.props.location.search
-        console.log(this.state.tenant)
+
+        
         return (
             <div>
                 <div className="" style={{ margin:"16px" }}>
-                <div style={{ textAlign: "left", fontSize: "12px", color: "black" }}>
-                        <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link>
-                        
-                        {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span></Link>: 
-                        <Link className="link_tag_2" to="/tenant/grid"><span> Tenants</span><span className="link_tag_2_curve"></span></Link>}
-                        
-                        {this.state.tenant === false ? null: 
-                        <Link className="link_tag_3" to={url}><span> Tenants Name Grid</span><span className="link_tag_3_curve"></span></Link>}
-                        
-                        {this.state.tenant === false ? <Link className="link_tag_3" to={url1}> <span>Apartment Details Grid</span><span className="link_tag_3_curve"></span> </Link>: 
-                        <Link className="link_tag_2" to={url2}><span> Tenants Name Details Grid</span><span className="link_tag_2_curve"></span></Link>}
+                    <div style={{ textAlign: "left", fontSize: "12px", color: "black" }}>
+                        <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link><Link className="link_tag_2" to="/tenant/grid"><span> Tenants</span><span className="link_tag_2_curve"></span> </Link> 
                     </div>
                     <br/>
                     <div className="apartment_grid_toolbar_div">
@@ -212,7 +194,7 @@ class Apartment extends React.Component {
                         >
                             <div
                                     style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", float: "left", marginBottom:"10px", fontSize: "20px", fontWeight: "500", color: "rgba (0,0,0,0.87)" }}
-        ><span className="Grid-header" style={{color:"#4285F4 !important"}}>{this.state.apartmentName}- Apartment</span> 
+                                ><span className="Grid-header" style={{color:"#4285F4 !important"}}>TENANTS</span> 
                                 {this.state.deleteButton === true ? 
                                     <label style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", marginLeft: "10px", color: "rgba (0,0,0,0.87)" }}>{this.state.count} row(s) selected</label>
                                     : null}
@@ -263,14 +245,14 @@ class Apartment extends React.Component {
                                     <Link
                                         className="k-button"
                                         style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0" }}
-                                        to="/apartment/edit"
+                                        to="/tenant/apartment/edit"
                                     >
                                         <span className="k-icon k-i-pencil"></span>
                                     </Link>
                                     <Link
                                             className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
-                                            to="/apartment/add-unit"
+                                            to="/tenant/apartment/add-unit"
                                         >Add Unit
                                         </Link>
                                     </div>
@@ -314,7 +296,7 @@ class Apartment extends React.Component {
                             <button
                                     title="Add"
                                     type="button"
-                                    to="#"
+                                    onClick={() => { this.onClickButton("add_new_apartment") }}
                                     className="k-button role-main-Link-plus-button"
                                     style={{ float: "right",color: "#fff", backgroundColor:"#215CA0" }}
                                 >
@@ -328,7 +310,7 @@ class Apartment extends React.Component {
 
                             <Grid
                                 className="apartment_grid_data"
-                                style={{ fontFamily: "Lato ,Arial, Franklin Gothic Book", fontSize: "14px", fontWeight: "400" }}
+                                style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", fontSize: "14px", fontWeight: "400" }}
                                 data={this.state.items}
                                 // data={orderBy(this.state.data.slice(this.state.skip, this.state.take + this.state.skip), this.state.sort)}
                                 skip={this.state.skip}
@@ -359,12 +341,11 @@ class Apartment extends React.Component {
                                         this.state.items.findIndex(dataItem => dataItem.selected === false) === -1
                                     }
                                 />
-                                {/* <Column filterable={false} cell={this.CommandCell} title="Unit #"/> */}
-                                <Column field="UnitsInStock" title="Unit #" />
-                                <Column field="floor" title="Floor" />
-                                <Column field="Discontinued" title="Occupied" />
-                                <Column field="address" title="Tenant Address" />
-                                <Column filterable={false} cell={this.CommandCell} title="Amount"/>
+                                <Column filterable={false} cell={this.CommandCell} title="Building Name"/>
+                                {/* <Column field="product" title="Appartment Name" /> */}
+                                <Column field="UnitsInStock" title="Units" />
+                                <Column field="Amount" title="Amount" />
+                                <Column field="MaintainInventory" title="Rented" />
                                 {/* <Column field="Inventory" title="Inventory" /> */}
                                  
                             </Grid>

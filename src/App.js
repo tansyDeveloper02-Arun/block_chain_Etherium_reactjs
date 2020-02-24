@@ -12,7 +12,7 @@ import apartmentDetailGridDetail from "./components/Apartment/apartmentNameDetai
 import apartmentDetailPaymentDetail from "./components/Apartment/apartmentNameDetailGrid/apartmentDetailsPaymentDetail";
 import addNewApartment from "./components/Apartment/apartmentNameDetailGrid/addNewApartment";
 import addNewUnit from "./components/Apartment/apartmentNameDetailGrid/addNewUnit";
-
+import tenantDetailGrid from "./components/Tenant/tenantGrid/tenantGrid";
 import contract from "./smart_contract";
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import ApartmentDetails from './'
@@ -33,7 +33,11 @@ class App extends Component{
             <Route exact path='/contract-code' component={contract} />
             <Route exact path='/apartment/grid/add' component={addNewApartment} />
             <Route exact path='/apartment/new-unit/add' component={addNewUnit} />
-            
+            {/* Tenant */}
+            <Route exact path='/tenant/grid' component={tenantDetailGrid} />
+            <Route exact path='/tenant/apartment/grid' component={apartmentGrid} />
+            <Route exact path='/tenant/apartment/detail/grid' component={apartmentDetailGrid} />
+            <Route exact path='/tenant/apartment/detail/grid/details/Payment' component={apartmentDetailPaymentDetail} />
             {/* <Route exact path='/login' component={Login} />
             <Route exact path='/forgot-password' component={forgotPassword} />
             <Route exact path='/home/homepage' component={HomePage} /> */}

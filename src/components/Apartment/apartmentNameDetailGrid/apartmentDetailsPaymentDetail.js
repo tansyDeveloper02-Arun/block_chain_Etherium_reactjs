@@ -29,6 +29,11 @@ class ProductDetail extends React.Component {
           }
       }
   }
+  if(this.props.location.pathname === "/tenant/apartment/detail/grid/details/Payment"){
+        this.state.tenant = true;
+    }else{
+        this.state.tenant = false;
+    }
   }
   type=["Goods","Service"]
   inventory=["Finished goods","inventory asset","Work in progress"]
@@ -41,6 +46,9 @@ class ProductDetail extends React.Component {
     var url = "/apartment/detail/grid" + this.props.location.search
     var url2 = "/apartment/detail/grid/details" + this.props.location.search
     var url3 = "/apartment/detail/grid/details/Payment" + this.props.location.search
+    var url4 = "/tenant/apartment/grid" + this.props.location.search
+    var url5 = "/tenant/apartment/detail/grid" + this.props.location.search
+    var url6 = "/tenant/apartment/detail/grid/details/Payment" + this.props.location.search
     return (
       <div>
         <div>
@@ -53,9 +61,18 @@ class ProductDetail extends React.Component {
               color: "black"
             }}> 
             <div style={{ textAlign: "left", fontSize: "12px", color: "black" }}>
-                        <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link><Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span> </Link> <Link className="link_tag_3" to={url}> <span>Apartment Details Grid</span><span className="link_tag_3_curve"></span> </Link>
-                        <Link className="link_tag_2" to={url2}><span> Apartment Details Grid Details</span><span className="link_tag_2_curve"></span> </Link>
-                        <Link className="link_tag_3" to={url3}> <span>Apartment Payment Pending Details</span><span className="link_tag_3_curve"></span> </Link>
+                        <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link>
+                        {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span></Link>: 
+                        <Link className="link_tag_2" to="/tenant/grid"><span> Tenants</span><span className="link_tag_2_curve"></span></Link>}
+                        {this.state.tenant === false ? <Link className="link_tag_3" to={url}> <span>Apartment Details Grid</span><span className="link_tag_3_curve"></span> </Link>: 
+                        <Link className="link_tag_3" to={url4}><span> Tenants Name Grid</span><span className="link_tag_3_curve"></span></Link>}
+                        
+                        {this.state.tenant === false ? <Link className="link_tag_2" to={url2}><span> Apartment Details Grid Details</span><span className="link_tag_2_curve"></span> </Link>: null}
+                        {this.state.tenant === false ? 
+                        <Link className="link_tag_3" to={url3}> <span>Apartment Payment Pending Details</span><span className="link_tag_3_curve"></span> </Link> : <Link className="link_tag_2" to={url5}><span> Tenants Name Details Grid</span><span className="link_tag_2_curve"></span></Link>}
+
+                        {this.state.tenant === false ? null: 
+                        <Link className="link_tag_3" to={url6}><span> Tenants Name Payment Grid Detail</span><span className="link_tag_3_curve"></span></Link>}
                     </div>
                     <br/>
           </div>
