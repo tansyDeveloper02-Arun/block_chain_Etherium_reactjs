@@ -62,11 +62,12 @@
 }
 .k-pager-wrap {
   color: #333333;
-  background-color: #ffffff !important;
+  background-color: #efefef !important;
 }
 .k-pager-wrap {
   padding: 8px 8px;
-  border-width: 1px;
+  /* border-width: 1px; */
+  border: none !important;
   line-height: 1.4285714286;
   display: flex;
   align-items: center;
@@ -110,10 +111,162 @@
   overflow-y: hidden;
 }
 
-.apartment_grid_data, .k-grid-header{
+.apartment_grid_data .k-grid-header{
   padding:0px !important;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.30), 0 0px 2px rgba(0, 0, 0, 0.22);
+}
+.apartment_grid_data .k-grid-container{
+  padding:0px !important;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.30), 0 0px 2px rgba(0, 0, 0, 0.22);
 }
 
 .input_field{
   border-radius: 0.25em !important;
+}
+
+.apartment_grid_data, .k-widget{
+  border-style: none !important;
+  border-width: 0px !important;
+}
+
+.k-pager-wrap .k-pager-first{
+  display: none;
+}
+
+.k-pager-wrap .k-pager-last{
+  display: none;
+}
+
+.k-pager-sizes{
+  display: none !important;
+}
+
+.link_tag{
+  background-color: rgb(33, 92, 160);
+  color: #fff;
+  text-decoration: none;
+  padding: 9px;
+  padding-left: 0px;
+  padding-right: 10px;
+  z-index: 1000 !important;
+  position: relative;
+  overflow: hidden;
+  text-align: right;
+  z-index: 1000;
+}
+.link_tag .k-i-pencil::before{
+  z-index: 1000;
+  left: 10px;
+  position: absolute;
+}
+.link_tag span::after{
+  content:"";
+  position:absolute;
+  height:100%;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  top:0;
+  border:15px solid transparent;
+  box-shadow: 0px 0px rgba(0, 0, 0, 0.30), 2px 0px 3px rgba(0, 0, 0, 0.30);
+  background-color: rgb(33, 92, 160);
+  z-index: 0;
+ }
+.link_tag:hover{
+  background-color: rgb(33, 92, 160);
+  color: #fff;
+  text-decoration: none;
+  padding: 9px;
+  padding-left: 0px;
+  padding-right: 10px;
+  z-index: 1000 !important;
+  position: relative;
+  overflow: hidden;
+  text-align: right;
+  z-index: 1000;
+}
+.link_tag_2{
+  background-color: rgb(33, 92, 160);
+  color: #fff;
+  padding: 9px;
+  padding-left: 19px;
+  padding-right: 10px;
+  box-shadow: 10px;
+  margin-left: 7px;
+  box-shadow: 0px 0px rgba(0, 0, 0, 0.30), 2px 0px 3px rgba(0, 0, 0, 0.30);
+  position: relative;
+  
+}
+/* .link_tag_2 span::after{
+  content:"";
+  position:absolute;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  top: 9px;
+  border:16px solid transparent;
+  box-shadow: 0px 0px rgba(0, 0, 0, 0.30), 2px 0px 3px rgba(0, 0, 0, 0.30);
+  background-color: rgb(33, 92, 160);
+  z-index: 0;
+ } */
+ .link_tag_2:hover{
+  background-color: rgb(33, 92, 160);
+  color: #fff;
+  padding: 9px;
+  padding-left: 19px;
+  padding-right: 10px;
+  box-shadow: 10px;
+  margin-left: 9px;
+  text-decoration: none;
+  box-shadow: 0px 0px rgba(0, 0, 0, 0.30), 2px 0px 3px rgba(0, 0, 0, 0.30);
+}
+.link_tag_3{
+  background-color: #fff;
+  color: rgb(33, 92, 160);
+  padding: 9px;
+  padding-left: 19px;
+  padding-right: 10px;
+  box-shadow: 10px;
+  margin-left: 7px;
+  box-shadow: 0px 0px rgba(0, 0, 0, 0.30), 2px 0px 3px rgba(0, 0, 0, 0.30);
+  position: relative;
+}
+/* .link_tag_3 span::after{
+  content:"";
+  position:absolute;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  top: 9px;
+  border:16px solid transparent;
+  box-shadow: 0px 0px rgba(0, 0, 0, 0.30), 2px 0px 3px rgba(0, 0, 0, 0.30);
+  background-color: #fff;
+  z-index: 0;
+ } */
+ .link_tag_3:hover{
+  background-color: #fff;
+  color: rgb(33, 92, 160);
+  padding: 9px;
+  padding-left: 19px;
+  padding-right: 10px;
+  box-shadow: 10px;
+  margin-left: 9px;
+  text-decoration: none;
+}
+
+.link_tag_2_curve{
+  position: absolute;
+  border: 16px solid rgb(33, 92, 160);
+  top: 0;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  box-shadow: 0px 0px rgba(0, 0, 0, 0.30), 2px 0px 3px rgba(0, 0, 0, 0.30);
+  z-index: 1000;
+}
+
+.link_tag_3_curve{
+  position: absolute;
+  border: 16px solid #fff;
+  top: 0;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  box-shadow: 0px 0px rgba(0, 0, 0, 0.30), 2px 0px 3px rgba(0, 0, 0, 0.30);
+  z-index: 1000;
 }

@@ -184,12 +184,13 @@ class Apartment extends React.Component {
         var url2 = "/apartment/detail/grid/details" + this.props.location.search
         return (
             <div>
-                <br />
-                <div style={{ textAlign: "left", fontSize: "12px", marginLeft: "50px", color: "black" }}>
-                <Link to="">Apartment Admin</Link> > <Link to="/apartment/grid">Apartments</Link> > <Link to={url}>Apartment Details Grid</Link> > <Link to={url2}>Apartment Details Grid Details</Link> 
-                </div>
-                <br />
+                
                 <div className="" style={{ margin:"16px" }}>
+                    <div style={{ textAlign: "left", fontSize: "12px", color: "black" }}>
+                            <Link className="link_tag" to=""><span className="k-icon k-i-pencil"></span></Link><Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span> </Link> <Link className="link_tag_3" to={url}> <span>Apartment Details Grid</span><span className="link_tag_3_curve"></span> </Link>
+                            <Link className="link_tag_2" to={url2}><span> Apartment Details Grid Details</span><span className="link_tag_2_curve"></span> </Link>
+                        </div>
+                        <br/>
                     <div className="apartment_grid_toolbar_div">
                         <ExcelExport
                             data={this.state.data}

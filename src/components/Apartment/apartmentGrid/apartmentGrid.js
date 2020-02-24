@@ -182,12 +182,11 @@ class Apartment extends React.Component {
         
         return (
             <div>
-                <br />
-                <div style={{ textAlign: "left", fontSize: "12px", marginLeft: "50px", color: "black" }}>
-                <Link to="">Apartment Admin</Link> > <Link to="/apartment/grid">Apartments</Link> 
-                </div>
-                <br />
                 <div className="" style={{ margin:"16px" }}>
+                    <div style={{ textAlign: "left", fontSize: "12px", color: "black" }}>
+                        <Link className="link_tag" to=""><span className="k-icon k-i-pencil"></span></Link><Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span> </Link> 
+                    </div>
+                    <br/>
                     <div className="apartment_grid_toolbar_div">
                         <ExcelExport
                             data={this.state.data}

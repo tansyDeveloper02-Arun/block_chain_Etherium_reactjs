@@ -52,7 +52,12 @@ class ProductDetail extends React.Component {
               marginLeft: "45px",
               color: "black"
             }}> 
-            <Link to="">Apartment Admin</Link> > <Link to="/apartment/grid">Apartments</Link> > <Link to={url}>Apartment Details Grid</Link> > <Link to={url2}>Apartment Details Grid Details</Link>  >  <Link to={url3}>Apartment Payment Pending Details</Link>
+            <div style={{ textAlign: "left", fontSize: "12px", color: "black" }}>
+                        <Link className="link_tag" to=""><span className="k-icon k-i-pencil"></span></Link><Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span> </Link> <Link className="link_tag_3" to={url}> <span>Apartment Details Grid</span><span className="link_tag_3_curve"></span> </Link>
+                        <Link className="link_tag_2" to={url2}><span> Apartment Details Grid Details</span><span className="link_tag_2_curve"></span> </Link>
+                        <Link className="link_tag_3" to={url3}> <span>Apartment Payment Pending Details</span><span className="link_tag_3_curve"></span> </Link>
+                    </div>
+                    <br/>
           </div>
         </div>
         <div className="row example-wrapper row_setting">
