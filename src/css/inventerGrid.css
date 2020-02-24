@@ -154,10 +154,11 @@
   text-align: right;
   z-index: 1000;
 }
-.link_tag .k-i-pencil::before{
+.link_tag .k-i-pencils::before{
   z-index: 1000;
   left: 10px;
   position: absolute;
+  margin-left: 7px;
 }
 .link_tag span::after{
   content:"";

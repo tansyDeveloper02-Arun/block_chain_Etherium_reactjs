@@ -184,7 +184,7 @@ class Apartment extends React.Component {
             <div>
                 <div className="" style={{ margin:"16px" }}>
                     <div style={{ textAlign: "left", fontSize: "12px", color: "black" }}>
-                        <Link className="link_tag" to=""><span className="k-icon k-i-pencil"></span></Link><Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span> </Link> 
+                        <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link><Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span> </Link> 
                     </div>
                     <br/>
                     <div className="apartment_grid_toolbar_div">
