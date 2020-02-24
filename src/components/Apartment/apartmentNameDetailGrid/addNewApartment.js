@@ -65,7 +65,7 @@ class ProductDetail extends React.Component {
         <div className="col-sm">
             <div className="" style={{ textAlign:"left"}}>
               <div className="card-block">
-                <form className="k-form apartment_payment_detail_form"  onSubmit={this.handleSubmit} style={{ color: "#333" }}>
+                <form className="k-form apartment_payment_detail_form"  onSubmit={this.handleSubmit} style={{ color: "#333", backgroundColor:"#FFFFFF" }}>
                   <fieldset  className="fieldset_line">
                     <div className="section__header">
                       <h2 className="section__title">

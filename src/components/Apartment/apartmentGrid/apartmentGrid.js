@@ -195,7 +195,7 @@ class Apartment extends React.Component {
                         >
                             <div
                                     style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", float: "left", marginBottom:"10px", fontSize: "20px", fontWeight: "500", color: "rgba (0,0,0,0.87)" }}
-                                ><span className="Grid-header" style={{color:"#4285F4 !important"}}>Apartments</span> 
+                                ><span className="Grid-header" style={{color:"#4285F4 !important"}}>APARTMENTS</span> 
                                 {this.state.deleteButton === true ? 
                                     <label style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", marginLeft: "10px", color: "rgba (0,0,0,0.87)" }}>{this.state.count} row(s) selected</label>
                                     : null}

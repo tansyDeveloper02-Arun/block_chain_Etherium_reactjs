@@ -11,14 +11,14 @@
   color: rgba(0, 0, 0, 0.50) !important;
   font-size: 0.95rem !important;
   /* font-weight: 550 !important; */
-  text-align: center;
+  /* text-align: center; */
 }
 
 .Grid-header {
   color: #4285F4 !important;
   font-size: 20px !important;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-weight: 550 !important;
+  /* font-family: Lato, Franklin Gothic Book,  'Arial'; */
+  /* font-weight: 550 !important; */
   line-height: 1.6 !important;
   letter-spacing: 0.0075em !important;
 }
@@ -78,12 +78,13 @@
   border-width: 0 !important;
 }
 
-.apartment_grid_data,  tbody{
+/* .apartment_grid_data,  tbody{
   text-align: center !important;
-}
+} */
 
 .apartment_grid_toolbar_div, .k-grid-toolbar{
   padding: 0px;
+  background-color: #efefef !important;
 }
 
 .k-checkbox:checked + .k-checkbox-label::before{

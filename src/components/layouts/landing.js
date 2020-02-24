@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export class Landing extends React.Component {
   render() {
     return (
-      <div className="site-section bg-light">
+      <div className="site-section">
         <div className="home_container">
           <div className="row mb-5">
             <div className="col-md-7 mx-auto text-center">

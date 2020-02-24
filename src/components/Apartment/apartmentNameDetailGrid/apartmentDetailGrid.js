@@ -188,6 +188,7 @@ class Apartment extends React.Component {
                 <Link to="">Apartment Admin</Link> > <Link to="/apartment/grid">Apartments</Link> > <Link to={url}>Apartment Details Grid</Link>  
                 </div>
                 <br />
+                
                 <div className="" style={{ margin:"16px" }}>
                     <div className="apartment_grid_toolbar_div">
                         <ExcelExport
