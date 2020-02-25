@@ -16,7 +16,8 @@ class ProductDetail extends React.Component {
 
     this.state = {
       success: false,
-      value: new Date()
+      value: new Date(),
+      tenant: false
     };
     for (let i = 0; i <= products.length; i++) {
       if(products[i] !== undefined){
@@ -58,7 +59,11 @@ class ProductDetail extends React.Component {
               marginLeft: "45px",
               color: "black"
             }}> 
-            <Link to="">Apartment Admin</Link> > <Link to="/apartment/grid">Apartments</Link> > <Link to={url}>New Apartment</Link>
+            <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link>
+            {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span></Link>: 
+            <Link className="link_tag_2" to="/tenant/grid"><span> Tenants</span><span className="link_tag_2_curve"></span></Link>}
+            {this.state.tenant === true ? null: 
+            <Link className="link_tag_3" to={url}><span> New Apartment</span><span className="link_tag_3_curve"></span></Link>}
           </div>
         </div>
         <div className="row example-wrapper row_setting">
