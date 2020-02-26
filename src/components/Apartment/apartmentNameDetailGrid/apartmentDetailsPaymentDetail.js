@@ -9,6 +9,9 @@ import { Button } from '@progress/kendo-react-buttons';
 // import { ImageUpload } from "../../imageUpload";
 import products from './apartments.json';
 import { Link } from "react-router-dom";
+import { Input } from '@progress/kendo-react-inputs';
+// import { DropDownList } from '@progress/kendo-react-dropdowns';
+// import { DatePicker } from '@progress/kendo-react-dateinputs';
 
 class ProductDetail extends React.Component {
   constructor(props) {
@@ -34,6 +37,12 @@ class ProductDetail extends React.Component {
     }else{
         this.state.tenant = false;
     }
+    if(this.props.location.pathname === "/apartment/detail/lease"){
+      this.state.lease = true;
+    }else{
+      this.state.lease = false;
+    }
+    
   }
   type=["Goods","Service"]
   inventory=["Finished goods","inventory asset","Work in progress"]
@@ -49,6 +58,7 @@ class ProductDetail extends React.Component {
     var url4 = "/tenant/apartment/grid" + this.props.location.search
     var url5 = "/tenant/apartment/detail/grid" + this.props.location.search
     var url6 = "/tenant/apartment/detail/grid/details/Payment" + this.props.location.search
+    
     return (
       <div>
         <div>
@@ -64,12 +74,14 @@ class ProductDetail extends React.Component {
                         <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link>
                         {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span></Link>: 
                         <Link className="link_tag_2" to="/tenant/grid"><span> Tenants</span><span className="link_tag_2_curve"></span></Link>}
-                        {this.state.tenant === false ? <Link className="link_tag_3" to={url}> <span>Apartment Details Grid</span><span className="link_tag_3_curve"></span> </Link>: 
+                        {this.state.tenant === false ? <Link className="link_tag_3" to={url}> <span>Apartment Units</span><span className="link_tag_3_curve"></span> </Link>: 
                         <Link className="link_tag_3" to={url4}><span> Tenants Name Grid</span><span className="link_tag_3_curve"></span></Link>}
-                        
-                        {this.state.tenant === false ? <Link className="link_tag_2" to={url2}><span> Apartment Details Grid Details</span><span className="link_tag_2_curve"></span> </Link>: null}
+                        {this.state.lease === false ? <span>
+                        {this.state.tenant === false ? <Link className="link_tag_2" to={url2}><span> Payment History</span><span className="link_tag_2_curve"></span> </Link>: null}</span>:<Link className="link_tag_2" to={url2}><span> Lease Apartment Unit</span><span className="link_tag_2_curve"></span> </Link>}
+
+                        {this.state.lease === false ? <span>
                         {this.state.tenant === false ? 
-                        <Link className="link_tag_3" to={url3}> <span>Apartment Payment Pending Details</span><span className="link_tag_3_curve"></span> </Link> : <Link className="link_tag_2" to={url5}><span> Tenants Name Details Grid</span><span className="link_tag_2_curve"></span></Link>}
+                        <Link className="link_tag_3" to={url3}> <span>Monthly Rent Payment </span><span className="link_tag_3_curve"></span> </Link> : <Link className="link_tag_2" to={url5}><span> Tenants Name Details Grid</span><span className="link_tag_2_curve"></span></Link>}</span>:null}
 
                         {this.state.tenant === false ? null: 
                         <Link className="link_tag_3" to={url6}><span> Tenants Name Payment Grid Detail</span><span className="link_tag_3_curve"></span></Link>}
@@ -84,41 +96,133 @@ class ProductDetail extends React.Component {
                 <form className="k-form apartment_payment_detail_form"  onSubmit={this.handleSubmit} style={{ color: "#333" }}>
                   <fieldset  className="fieldset_line">
                     <div className="section__header">
-                      <h2 className="section__title">
-                        Payment 
-                      </h2>
+                    {this.state.lease === false ? <h2 className="section__title">
+                    {this.state.apartmentName} - {this.state.unitName}
+                      </h2>:<h2 className="section__title">
+                        {this.state.apartmentName} - {this.state.unitName}
+                      </h2>}
                     </div>
-                    <div className="row">
+                    
+                     {/* <div className="row">
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                        Name<span style={{paddingLeft:"40px"}}>:</span> <span style={{paddingLeft:"18px"}}> {this.state.apartmentName}</span>
+                      <Input
+                        className="input_field"
+                        name="username"
+                        style={{ width: "100%" }}
+                        label="Apartment Name"
+                        value={this.state.apartmentName}
+                        onChange={event => this.setState({ apartmentName: event.target.value})}
+                      />
                       </div>
-                    </div>
-                    <div className="row">
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                      Unit<span style={{paddingLeft:"54px"}}>:</span> <span style={{paddingLeft:"18px"}}>{this.state.unitName}</span>
+                      <Input
+                        className="input_field"
+                        name="username"
+                        style={{ width: "100%" }}
+                        label="Unit #"
+                        value={this.state.unitName}
+                        onChange={event => this.setState({ unitName: event.target.value})}
+                      />
                       </div>
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       
-                    </div>
-                    <div className="row">
-                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                        Amount<span style={{paddingLeft:"28px"}}>:</span><span style={{paddingLeft:"20px"}}>{this.state.Amount}</span>
                       </div>
                     </div>
+                     */}
                     <div className="row">
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                        Month<span style={{paddingLeft:"38px"}}>:</span> <span style={{paddingLeft:"18px"}}>{this.state.Month}</span>
+                      {this.state.lease === false ? <Input
+                          className="input_field"
+                          name="username"
+                          style={{ width: "100%" }}
+                          label="Year"
+                          value={this.state.Floor}
+                          onChange={event => this.setState({ Floor: event.target.value})}
+                        />: <Input
+                        className="input_field"
+                        name="username"
+                        style={{ width: "100%" }}
+                        label="Start date"
+                        type="date"
+                        value={new Date()}
+                        onChange={event => this.setState({ Floor: event.target.value})}
+
+                      />}
+                      </div>
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      {this.state.lease === false ? <Input
+                          className="input_field"
+                          name="username"
+                          style={{ width: "100%" }}
+                          label="Month"
+                          value={this.state.Floor}
+                          onChange={event => this.setState({ Floor: event.target.value})}
+
+                        />: <Input
+                        className="input_field"
+                        name="username"
+                        style={{ width: "100%" }}
+                        label="End date"
+                        type="date"
+                        value={new Date()}
+                        onChange={event => this.setState({ Floor: event.target.value})}
+
+                      />}
+                      </div>
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      {this.state.lease === true ? <Input
+                          className="input_field"
+                          name="username"
+                          style={{ width: "100%" }}
+                          label="Advance Amount"
+                          value={this.state.Floor}
+                          onChange={event => this.setState({ Floor: event.target.value})}
+                        />: null}
                       </div>
                     </div>
-                    <div className="row">
-                        <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                        Balance<span style={{paddingLeft:"24px"}}>:</span> <span style={{paddingLeft:"18px"}}>1500</span>
-                        </div>
+                    
+                    
+                  <div className="row">
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      <Input
+                        className="input_field"
+                        name="username"
+                        style={{ width: "100%" }}
+                        label="Monthly Rent"
+                        value={this.state.Amount}
+                        onChange={event => this.setState({ Amount: event.target.value})}
+                      />
+                      </div>
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      <Input
+                        className="input_field"
+                        name="username"
+                        style={{ width: "100%" }}
+                        label="Paid Amount"
+                        value={this.state.Floor}
+                        onChange={event => this.setState({ Floor: event.target.value})}
+                      />
+                      </div>
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      <Input
+                          className="input_field"
+                          name="username"
+                          style={{ width: "100%" }}
+                          label="Payment Date"
+                          value={new Date()}
+                          onChange={event => this.setState({ Floor: event.target.value})}
+                          type="date"
+                        />
+                      </div>
                     </div>
-                    <div style={{ display: "flex", float: "right", width: "100px" }}>
-                    {/* <Button className="button-cancel-details"  >Save</Button> */}
-                    <Button className="button-cancel-details" onClick={() => { this.onClickButton("cancel") }} >Cancel</Button>
-                  </div>
-                  
+                    <div className="row" style={{ float: "right"}}>
+                      <div className="col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                      <div style={{ float: "right", marginTop:"10px"}}>
+                        <Button className="button-save-details" >Pay</Button>
+                        <Button className="button-cancel-details" onClick={() => { this.onClickButton("cancel") }} >Cancel</Button>
+                      </div>
+                      </div>
+                    </div>
                   </fieldset>
                   
                 </form>

@@ -1,7 +1,7 @@
 import React from "react";
 import '../../../css/header.css';
 import '../../../css/Productdetail.css';
-import { Input } from '@progress/kendo-react-inputs';
+import { Input, Checkbox } from '@progress/kendo-react-inputs';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
 // import { Ripple } from '@progress/kendo-react-ripple';
 import { Button } from '@progress/kendo-react-buttons';
@@ -17,7 +17,9 @@ class NewUnit extends React.Component {
     this.state = {
       success: false,
       value: new Date(),
-      tenant: false
+      tenant: false,
+      label: "New",
+      assign_tenant : false
     };
     for (let i = 0; i <= products.length; i++) {
       if(products[i] !== undefined){
@@ -26,13 +28,34 @@ class NewUnit extends React.Component {
               this.state.unitName = products[i]['UnitsInStock']
               this.state.Amount = products[i]['Amount']
               this.state.Month = products[i]['Month']
-              
+              this.state.Unit_Number = products[i]['UnitsInStock']
+              this.state.Floor = products[i]['floor']
+              this.state.direction="East"
+              this.state.Sqft = "250Sqft"
+              this.state.bed_rooms = "4"
+              this.state.bath_rooms = "5"
           }
       }
   }
+    if(this.props.location.pathname === "/apartment/unit/edit"){
+      this.state.label = "Update"
+    }
+    if(this.props.location.pathname === "/apartment/assign-unit"){
+      this.state.label = "Assign Unit Owner"
+    }
+    if(this.props.location.pathname === "/apartment/assign-tenant"){
+      this.state.label = "Assign Tenant"
+      this.state.unit_owner = "Rich"
+      this.state.assign_tenant = true
+      
+      
+    }
+    console.log(this.state.label)
+    
+  
   }
   type=["Goods","Service"]
-  inventory=["Yes","No"]
+  inventory=["East","West","North","South"]
   purchase=["Advetising and marketing","Automobile expenses","Bad debt","bank fees and charges","Consult expenses","contract assets","salaries and employee wages","internet expenses","other expenses"]
   sizes = ["Discount", "income", "general income", "interest income","late fee income","other charges","sales","Shipping charge"];
   onClickButton = (event) => {
@@ -45,10 +68,12 @@ class NewUnit extends React.Component {
     }
     
   }
+  
   render() {
-    var url = "/apartment/grid/add";
+    var url = "/apartment/detail/grid"  + this.props.location.search;
     var url2 = "/apartment/new-unit/add";
-
+    
+    
     return (
       <div>
         <div>
@@ -64,9 +89,9 @@ class NewUnit extends React.Component {
             {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span></Link>: 
             <Link className="link_tag_2" to="/tenant/grid"><span> Tenants</span><span className="link_tag_2_curve"></span></Link>}
             {this.state.tenant === true ? null: 
-            <Link className="link_tag_3" to={url}><span> New Apartment</span><span className="link_tag_3_curve"></span></Link>}
+            <Link className="link_tag_3" to={url}><span> Apartment Units</span><span className="link_tag_3_curve"></span></Link>}
             {this.state.tenant === true ? null: 
-            <Link className="link_tag_2" to={url2}><span> New Unit</span><span className="link_tag_2_curve"></span></Link>}
+            <Link className="link_tag_2" to={url2}><span> {this.state.label}</span><span className="link_tag_2_curve"></span></Link>}
           </div>
         </div>
         <div className="row example-wrapper row_setting">
@@ -77,9 +102,28 @@ class NewUnit extends React.Component {
                   <fieldset  className="fieldset_line">
                     <div className="section__header">
                       <h2 className="section__title">
-                        New Unit 
+                        {this.state.label}
                       </h2>
                     </div>
+                    {this.state.assign_tenant === true ? <div className="row">
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      <Input
+                        className="input_field"
+                        name="username"
+                        style={{ width: "100%" }}
+                        label="Tenant Name"
+                        value={this.state.tenant_name}
+                        onChange={event => this.setState({ tenant_name: event.target.value})}
+                      />
+                      </div>
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      
+                      </div>
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      
+                      </div>
+                    </div>:null}
+                    
                     <div className="row">
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
@@ -87,73 +131,134 @@ class NewUnit extends React.Component {
                         name="username"
                         style={{ width: "100%" }}
                         label="Unit #"
+                        value={this.state.Unit_Number}
+                        onChange={event => this.setState({ Unit_Number: event.target.value})}
                         // placeholder="First Name"
-                        pattern={"[A-Za-z]+"}
-                        minLength={2}
-                        required
+                        // pattern={"[A-Za-z]+"}
+                        // minLength={1}
                       />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      <Input
+                        className="input_field"
+                        name="username"
+                        style={{ width: "100%" }}
+                        label="Unit Owner"
+                        value={this.state.unit_owner}
+                        onChange={event => this.setState({ unit_owner: event.target.value})}
+                        // placeholder="First Name"
+                        pattern={"[A-Za-z]+"}
+                        // minLength={2}
+                        // required
+                      />
+                      </div>
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      
+                      </div>
+                    </div>
+                    
+                    <div className="row">
+                    {this.state.assign_tenant === true ? <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      <Input
+                          className="input_field"
+                          name="username"
+                          style={{ width: "100%" }}
+                          label="Lease Start Date"
+                          value={new Date()}
+                          onChange={event => this.setState({ Floor: event.target.value})}
+                          type="date"
+                        />
+                      </div>:<div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
                         name="username"
                         style={{ width: "100%" }}
                         label="Floor"
+                        value={this.state.Floor}
+                        onChange={event => this.setState({ Floor: event.target.value})}
                         // placeholder="First Name"
-                        pattern={"[A-Za-z]+"}
-                        minLength={2}
-                        required
+                        // pattern={"[A-Za-z]+"}
+                        // minLength={2}
+                        // required
+                      />
+                      </div>}
+                      {this.state.assign_tenant === true ? <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                        <Input
+                          className="input_field"
+                          name="username"
+                          style={{ width: "100%" }}
+                          label="Lease End Date"
+                          value={new Date()}
+                          onChange={event => this.setState({ Floor: event.target.value})}
+                          type="date"
+                          // placeholder="First Name"
+                          // pattern={"[A-Za-z]+"}
+                          // minLength={2}
+                          // required
+                        />
+                      </div>
+                      :<div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                        <DropDownList data={this.inventory} label="Direction" style={{ width: '100%' }} value={this.state.direction}  onChange={event => this.setState({ direction: event.target.value})}/>
+                      </div>}
+                      
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      <Input
+                        className="input_field"
+                        name="username"
+                        style={{ width: "100%" }}
+                        label="Monthly Rent"
+                        value={this.state.Amount}  onChange={event => this.setState({ Amount: event.target.value})}
+                        // placeholder="First Name"
+                        // pattern={"[A-Za-z]+"}
+                        // minLength={2}
+                        // required
+                      />
+                      </div>
+                    </div>
+                    
+                    {this.state.assign_tenant === true ? null:
+                    <div className="row">
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      <Input
+                        className="input_field"
+                        name="username"
+                        style={{ width: "100%" }}
+                        label="Sqft"
+                        value={this.state.Sqft}  onChange={event => this.setState({ Sqft: event.target.value})}
                       />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
                         name="username"
+                        value={this.state.bed_rooms}  onChange={event => this.setState({ bed_rooms: event.target.value})}
                         style={{ width: "100%" }}
-                        label="Area"
-                        // placeholder="First Name"
-                        pattern={"[A-Za-z]+"}
-                        minLength={2}
-                        required
+                        label="Bed rooms"
                       />
                       </div>
-                    </div>
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      <Input
+                        className="input_field"
+                        name="username"
+                        value={this.state.bath_rooms}  onChange={event => this.setState({ bath_rooms: event.target.value})}
+                        style={{ width: "100%" }}
+                        label="Bath rooms"
+                      />
+                      </div>
+                    </div>}
+                    <br/>
+                    {this.state.assign_tenant === true ? null: 
                     <div className="row">
                     <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                      <Input
-                        className="input_field"
-                        name="username"
-                        style={{ width: "100%" }}
-                        label="No. of Bedrooms"
-                        // placeholder="First Name"
-                        pattern={"[A-Za-z]+"}
-                        minLength={2}
-                        required
-                      />
+                        <Checkbox label={'Closed For Maintanence'}/>
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                      <Input
-                        className="input_field"
-                        name="username"
-                        style={{ width: "100%" }}
-                        label="Rent"
-                        // placeholder="First Name"
-                        pattern={"[A-Za-z]+"}
-                        minLength={2}
-                        required
-                      />
+                      <Checkbox label={'Already Rented'}/>
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                        
-                        <DropDownList data={this.inventory} label="Occupied" style={{ width: '100%' }} />
                       </div>
-                    </div>
-                    <br></br>
-                    <div className="row">
-                    <div className="col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                      <textarea className="textarea_input_field" placeholder="Address"></textarea>
-                      </div>
-                    </div>
+                    </div>}
+                    {/* <br/> */}
                     <div className="row" style={{ float: "right"}}>
                       <div className="col-sm-12 col-xs-12 col-md-12 col-lg-12">
                       <div style={{ float: "right", marginTop:"10px"}}>
@@ -207,7 +312,7 @@ class NewUnit extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     this.setState({ success: true });
-    setTimeout(() => { this.setState({ success: false }); }, 3000);
+    setTimeout(() => { this.setState({ success: false }); if(this.props.location.pathname === "/apartment/assign-unit"){this.props.history.push("/unit-owner/grid")}}, 3000);
   }
 }
 export default NewUnit;

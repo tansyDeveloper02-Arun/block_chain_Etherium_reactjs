@@ -13,7 +13,7 @@ export function MyCommandCell({ editField }) {
                     to={UPDATE_URL}
                     title="Edit"
                     className="anchor_tag"
-                    style={{ padding: "0px" }}>
+                    style={{ padding: "0px", textDecoration:"none" }}>
                     {this.props.dataItem.Payment_status}
                 </Link>
                 :

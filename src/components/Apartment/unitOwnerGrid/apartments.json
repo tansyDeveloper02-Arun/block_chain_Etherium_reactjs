@@ -21,16 +21,13 @@
         "expiryDate": "2019-12-01",
         "Amount": 2500,
         "city": "Chicago, NewYork",
-        "Country":"USA",
         "contactNumber": 9676123450,
         "product": "Emirates Idea Assist",
         "productType": "Assist",
         "MaintainInventory": "No",
         "Inventory": 0,
         "Active": "active",
-        "Occupied": "True",
-        "Opened_units":50,
-        "Rented_units": 20
+        "Occupied": "True"
     },
     {
         "ProductID": 2,
@@ -60,10 +57,7 @@
         "MaintainInventory": "No",
         "Inventory": 0,
         "Active": "active",
-        "Occupied": "True",
-        "Opened_units":50,
-        "Rented_units": 20,
-        "Country":"USA"
+        "Occupied": "True"
     },
     {
         "ProductID": 3,
@@ -93,10 +87,7 @@
         "MaintainInventory": "No",
         "Inventory": 0,
         "Active": "active",
-        "Occupied": "True",
-        "Opened_units":50,
-        "Rented_units": 30,
-        "Country":"USA"
+        "Occupied": "True"
     },
     {
         "ProductID": 4,
@@ -126,10 +117,7 @@
         "MaintainInventory": "No",
         "Inventory": 0,
         "Active": "active",
-        "Occupied": "True",
-        "Opened_units":50,
-        "Rented_units": 20,
-        "Country":"USA"
+        "Occupied": "True"
     },
     {
         "ProductID": 5,
@@ -159,10 +147,7 @@
         "MaintainInventory": "No",
         "Inventory": 0,
         "Active": "active",
-        "Occupied": "True",
-        "Opened_units":50,
-        "Rented_units": 20,
-        "Country":"USA"
+        "Occupied": "True"
     },
     {
         "ProductID": 6,
@@ -192,10 +177,7 @@
         "MaintainInventory": "No",
         "Inventory": 0,
         "Active": "active",
-        "Occupied": "True",
-        "Opened_units":50,
-        "Rented_units": 40,
-        "Country":"USA"
+        "Occupied": "True"
     },
     {
         "ProductID": 7,
@@ -225,10 +207,7 @@
         "MaintainInventory": "No",
         "Inventory": 0,
         "Active": "active",
-        "Occupied": "True",
-        "Opened_units":100,
-        "Rented_units": 40,
-        "Country":"USA"
+        "Occupied": "True"
     },
     {
         "ProductID": 8,
@@ -258,10 +237,7 @@
         "MaintainInventory": "No",
         "Inventory": 0,
         "Active": "active",
-        "Occupied": "True",
-        "Opened_units":50,
-        "Rented_units": 20,
-        "Country":"USA"
+        "Occupied": "True"
     },
     {
         "ProductID": 9,
@@ -291,10 +267,7 @@
         "MaintainInventory": "No",
         "Inventory": 0,
         "Active": "active",
-        "Occupied": "True",
-        "Opened_units":50,
-        "Rented_units": 30,
-        "Country":"USA"
+        "Occupied": "True"
     },
     {
         "ProductID": 10,
@@ -324,10 +297,7 @@
         "MaintainInventory": "Yes",
         "Inventory": 0,
         "Active": "active",
-        "Occupied": "True",
-        "Opened_units":50,
-        "Rented_units": 20,
-        "Country":"USA"
+        "Occupied": "True"
     },
     {
         "ProductID": 11,
@@ -357,10 +327,7 @@
         "MaintainInventory": "No",
         "Inventory": 0,
         "Active": "active",
-        "Occupied": "False",
-        "Opened_units":40,
-        "Rented_units": 10,
-        "Country":"USA"
+        "Occupied": "False"
     },
     {
         "ProductID": 12,
@@ -390,9 +357,6 @@
         "MaintainInventory": "No",
         "Inventory": 0,
         "Active": "active",
-        "Occupied": "True",
-        "Opened_units":80,
-        "Rented_units": 20,
-        "Country":"USA"
+        "Occupied": "True"
     }
 ]

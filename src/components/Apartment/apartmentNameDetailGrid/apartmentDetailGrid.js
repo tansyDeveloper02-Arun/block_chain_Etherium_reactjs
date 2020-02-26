@@ -3,6 +3,7 @@ import { Grid, GridColumn as Column, GridToolbar } from '@progress/kendo-react-g
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import products from './apartments.json';
 import { MyCommandCell } from './actioneditbutton.js';
+import { MyCommandCell2 } from './actionAnchorTagButton';
 import { filterBy } from '@progress/kendo-data-query';
 import { Input } from '@progress/kendo-react-inputs';
 import MyInventoryAnchorTag from './GridAnchorTag.js';
@@ -23,6 +24,7 @@ class Apartment extends React.Component {
         this.state.search= false;
         
         this.pageChange = this.pageChange.bind(this);
+        
         for (let i = 0; i <= products.length; i++) {
             if(products[i] !== undefined){
                 if(products[i]['ProductID'].toString() === this.props.location.search.slice(4)){
@@ -35,10 +37,12 @@ class Apartment extends React.Component {
         }else{
             this.state.tenant = false;
         }
+       
     }
 
     lastSelectedIndex = 0;
     CommandCell;
+    CommandCell2;
     AnchorTag;
     _export;
     export = () => {
@@ -60,6 +64,10 @@ class Apartment extends React.Component {
         flagdisabled: ""
     }
     CommandCell = MyCommandCell({
+        editField: this.editField,
+        tenant:this.props
+    });
+    CommandCell2 = MyCommandCell2({
         editField: this.editField,
         tenant:this.props
     });
@@ -188,7 +196,11 @@ class Apartment extends React.Component {
         var url1 = "/apartment/detail/grid" + this.props.location.search
         var url = "/tenant/apartment/grid" + this.props.location.search
         var url2 = "/tenant/apartment/detail/grid" + this.props.location.search
-        console.log(this.state.tenant)
+        var url3 = "/apartment/unit/edit" + this.props.location.search
+        var url4 = "/apartment/assign-unit" + this.props.location.search
+        var url5 = "/apartment/assign-tenant" + this.props.location.search
+        
+  
         return (
             <div>
                 <div className="" style={{ margin:"16px" }}>
@@ -201,7 +213,7 @@ class Apartment extends React.Component {
                         {this.state.tenant === false ? null: 
                         <Link className="link_tag_3" to={url}><span> Tenants Name Grid</span><span className="link_tag_3_curve"></span></Link>}
                         
-                        {this.state.tenant === false ? <Link className="link_tag_3" to={url1}> <span>Apartment Details Grid</span><span className="link_tag_3_curve"></span> </Link>: 
+                        {this.state.tenant === false ? <Link className="link_tag_3" to={url1}> <span>Apartment Units</span><span className="link_tag_3_curve"></span> </Link>: 
                         <Link className="link_tag_2" to={url2}><span> Tenants Name Details Grid</span><span className="link_tag_2_curve"></span></Link>}
                     </div>
                     <br/>
@@ -256,22 +268,48 @@ class Apartment extends React.Component {
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
                                             disabled
 
-                                        >Add Unit
+                                        >Assign Unit
+                                        </Link>
+                                        <Link
+                                            className="k-button"
+                                            style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
+                                            disabled
+
+                                        >Assign Tenant
+                                        </Link>
+                                        <Link
+                                            className="k-button"
+                                            style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
+                                            // to={url1}
+                                            disabled
+                                        >Vacate Tenant
                                         </Link>
                                     </div> :
                                     <div>
                                     <Link
                                         className="k-button"
                                         style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0" }}
-                                        to="/apartment/edit"
+                                        to={url3}
                                     >
                                         <span className="k-icon k-i-pencil"></span>
                                     </Link>
                                     <Link
                                             className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
-                                            to="/apartment/add-unit"
-                                        >Add Unit
+                                            to={url4}
+                                        >Assign Unit
+                                        </Link>
+                                        <Link
+                                            className="k-button"
+                                            style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
+                                            to={url5}
+                                        >Assign Tenant
+                                        </Link>
+                                        <Link
+                                            className="k-button"
+                                            style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
+                                            to={url1}
+                                        >Vacate Tenant
                                         </Link>
                                     </div>
                                     
@@ -311,10 +349,10 @@ class Apartment extends React.Component {
                                 </button>
                                 
                                 
-                            <button
+                            <Link
                                     title="Add"
                                     type="button"
-                                    to="#"
+                                    to="/apartment/new-unit/add"
                                     className="k-button role-main-Link-plus-button"
                                     style={{ float: "right",color: "#fff", backgroundColor:"#215CA0" }}
                                 >
@@ -322,7 +360,7 @@ class Apartment extends React.Component {
                                         className="k-icon k-i-plus"
                                         style={{ marginLeft: "0px" }}>
                                     </span>
-                                </button>
+                                </Link>
                             </div>
                             </GridToolbar>
 
@@ -359,12 +397,11 @@ class Apartment extends React.Component {
                                         this.state.items.findIndex(dataItem => dataItem.selected === false) === -1
                                     }
                                 />
-                                {/* <Column filterable={false} cell={this.CommandCell} title="Unit #"/> */}
-                                <Column field="UnitsInStock" title="Unit #" />
+                                <Column filterable={false} cell={this.CommandCell2} title="Unit #"/>
                                 <Column field="floor" title="Floor" />
                                 <Column field="Discontinued" title="Occupied" />
-                                <Column field="address" title="Tenant Address" />
-                                <Column filterable={false} cell={this.CommandCell} title="Amount"/>
+                                {/* <Column field="address" title="Tenant Address" /> */}
+                                <Column filterable={false} cell={this.CommandCell} title="Monthly Rent"/>
                                 {/* <Column field="Inventory" title="Inventory" /> */}
                                  
                             </Grid>

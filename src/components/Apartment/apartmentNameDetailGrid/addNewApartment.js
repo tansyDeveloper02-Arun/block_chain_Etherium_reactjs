@@ -9,6 +9,7 @@ import { Button } from '@progress/kendo-react-buttons';
 // import { ImageUpload } from "../../imageUpload";
 import products from './apartments.json';
 import { Link } from "react-router-dom";
+// import { DatePicker } from '@progress/kendo-react-dateinputs';
 
 class ProductDetail extends React.Component {
   constructor(props) {
@@ -17,8 +18,14 @@ class ProductDetail extends React.Component {
     this.state = {
       success: false,
       value: new Date(),
-      tenant: false
+      tenant: false,
+      label:"New"
     };
+    if(this.props.location.pathname === "/apartment/grid/edit"){
+      this.state.label = "Update"
+      this.state.Unit_Number = "101"
+      this.state.Floor = "Ground"
+    }
     for (let i = 0; i <= products.length; i++) {
       if(products[i] !== undefined){
           if(products[i]['ProductID'].toString() === this.props.location.search.slice(4)){
@@ -63,7 +70,7 @@ class ProductDetail extends React.Component {
             {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span></Link>: 
             <Link className="link_tag_2" to="/tenant/grid"><span> Tenants</span><span className="link_tag_2_curve"></span></Link>}
             {this.state.tenant === true ? null: 
-            <Link className="link_tag_3" to={url}><span> New Apartment</span><span className="link_tag_3_curve"></span></Link>}
+            <Link className="link_tag_3" to={url}><span>  {this.state.label} Apartment Building</span><span className="link_tag_3_curve"></span></Link>}
           </div>
         </div>
         <div className="row example-wrapper row_setting">
@@ -74,31 +81,28 @@ class ProductDetail extends React.Component {
                   <fieldset  className="fieldset_line">
                     <div className="section__header">
                       <h2 className="section__title">
-                        New Apartment 
+                        {this.state.label} Apartment 
                       </h2>
                     </div>
                     <div className="row">
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                      <Input
-                        className="input_field"
-                        name="username"
-                        style={{ width: "100%" }}
-                        label="Name"
-                        // placeholder="First Name"
-                        pattern={"[A-Za-z]+"}
-                        minLength={2}
-                        
-                      />
+                        <Input
+                          className="input_field"
+                          name="username"
+                          style={{ width: "100%" }}
+                          label="Name"
+                          // placeholder="First Name"
+                          pattern={"[A-Za-z]+"}
+                          minLength={2}
+                          
+                        />
                       </div>
-                      
-                    </div>
-                    <div className="row">
-                    <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
                         name="username"
                         style={{ width: "100%" }}
-                        label="Area"
+                        label="Apartment Owner"
                         // placeholder="First Name"
                         pattern={"[A-Za-z]+"}
                         minLength={2}
@@ -106,6 +110,64 @@ class ProductDetail extends React.Component {
                       />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      <Input
+                          className="input_field"
+                          name="username"
+                          style={{ width: "100%" }}
+                          label="Start Date"
+                          value={new Date()}
+                          onChange={event => this.setState({ Floor: event.target.value})}
+                          type="date"
+                          // placeholder="First Name"
+                          // pattern={"[A-Za-z]+"}
+                          // minLength={2}
+                          // required
+                        />
+                      </div>
+                      
+                    </div>
+                    <div className="row">
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                        <Input
+                          className="input_field"
+                          name="username"
+                          style={{ width: "100%" }}
+                          label="Door #"
+                          // placeholder="First Name"
+                          pattern={"[A-Za-z]+"}
+                          minLength={2}
+                          
+                        />
+                      </div>
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                        <Input
+                          className="input_field"
+                          name="username"
+                          style={{ width: "100%" }}
+                          label="Street"
+                          // placeholder="First Name"
+                          pattern={"[A-Za-z]+"}
+                          minLength={2}
+                          required
+                        />
+                      </div>
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                        <Input
+                          className="input_field"
+                          name="username"
+                          style={{ width: "100%" }}
+                          label="Locality"
+                          // placeholder="First Name"
+                          pattern={"[A-Za-z]+"}
+                          minLength={2}
+                          required
+                        />
+                      </div>
+                      
+                    </div>
+                    
+                    <div className="row">
+                    <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
                         name="username"
@@ -118,18 +180,37 @@ class ProductDetail extends React.Component {
                       />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                        <Input
+                          className="input_field"
+                          name="username"
+                          style={{ width: "100%" }}
+                          label="Country"
+                          // placeholder="First Name"
+                          pattern={"[A-Za-z]+"}
+                          minLength={2}
+                          
+                        />
+                        
+                      </div>
+                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      <Input
+                        className="input_field"
+                        name="username"
+                        style={{ width: "100%" }}
+                        label="Postal Code"
+                        // placeholder="First Name"
+                        pattern={"[A-Za-z]+"}
+                        minLength={2}
+                        
+                      />
                       </div>
                     </div>
                     <br></br>
-                    <div className="row">
-                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                        <label>Address</label>
-                      </div>
-                    </div>
+                    
                     <div className="row">
                       <div className="col-md-4 col-sm-12 col-xs-12 xol-lg-4">
                         <div style={{ marginTop:"10px"}}>
-                          <Button className="button-save-details" onClick={() => { this.onClickButton("add_new_unit") }}>Add Unit</Button>
+                          {/* <Button className="button-save-details" onClick={() => { this.onClickButton("add_new_unit") }}>Add Unit</Button> */}
                         </div>
                       </div>
                     </div>

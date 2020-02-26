@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, GridColumn as Column, GridToolbar } from '@progress/kendo-react-grid';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import products from './apartments.json';
-import { MyCommandCell } from './actionEditPaymentStatusbutton.js';
+import { MyCommandCell } from './actioneditbutton.js';
 import { filterBy } from '@progress/kendo-data-query';
 import { Input } from '@progress/kendo-react-inputs';
 import MyInventoryAnchorTag from './GridAnchorTag.js';
@@ -21,13 +21,15 @@ class Apartment extends React.Component {
         super(props);
         this.state = this.createState(0, 10);
         this.state.search= false;
-        
         this.pageChange = this.pageChange.bind(this);
-        for (let i = 0; i <= products.length; i++) {
-            if(products[i] !== undefined){
-                if(products[i]['ProductID'].toString() === this.props.location.search.slice(4)){
-                    this.state.apartmentName = products[i]['ProductName']
-                    this.state.unitName = products[i]['UnitsInStock']
+        this.state.tenant = false;
+        if(this.props.location.pathname === "/tenant/apartment/grid"){
+            this.state.tenant = true;
+            for (let i = 0; i <= products.length; i++) {
+                if(products[i] !== undefined){
+                    if(products[i]['ProductID'].toString() === this.props.location.search.slice(4)){
+                        this.state.buildingName = products[i]['ProductName']
+                    }
                 }
             }
         }
@@ -52,11 +54,13 @@ class Apartment extends React.Component {
         ],
         search: false,
         deleteButton: false,
+        tenant: this.props,
         count: 0,
         flagdisabled: ""
     }
     CommandCell = MyCommandCell({
-        editField: this.editField
+        editField: this.editField,
+        tenant:this.state.tenant
     });
 
 
@@ -172,25 +176,32 @@ class Apartment extends React.Component {
             })
 
         }
-
+        if (event === "add_new_apartment") {
+            this.props.history.push("/apartment/grid/add")
+        }
+        
     }
     onClickEditButton = () => {
+
         this.setState({
             flagdisabled: true
         })
+
+
     }
     render() {
-        var url = "/apartment/detail/grid" + this.props.location.search
-        var url2 = "/apartment/detail/grid/details" + this.props.location.search
+        var url = "/tenant/apartment/grid" + this.props.location.search
         return (
             <div>
-                
                 <div className="" style={{ margin:"16px" }}>
                     <div style={{ textAlign: "left", fontSize: "12px", color: "black" }}>
-                            <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link><Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span> </Link> <Link className="link_tag_3" to={url}> <span>Apartment Units</span><span className="link_tag_3_curve"></span> </Link>
-                            <Link className="link_tag_2" to={url2}><span> Payment History</span><span className="link_tag_2_curve"></span> </Link>
-                        </div>
-                        <br/>
+                        <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link>
+                        {this.state.tenant === false ? <Link className="link_tag_2" to="/rented-paid/grid"><span> My Rented Places</span><span className="link_tag_2_curve"></span></Link>: 
+                        <Link className="link_tag_2" to="/tenant/grid"><span> Tenants</span><span className="link_tag_2_curve"></span></Link>}
+                        {this.state.tenant === false ? null: 
+                        <Link className="link_tag_3" to={url}><span> Tenants Name Grid</span><span className="link_tag_3_curve"></span></Link>}
+                    </div>
+                    <br/>
                     <div className="apartment_grid_toolbar_div">
                         <ExcelExport
                             data={this.state.data}
@@ -198,7 +209,9 @@ class Apartment extends React.Component {
                         >
                             <div
                                     style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", float: "left", marginBottom:"10px", fontSize: "20px", fontWeight: "500", color: "rgba (0,0,0,0.87)" }}
-        ><span className="Grid-header" style={{color:"#4285F4 !important"}}>{this.state.apartmentName}- Apartment, Unit - {this.state.unitName}</span> 
+                                >
+                                    {this.state.tenant=== true ? 
+                                    <span className="Grid-header" style={{color:"#4285F4 !important"}}>{this.state.buildingName}- Apartment</span> : <span className="Grid-header" style={{color:"#4285F4 !important"}}>My Rented Places</span> }
                                 {this.state.deleteButton === true ? 
                                     <label style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", marginLeft: "10px", color: "rgba (0,0,0,0.87)" }}>{this.state.count} row(s) selected</label>
                                     : null}
@@ -231,40 +244,40 @@ class Apartment extends React.Component {
                                 {this.state.count > 1 ? 
                                     <div className="editDiv">
                                         <button
-                                            className="k-button deleteButton"
+                                            className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0" }}
                                             disabled
 
                                         ><span className="k-icon k-i-pencil"></span>
                                         </button>
-                                        <Link
-                                            className="k-button deleteButton"
+                                        {/* <Link
+                                            className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
                                             disabled
 
                                         >Add Unit
-                                        </Link>
+                                        </Link> */}
                                     </div> :
                                     <div>
                                     <Link
-                                        className="k-button deleteButton"
+                                        className="k-button"
                                         style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0" }}
                                         to="/apartment/edit"
                                     >
                                         <span className="k-icon k-i-pencil"></span>
                                     </Link>
-                                    <Link
-                                            className="k-button deleteButton"
+                                    {/* <Link
+                                            className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
                                             to="/apartment/add-unit"
                                         >Add Unit
-                                        </Link>
+                                        </Link> */}
                                     </div>
                                     
                             }</div> : null}
                                 {this.state.deleteButton === true ?
                                 <button
-                                    className="k-button deleteButton" style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0" }}
+                                    className="k-button" style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0" }}
                                 >
                                     <span className="k-icon k-i-delete " ></span>
                                 </button>
@@ -300,7 +313,7 @@ class Apartment extends React.Component {
                             <button
                                     title="Add"
                                     type="button"
-                                    to="#"
+                                    onClick={() => { this.onClickButton("add_new_apartment") }}
                                     className="k-button role-main-Link-plus-button"
                                     style={{ float: "right",color: "#fff", backgroundColor:"#215CA0" }}
                                 >
@@ -314,7 +327,7 @@ class Apartment extends React.Component {
 
                             <Grid
                                 className="apartment_grid_data"
-                                style={{ fontFamily: "Lato ,Arial, Franklin Gothic Book", fontSize: "14px", fontWeight: "400", boxShadow:"rgba(0, 0, 0, 0.3) 0px 0px 0px, rgba(0, 0, 0, 0.22) 0px 0px 4px"}}
+                                style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", fontSize: "14px", fontWeight: "400" }}
                                 data={this.state.items}
                                 // data={orderBy(this.state.data.slice(this.state.skip, this.state.take + this.state.skip), this.state.sort)}
                                 skip={this.state.skip}
@@ -336,7 +349,7 @@ class Apartment extends React.Component {
                                     });
                                 }}
                             >   
-                                {/* <Column
+                                <Column
                                     className="check-box-color"
                                     field="selected"
                                     width="50px"
@@ -344,16 +357,15 @@ class Apartment extends React.Component {
                                     headerSelectionValue={
                                         this.state.items.findIndex(dataItem => dataItem.selected === false) === -1
                                     }
-                                /> */}
-                                {/* <Column filterable={false} cell={this.CommandCell} title="Unit #"/> */}
-                                <Column field="Year" title="Year" />
-                                <Column field="Month" title="Month" />
-                                <Column field="Amount" title="Amount" />
-                                <Column field="Amount" title="Paid Amount" />
-                                {/* <Column field="Amount" title="Balance Amount" /> */}
-                                <Column filterable={false} cell={this.CommandCell} title="Balance Amount"/>
-                                {/* <Column field="Inventory" title="Inventory" /> */}
-                                 
+                                />
+                                <Column filterable={false} cell={this.CommandCell} title="Apartment "/>
+                                {/* <Column field="product" title="Apartment Name" /> */}
+                                <Column field="UnitsInStock" title="Unit #" />
+                                <Column field="city" title="City" />
+                                <Column field="orderDate" title="Start Date" />
+                                <Column field="expiryDate" title="End Date" />
+                                <Column field="Amount" title="Monthly Rent" />
+                                <Column field="Occupied" title="Undermaintainance" />
                             </Grid>
                         </ExcelExport>
 

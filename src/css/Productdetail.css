@@ -155,3 +155,8 @@
     font-size: 14px;
     height: 110px !important;
   }
+
+  .date_picker_div{
+    padding-top: 1.125em;
+    width: 100%;
+  }

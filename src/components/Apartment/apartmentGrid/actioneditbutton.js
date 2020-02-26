@@ -10,6 +10,9 @@ export function MyCommandCell({ editField, tenant }) {
             if(tenant.location.pathname ==="/tenant/apartment/grid"){
                 UPDATE_URL = "/tenant/apartment/detail/grid?id=" + this.props.dataItem.ProductID
             }
+            if(tenant.location.pathname ==="/all-apartment/grid"){
+                UPDATE_URL = "/all-unit-owner/grid?id=" + this.props.dataItem.ProductID
+            }
             return inEdit ? null : (<td className="">
                 <Link 
                     to={UPDATE_URL}

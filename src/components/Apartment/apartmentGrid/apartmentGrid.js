@@ -23,6 +23,11 @@ class Apartment extends React.Component {
         this.state.search= false;
         this.pageChange = this.pageChange.bind(this);
         this.state.tenant = false;
+        if(this.props.location.pathname === "/all-apartment/grid"){
+            this.state.apartment = "ALL APARTMENTS";
+        }else{
+            this.state.apartment = "MY APARTMENTS";
+        }
         if(this.props.location.pathname === "/tenant/apartment/grid"){
             this.state.tenant = true;
             for (let i = 0; i <= products.length; i++) {
@@ -196,7 +201,7 @@ class Apartment extends React.Component {
                 <div className="" style={{ margin:"16px" }}>
                     <div style={{ textAlign: "left", fontSize: "12px", color: "black" }}>
                         <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link>
-                        {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span></Link>: 
+                        {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> {this.state.apartment}</span><span className="link_tag_2_curve"></span></Link>: 
                         <Link className="link_tag_2" to="/tenant/grid"><span> Tenants</span><span className="link_tag_2_curve"></span></Link>}
                         {this.state.tenant === false ? null: 
                         <Link className="link_tag_3" to={url}><span> Tenants Name Grid</span><span className="link_tag_3_curve"></span></Link>}
@@ -211,7 +216,7 @@ class Apartment extends React.Component {
                                     style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", float: "left", marginBottom:"10px", fontSize: "20px", fontWeight: "500", color: "rgba (0,0,0,0.87)" }}
                                 >
                                     {this.state.tenant=== true ? 
-                                    <span className="Grid-header" style={{color:"#4285F4 !important"}}>{this.state.buildingName}- Apartment</span> : <span className="Grid-header" style={{color:"#4285F4 !important"}}>APARTMENTS</span> }
+                                    <span className="Grid-header" style={{color:"#4285F4 !important"}}>{this.state.buildingName}- Apartment</span> : <span className="Grid-header" style={{color:"#4285F4 !important"}}>{this.state.apartment}</span> }
                                 {this.state.deleteButton === true ? 
                                     <label style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", marginLeft: "10px", color: "rgba (0,0,0,0.87)" }}>{this.state.count} row(s) selected</label>
                                     : null}
@@ -250,28 +255,28 @@ class Apartment extends React.Component {
 
                                         ><span className="k-icon k-i-pencil"></span>
                                         </button>
-                                        <Link
+                                        {/* <Link
                                             className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
                                             disabled
 
                                         >Add Unit
-                                        </Link>
+                                        </Link> */}
                                     </div> :
                                     <div>
                                     <Link
                                         className="k-button"
                                         style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0" }}
-                                        to="/apartment/edit"
+                                        to="/apartment/grid/edit"
                                     >
                                         <span className="k-icon k-i-pencil"></span>
                                     </Link>
-                                    <Link
+                                    {/* <Link
                                             className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
                                             to="/apartment/add-unit"
                                         >Add Unit
-                                        </Link>
+                                        </Link> */}
                                     </div>
                                     
                             }</div> : null}
@@ -359,12 +364,12 @@ class Apartment extends React.Component {
                                     }
                                 />
                                 <Column filterable={false} cell={this.CommandCell} title="Name"/>
-                                {/* <Column field="product" title="Appartment Name" /> */}
-                                <Column field="productType" title="Units" />
-                                <Column field="Discontinued" title="Occupied" />
-                                <Column field="MaintainInventory" title="Rented" />
-                                {/* <Column field="Inventory" title="Inventory" /> */}
-                                 
+
+                                <Column field="city" title="City" />
+                                <Column field="Country" title="Country" />
+                                <Column field="orderDate" title="Created Date" />
+                                <Column field="Opened_units" title="Opened Units" />
+                                <Column field="Rented_units" title="Rented Units" />
                             </Grid>
                         </ExcelExport>
 

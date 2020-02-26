@@ -122,6 +122,7 @@
 
 .input_field{
   border-radius: 0.25em !important;
+  color: black !important;
 }
 
 .apartment_grid_data, .k-widget{

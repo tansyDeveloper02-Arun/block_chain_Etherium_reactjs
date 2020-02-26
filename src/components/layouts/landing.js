@@ -11,23 +11,32 @@ export class Landing extends React.Component {
               <h2 className="heading-29190">Modules</h2>
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-6 col-lg-4">
+          
+            <br/>
+            <div className="row">
+            <div className="col-md-6 col-lg-3">
               <div className="service-29128 text-center">
-               <b><Link to="/apartment/grid">Apartment Admin</Link></b>
+               <b><Link to="/apartment/grid">My Apartments</Link></b>
               </div>
             </div>
-            <div className="col-md-6 col-lg-4">
+            <div className="col-md-6 col-lg-3">
               <div className="service-29128 text-center">
-              <b><Link to="/tenant/grid">Tenant Admin</Link></b>
+               <b><Link to="/unit-owner/grid">My Units</Link></b>
               </div>
             </div>
-            <div className="col-md-6 col-lg-4">
+            <div className="col-md-6 col-lg-3">
               <div className="service-29128 text-center">
-              <b><Link to="/contract-code">Block chain contract code</Link></b>
+              <b><Link to="/rented-paid/grid">My Rented Place</Link></b>
+              </div>
+            </div>
+            <div className="col-md-6 col-lg-3">
+              <div className="service-29128 text-center">
+              <b><Link to="/all-apartment/grid">Search for All Apartments</Link></b>
               </div>
             </div>
             </div>
+            
+        
         </div>
         </div>
     )
