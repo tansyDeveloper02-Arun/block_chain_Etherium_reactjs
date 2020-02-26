@@ -24,10 +24,10 @@ class Apartment extends React.Component {
         this.pageChange = this.pageChange.bind(this);
         this.state.tenant = false;
         if(this.props.location.pathname === "/all-unit-owner/grid"){
-            this.state.units = "ALL UNITS";
+            this.state.units = "All Units";
             this.state.all_units = true
         }else{
-            this.state.units = "MY UNITS";
+            this.state.units = "My Units";
             this.state.all_units = false
         }
        
@@ -164,11 +164,14 @@ class Apartment extends React.Component {
         this.setState({
             items: filterBy(products.map(dataItem => Object.assign({ selected: false }, dataItem)), {
                 logic: "or",
-                filters: [{ field: "ProductName", operator: "contains", value: event.target.value },
-                { field: "UnitPrice", operator: "contains", value: event.target.value },
+                filters: [{ field: "product", operator: "contains", value: event.target.value },
+                { field: "city", operator: "contains", value: event.target.value },
                 { field: "UnitsInStock", operator: "contains", value: event.target.value },
-                { field: "ReorderLevel", operator: "contains", value: event.target.value },
+                { field: "Amount", operator: "contains", value: event.target.value },
+                { field: "MaintainInventory", operator: "contains", value: event.target.value },
+                { field: "Occupied", operator: "contains", value: event.target.value },
                 ]
+                
             })
         });
     };
@@ -205,8 +208,12 @@ class Apartment extends React.Component {
                 <div className="" style={{ margin:"16px" }}>
                     <div style={{ textAlign: "left", fontSize: "12px", color: "black" }}>
                         <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link>
+                        {this.state.all_units === false ? null: 
+                        <Link className="link_tag_2" to="/all-apartment/grid"><span> All Apartments</span><span className="link_tag_2_curve"></span></Link>}
+
                         {this.state.all_units === false ? <Link className="link_tag_2" to="/unit-owner/grid"><span> {this.state.units}</span><span className="link_tag_2_curve"></span></Link>: 
-                        <Link className="link_tag_2" to="/tenant/grid"><span> {this.state.units}</span><span className="link_tag_2_curve"></span></Link>}
+                        <Link className="link_tag_3" to="/tenant/grid"><span> {this.state.units}</span><span className="link_tag_3_curve"></span></Link>}
+                        
                         {this.state.tenant === false ? null: 
                         <Link className="link_tag_3" to={url}><span> Tenants Name Grid</span><span className="link_tag_3_curve"></span></Link>}
                     </div>
@@ -241,7 +248,7 @@ class Apartment extends React.Component {
                                 name="hello"
                                 onClick={() => { this.onClickButton("cancel") }}
                                 style={{ float: "center", boxShadow: "none", color: "#586069",position: "relative", padding: '0px',
-                                backgroundColor: "white", border: "none", marginLeft:"-25px" }}
+                                backgroundColor: "#efefef", border: "none", marginLeft:"-25px" }}
                             >X
                             </button> : null}
                             <div style={{display:"flex", float: "right"}}>
@@ -391,8 +398,6 @@ class Apartment extends React.Component {
                                         this.state.items.findIndex(dataItem => dataItem.selected === false) === -1
                                     }
                                 />
-                                {/* <Column filterable={false} cell={this.CommandCell} title="Name"/> */}
-                                {/* <Column field="product" title="Appartment Name" /> */}
                                 {this.state.all_units === false ? <Column field="product" title="Apartment Name" /> :null}
                                 <Column field="UnitsInStock" title="Unit #" />
                                 <Column field="city" title="City" />
@@ -400,7 +405,7 @@ class Apartment extends React.Component {
                                 <Column field="Amount" title="Monthly Rent" />
                                 <Column field="MaintainInventory" title="Rented" />
                                 <Column field="Occupied" title="Undermaintainance" />
-                                {/* <Column field="Inventory" title="Inventory" /> */}
+
                                  
                             </Grid>
                         </ExcelExport>

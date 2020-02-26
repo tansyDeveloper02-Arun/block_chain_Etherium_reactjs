@@ -152,11 +152,12 @@ class Apartment extends React.Component {
         this.setState({
             items: filterBy(products.map(dataItem => Object.assign({ selected: false }, dataItem)), {
                 logic: "or",
-                filters: [{ field: "ProductName", operator: "contains", value: event.target.value },
-                { field: "UnitPrice", operator: "contains", value: event.target.value },
-                { field: "UnitsInStock", operator: "contains", value: event.target.value },
-                { field: "ReorderLevel", operator: "contains", value: event.target.value },
+                filters: [{ field: "Year", operator: "contains", value: event.target.value },
+                { field: "Month", operator: "contains", value: event.target.value },
+                { field: "Amount", operator: "contains", value: event.target.value },
+                { field: "Payment_status", operator: "contains", value: event.target.value },
                 ]
+                
             })
         });
     };
@@ -187,7 +188,7 @@ class Apartment extends React.Component {
                 
                 <div className="" style={{ margin:"16px" }}>
                     <div style={{ textAlign: "left", fontSize: "12px", color: "black" }}>
-                            <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link><Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span> </Link> <Link className="link_tag_3" to={url}> <span>Apartment Units</span><span className="link_tag_3_curve"></span> </Link>
+                            <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link><Link className="link_tag_2" to="/apartment/grid"><span> My Apartments</span><span className="link_tag_2_curve"></span> </Link> <Link className="link_tag_3" to={url}> <span>Apartment Units</span><span className="link_tag_3_curve"></span> </Link>
                             <Link className="link_tag_2" to={url2}><span> Payment History</span><span className="link_tag_2_curve"></span> </Link>
                         </div>
                         <br/>
@@ -219,7 +220,7 @@ class Apartment extends React.Component {
                                 name="hello"
                                 onClick={() => { this.onClickButton("cancel") }}
                                 style={{ float: "center", boxShadow: "none", color: "#586069",position: "relative", padding: '0px',
-                                backgroundColor: "white", border: "none", marginLeft:"-25px" }}
+                                backgroundColor: "#efefef", border: "none", marginLeft:"-25px" }}
                             >X
                             </button> : null}
                             <div style={{display:"flex", float: "right"}}>
@@ -303,6 +304,7 @@ class Apartment extends React.Component {
                                     to="#"
                                     className="k-button role-main-Link-plus-button"
                                     style={{ float: "right",color: "#fff", backgroundColor:"#215CA0" }}
+                                    disabled
                                 >
                                     <span
                                         className="k-icon k-i-plus"
@@ -336,24 +338,13 @@ class Apartment extends React.Component {
                                     });
                                 }}
                             >   
-                                {/* <Column
-                                    className="check-box-color"
-                                    field="selected"
-                                    width="50px"
-                                    marginLeft="100px"
-                                    headerSelectionValue={
-                                        this.state.items.findIndex(dataItem => dataItem.selected === false) === -1
-                                    }
-                                /> */}
-                                {/* <Column filterable={false} cell={this.CommandCell} title="Unit #"/> */}
                                 <Column field="Year" title="Year" />
                                 <Column field="Month" title="Month" />
                                 <Column field="Amount" title="Amount" />
                                 <Column field="Amount" title="Paid Amount" />
-                                {/* <Column field="Amount" title="Balance Amount" /> */}
+                                
                                 <Column filterable={false} cell={this.CommandCell} title="Balance Amount"/>
-                                {/* <Column field="Inventory" title="Inventory" /> */}
-                                 
+                               
                             </Grid>
                         </ExcelExport>
 

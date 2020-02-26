@@ -157,10 +157,15 @@ class Apartment extends React.Component {
             items: filterBy(products.map(dataItem => Object.assign({ selected: false }, dataItem)), {
                 logic: "or",
                 filters: [{ field: "ProductName", operator: "contains", value: event.target.value },
-                { field: "UnitPrice", operator: "contains", value: event.target.value },
+                { field: "city", operator: "contains", value: event.target.value },
                 { field: "UnitsInStock", operator: "contains", value: event.target.value },
-                { field: "ReorderLevel", operator: "contains", value: event.target.value },
+                { field: "orderDate", operator: "contains", value: event.target.value },
+                { field: "expiryDate", operator: "contains", value: event.target.value },
+                { field: "Amount", operator: "contains", value: event.target.value },
+                { field: "Occupied", operator: "contains", value: event.target.value },
                 ]
+                // <Column filterable={false} cell={this.CommandCell} title="Apartment "/>
+
             })
         });
     };
@@ -232,13 +237,11 @@ class Apartment extends React.Component {
                                 name="hello"
                                 onClick={() => { this.onClickButton("cancel") }}
                                 style={{ float: "center", boxShadow: "none", color: "#586069",position: "relative", padding: '0px',
-                                backgroundColor: "white", border: "none", marginLeft:"-25px" }}
+                                backgroundColor: "#efefef", border: "none", marginLeft:"-25px" }}
                             >X
                             </button> : null}
                             <div style={{display:"flex", float: "right"}}>
-                                
-                                
-                                
+
                                  {this.state.deleteButton === true ? 
                                  <div>
                                 {this.state.count > 1 ? 
@@ -359,7 +362,7 @@ class Apartment extends React.Component {
                                     }
                                 />
                                 <Column filterable={false} cell={this.CommandCell} title="Apartment "/>
-                                {/* <Column field="product" title="Apartment Name" /> */}
+
                                 <Column field="UnitsInStock" title="Unit #" />
                                 <Column field="city" title="City" />
                                 <Column field="orderDate" title="Start Date" />

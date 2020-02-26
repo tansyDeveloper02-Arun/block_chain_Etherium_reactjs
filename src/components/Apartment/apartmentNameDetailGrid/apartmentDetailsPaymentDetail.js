@@ -49,7 +49,12 @@ class ProductDetail extends React.Component {
   purchase=["Advetising and marketing","Automobile expenses","Bad debt","bank fees and charges","Consult expenses","contract assets","salaries and employee wages","internet expenses","other expenses"]
   sizes = ["Discount", "income", "general income", "interest income","late fee income","other charges","sales","Shipping charge"];
   onClickButton = (event) => {
-    this.props.history.push('/apartment/detail/grid/details'+ this.props.location.search);
+    if(event === "cancel"){
+      this.props.history.push('/apartment/detail/grid/details'+ this.props.location.search);
+    }
+    if(event === "cancel-2"){
+      this.props.history.push('/apartment/detail/grid'+ this.props.location.search);
+    }
   }
   render() {
     var url = "/apartment/detail/grid" + this.props.location.search
@@ -72,7 +77,7 @@ class ProductDetail extends React.Component {
             }}> 
             <div style={{ textAlign: "left", fontSize: "12px", color: "black" }}>
                         <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link>
-                        {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span></Link>: 
+                        {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> My Apartments</span><span className="link_tag_2_curve"></span></Link>: 
                         <Link className="link_tag_2" to="/tenant/grid"><span> Tenants</span><span className="link_tag_2_curve"></span></Link>}
                         {this.state.tenant === false ? <Link className="link_tag_3" to={url}> <span>Apartment Units</span><span className="link_tag_3_curve"></span> </Link>: 
                         <Link className="link_tag_3" to={url4}><span> Tenants Name Grid</span><span className="link_tag_3_curve"></span></Link>}
@@ -102,33 +107,6 @@ class ProductDetail extends React.Component {
                         {this.state.apartmentName} - {this.state.unitName}
                       </h2>}
                     </div>
-                    
-                     {/* <div className="row">
-                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                      <Input
-                        className="input_field"
-                        name="username"
-                        style={{ width: "100%" }}
-                        label="Apartment Name"
-                        value={this.state.apartmentName}
-                        onChange={event => this.setState({ apartmentName: event.target.value})}
-                      />
-                      </div>
-                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                      <Input
-                        className="input_field"
-                        name="username"
-                        style={{ width: "100%" }}
-                        label="Unit #"
-                        value={this.state.unitName}
-                        onChange={event => this.setState({ unitName: event.target.value})}
-                      />
-                      </div>
-                      <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                      
-                      </div>
-                    </div>
-                     */}
                     <div className="row">
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       {this.state.lease === false ? <Input
@@ -219,7 +197,7 @@ class ProductDetail extends React.Component {
                       <div className="col-sm-12 col-xs-12 col-md-12 col-lg-12">
                       <div style={{ float: "right", marginTop:"10px"}}>
                         <Button className="button-save-details" >Pay</Button>
-                        <Button className="button-cancel-details" onClick={() => { this.onClickButton("cancel") }} >Cancel</Button>
+                        {this.state.lease === false ? <Button className="button-cancel-details" onClick={() => { this.onClickButton("cancel") }} >Cancel</Button>:<Button className="button-cancel-details" onClick={() => { this.onClickButton("cancel-2") }} >Cancel</Button>}
                       </div>
                       </div>
                     </div>

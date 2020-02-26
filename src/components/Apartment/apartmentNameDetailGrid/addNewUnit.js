@@ -18,7 +18,7 @@ class NewUnit extends React.Component {
       success: false,
       value: new Date(),
       tenant: false,
-      label: "New",
+      label: "Add Unit",
       assign_tenant : false
     };
     for (let i = 0; i <= products.length; i++) {
@@ -38,7 +38,7 @@ class NewUnit extends React.Component {
       }
   }
     if(this.props.location.pathname === "/apartment/unit/edit"){
-      this.state.label = "Update"
+      this.state.label = "Update Unit"
     }
     if(this.props.location.pathname === "/apartment/assign-unit"){
       this.state.label = "Assign Unit Owner"
@@ -60,7 +60,7 @@ class NewUnit extends React.Component {
   sizes = ["Discount", "income", "general income", "interest income","late fee income","other charges","sales","Shipping charge"];
   onClickButton = (event) => {
     if(event === "cancel"){
-      this.props.history.push('/apartment/grid/add');
+      this.props.history.push('/apartment/detail/grid' + this.props.location.search);
     }
     
     if(event === "add_new_unit"){
@@ -86,7 +86,7 @@ class NewUnit extends React.Component {
               color: "black"
             }}> 
             <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link>
-            {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span></Link>: 
+            {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> My Apartments</span><span className="link_tag_2_curve"></span></Link>: 
             <Link className="link_tag_2" to="/tenant/grid"><span> Tenants</span><span className="link_tag_2_curve"></span></Link>}
             {this.state.tenant === true ? null: 
             <Link className="link_tag_3" to={url}><span> Apartment Units</span><span className="link_tag_3_curve"></span></Link>}

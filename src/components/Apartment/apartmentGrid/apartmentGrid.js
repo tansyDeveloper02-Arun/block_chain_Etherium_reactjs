@@ -11,8 +11,7 @@ import { formatDate } from '@telerik/kendo-intl';
 import '../../../css/inventerGrid.css'
 import { Link } from "react-router-dom";
 
-products.forEach(o => {
-    o.orderDate = formatDate(new Date(o.orderDate), { date: "long" });
+products.forEach(o => {    o.orderDate = formatDate(new Date(o.orderDate), { date: "long" });
     o.expiryDate = formatDate(new Date(o.expiryDate), { date: "long" });
     o.shippedDate = o.shippedDate === 'NULL' ? undefined : new Date(o.shippedDate);
 });
@@ -24,9 +23,9 @@ class Apartment extends React.Component {
         this.pageChange = this.pageChange.bind(this);
         this.state.tenant = false;
         if(this.props.location.pathname === "/all-apartment/grid"){
-            this.state.apartment = "ALL APARTMENTS";
+            this.state.apartment = "All Apartments";
         }else{
-            this.state.apartment = "MY APARTMENTS";
+            this.state.apartment = "My Apartments";
         }
         if(this.props.location.pathname === "/tenant/apartment/grid"){
             this.state.tenant = true;
@@ -162,10 +161,13 @@ class Apartment extends React.Component {
             items: filterBy(products.map(dataItem => Object.assign({ selected: false }, dataItem)), {
                 logic: "or",
                 filters: [{ field: "ProductName", operator: "contains", value: event.target.value },
-                { field: "UnitPrice", operator: "contains", value: event.target.value },
-                { field: "UnitsInStock", operator: "contains", value: event.target.value },
-                { field: "ReorderLevel", operator: "contains", value: event.target.value },
+                { field: "city", operator: "contains", value: event.target.value },
+                { field: "Country", operator: "contains", value: event.target.value },
+                { field: "orderDate", operator: "contains", value: event.target.value },
+                { field: "Opened_units", operator: "contains", value: event.target.value },
+                { field: "Rented_units", operator: "contains", value: event.target.value },
                 ]
+                
             })
         });
     };
@@ -224,26 +226,27 @@ class Apartment extends React.Component {
                             
 
                             <GridToolbar className="Grid_excel_button">
+
+                            
                             {this.state.search === true ? 
-                            <Input
-                                    className="k-textbox"
-                                    onChange={this.handleChange}
-                                    placeholder="search"
-                                    style={{ float: "center", marginLeft: "20px",  width:"20%" }}
-                                /> : null}
-                                {this.state.search === true ? 
+                                    
+                                    <Input
+                                        className="search-input2"
+                                        onChange={this.handleChange}
+                                        placeholder="search"
+                                        style={{ float: "center", marginLeft: "20px" }}
+                                    />
+                                 : null}
+                            {this.state.search === true ? 
                                 <button
                                 className="k-button"
                                 name="hello"
                                 onClick={() => { this.onClickButton("cancel") }}
                                 style={{ float: "center", boxShadow: "none", color: "#586069",position: "relative", padding: '0px',
-                                backgroundColor: "white", border: "none", marginLeft:"-25px" }}
+                                backgroundColor: "#efefef", border: "none", marginLeft:"-25px" }}
                             >X
                             </button> : null}
                             <div style={{display:"flex", float: "right"}}>
-                                
-                                
-                                
                                  {this.state.deleteButton === true ? 
                                  <div>
                                 {this.state.count > 1 ? 
@@ -328,6 +331,7 @@ class Apartment extends React.Component {
                                     </span>
                                 </button>
                             </div>
+                            
                             </GridToolbar>
 
                             <Grid

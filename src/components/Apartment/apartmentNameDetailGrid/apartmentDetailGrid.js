@@ -165,11 +165,12 @@ class Apartment extends React.Component {
         this.setState({
             items: filterBy(products.map(dataItem => Object.assign({ selected: false }, dataItem)), {
                 logic: "or",
-                filters: [{ field: "ProductName", operator: "contains", value: event.target.value },
-                { field: "UnitPrice", operator: "contains", value: event.target.value },
-                { field: "UnitsInStock", operator: "contains", value: event.target.value },
-                { field: "ReorderLevel", operator: "contains", value: event.target.value },
+                filters: [{ field: "Payment_status", operator: "contains", value: event.target.value },
+                { field: "floor", operator: "contains", value: event.target.value },
+                { field: "Discontinued", operator: "contains", value: event.target.value },
+                { field: "Amount", operator: "contains", value: event.target.value }
                 ]
+                
             })
         });
     };
@@ -199,6 +200,7 @@ class Apartment extends React.Component {
         var url3 = "/apartment/unit/edit" + this.props.location.search
         var url4 = "/apartment/assign-unit" + this.props.location.search
         var url5 = "/apartment/assign-tenant" + this.props.location.search
+        var url6 = "/apartment/new-unit/add" + this.props.location.search
         
   
         return (
@@ -207,7 +209,7 @@ class Apartment extends React.Component {
                 <div style={{ textAlign: "left", fontSize: "12px", color: "black" }}>
                         <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link>
                         
-                        {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span></Link>: 
+                        {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> My Apartments</span><span className="link_tag_2_curve"></span></Link>: 
                         <Link className="link_tag_2" to="/tenant/grid"><span> Tenants</span><span className="link_tag_2_curve"></span></Link>}
                         
                         {this.state.tenant === false ? null: 
@@ -233,19 +235,21 @@ class Apartment extends React.Component {
 
                             <GridToolbar className="Grid_excel_button">
                             {this.state.search === true ? 
-                            <Input
-                                    className="k-textbox"
-                                    onChange={this.handleChange}
-                                    placeholder="search"
-                                    style={{ float: "center", marginLeft: "20px",  width:"20%" }}
-                                /> : null}
-                                {this.state.search === true ? 
+                                    
+                                    <Input
+                                        className="search-input2"
+                                        onChange={this.handleChange}
+                                        placeholder="search"
+                                        style={{ float: "center", marginLeft: "20px" }}
+                                    />
+                                 : null}
+                            {this.state.search === true ? 
                                 <button
                                 className="k-button"
                                 name="hello"
                                 onClick={() => { this.onClickButton("cancel") }}
                                 style={{ float: "center", boxShadow: "none", color: "#586069",position: "relative", padding: '0px',
-                                backgroundColor: "white", border: "none", marginLeft:"-25px" }}
+                                backgroundColor: "#efefef", border: "none", marginLeft:"-25px" }}
                             >X
                             </button> : null}
                             <div style={{display:"flex", float: "right"}}>
@@ -352,7 +356,7 @@ class Apartment extends React.Component {
                             <Link
                                     title="Add"
                                     type="button"
-                                    to="/apartment/new-unit/add"
+                                    to={url6}
                                     className="k-button role-main-Link-plus-button"
                                     style={{ float: "right",color: "#fff", backgroundColor:"#215CA0" }}
                                 >

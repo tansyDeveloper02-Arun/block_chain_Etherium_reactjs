@@ -536,3 +536,7 @@ button.k-button.k-primary, .k-slider .k-draghandle {
   word-break: normal !important;
   height: 30px !important;
 }
+
+.apartment_grid_toolbar_div input, .k-grid-toolbar, .search-input2 {
+  display: inline !important;
+}

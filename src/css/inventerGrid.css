@@ -86,6 +86,7 @@
 .apartment_grid_toolbar_div, .k-grid-toolbar{
   padding: 0px;
   background-color: #efefef !important;
+  border-color: #efefef !important;
 }
 
 .k-checkbox:checked + .k-checkbox-label::before{
