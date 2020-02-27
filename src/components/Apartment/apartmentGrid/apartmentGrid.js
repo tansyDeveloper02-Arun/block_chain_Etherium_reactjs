@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import { Grid, GridColumn as Column, GridToolbar } from '@progress/kendo-react-grid';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import products from './apartments.json';
@@ -7,10 +9,9 @@ import { filterBy } from '@progress/kendo-data-query';
 import { Input } from '@progress/kendo-react-inputs';
 import MyInventoryAnchorTag from './GridAnchorTag.js';
 import { formatDate } from '@telerik/kendo-intl';
-// import '../../css/inventerGrid.css'
 import '../../../css/inventerGrid.css'
 import { Link } from "react-router-dom";
-// import { orderBy } from '@progress/kendo-data-query';
+import { fnApartmentGrid } from "../../../actions/apartmentsGridAction";
 
 products.forEach(o => {    o.orderDate = formatDate(new Date(o.orderDate), { date: "long" });
     o.expiryDate = formatDate(new Date(o.expiryDate), { date: "long" });
@@ -359,4 +360,14 @@ class App extends React.Component {
         );
     }
 }
-export default App;
+// export default App;
+
+App.propTypes = {
+    apartment: PropTypes.object.isRequired
+  };
+const mapStateToProps = state => ({
+    apartment: state.apartment
+  });
+
+export default connect(mapStateToProps, { fnApartmentGrid }
+    )(App);

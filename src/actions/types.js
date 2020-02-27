@@ -1,0 +1,4 @@
+export const GET_ERRORS = "GET_ERRORS";
+export const CLEAR_ERRORS = "CLEAR_ERRORS";
+export const GET_APARTMENTS = "GET_APARTMENTS";
+export const APARTMENTS_LOADING = "APARTMENTS_LOADING";

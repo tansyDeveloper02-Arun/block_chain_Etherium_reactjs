@@ -17,6 +17,8 @@ import addNewUnit from "./components/Apartment/apartmentNameDetailGrid/addNewUni
 import tenantDetailGrid from "./components/Tenant/tenantGrid/tenantGrid";
 import contract from "./smart_contract";
 import 'bootstrap/dist/css/bootstrap.min.css';
+// import store from "./store";
+
 // import ApartmentDetails from './'
 class App extends Component{
 
