@@ -311,20 +311,6 @@ class Apartment extends React.Component {
                                 >
                                     <span className="k-icon k-i-print "></span>
                                 </button>
-                                
-                                
-                            <button
-                                    title="Add"
-                                    type="button"
-                                    onClick={() => { this.onClickButton("add_new_apartment") }}
-                                    className="k-button role-main-Link-plus-button"
-                                    style={{ float: "right",color: "#fff", backgroundColor:"#215CA0" }}
-                                >
-                                    <span
-                                        className="k-icon k-i-plus"
-                                        style={{ marginLeft: "0px" }}>
-                                    </span>
-                                </button>
                             </div>
                             </GridToolbar>
 

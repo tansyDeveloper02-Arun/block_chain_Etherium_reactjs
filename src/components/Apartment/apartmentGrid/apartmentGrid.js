@@ -15,11 +15,12 @@ products.forEach(o => {    o.orderDate = formatDate(new Date(o.orderDate), { dat
     o.expiryDate = formatDate(new Date(o.expiryDate), { date: "long" });
     o.shippedDate = o.shippedDate === 'NULL' ? undefined : new Date(o.shippedDate);
 });
-class Apartment extends React.Component {
+class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = this.createState(0, 10);
-        this.state.search= false;
+        this.state.searchButton= false;
+        this.state.data= products.map(dataItem => Object.assign({ selected: false }, dataItem));
         this.pageChange = this.pageChange.bind(this);
         this.state.tenant = false;
         if(this.props.location.pathname === "/all-apartment/grid"){
@@ -38,43 +39,17 @@ class Apartment extends React.Component {
             }
         }
     }
-
     lastSelectedIndex = 0;
     CommandCell;
     AnchorTag;
     _export;
     export = () => {
         this._export.save();
-        this.setState({
-            search: false
-        })
     }
     AnchorTag = MyInventoryAnchorTag("inEdit");
-    state = {
-        data: products.map(dataItem => Object.assign({ selected: false }, dataItem)),
-        skip: 0, take: 10,
-        sort: [
-            { field: '', dir: 'asc' }
-        ],
-        search: false,
-        deleteButton: false,
-        tenant: this.props,
-        count: 0,
-        flagdisabled: ""
-    }
-    CommandCell = MyCommandCell({
-        editField: this.editField,
-        tenant:this.state.tenant
-    });
-
-
-    pageChange(event) {
-        this.setState(this.createState(event.page.skip, event.page.take));
-    }
-
     createState(skip, take) {
         return {
-            items: products.slice(skip, skip + take),
+            data: products.slice(skip, skip + take),
             total: products.length,
             skip: skip,
             pageSize: take,
@@ -87,15 +62,34 @@ class Apartment extends React.Component {
             }
         };
     }
+    // state = {
+    //     skip: 0, take: 10,
+    //     sort: [
+    //         { field: '', dir: 'asc' }
+    //     ],
+    //     search: false,
+    //     deleteButton: false,
+    //     tenant: this.props,
+    //     count: 0,
+    //     flagdisabled: ""
+    // }
+    pageChange(event) {
+        this.setState(this.createState(event.page.skip, event.page.take));
+    }
 
+    
+    CommandCell = MyCommandCell({
+        editField: this.editField,
+        tenant:this.props
+    });
     selectionChange = (event) => {
         event.dataItem.selected = !event.dataItem.selected;
         this.forceUpdate();
         const countingData = []
-        for (let i = 0; i <= this.state.items.length; i++) {
-            if (this.state.items[i] !== undefined) {
-                if (this.state.items[i]['selected'] === true) {
-                    countingData.push(this.state.items[i])
+        for (let i = 0; i <= this.state.data.length; i++) {
+            if (this.state.data[i] !== undefined) {
+                if (this.state.data[i]['selected'] === true) {
+                    countingData.push(this.state.data[i])
                 }
             }
         }
@@ -116,7 +110,7 @@ class Apartment extends React.Component {
     rowClick = (event) => {
         let last = this.lastSelectedIndex;
         const current = this.state.data.findIndex(dataItem => dataItem === event.dataItem);
-
+        
         if (!event.nativeEvent.shiftKey) {
             this.lastSelectedIndex = last = current;
         }
@@ -145,7 +139,7 @@ class Apartment extends React.Component {
         if (checked === true) {
             this.setState({
                 deleteButton: true,
-                count: this.state.items.length
+                count: this.state.data.length
             })
         } else {
             this.setState({
@@ -153,12 +147,12 @@ class Apartment extends React.Component {
                 count: 0
             })
         }
-        this.state.items.forEach(item => item.selected = checked);
+        this.state.data.forEach(item => item.selected = checked);
         this.forceUpdate();
     }
     handleChange = (event) => {
         this.setState({
-            items: filterBy(products.map(dataItem => Object.assign({ selected: false }, dataItem)), {
+            data: filterBy(products.map(dataItem => Object.assign({ selected: false }, dataItem)), {
                 logic: "or",
                 filters: [{ field: "ProductName", operator: "contains", value: event.target.value },
                 { field: "city", operator: "contains", value: event.target.value },
@@ -174,30 +168,28 @@ class Apartment extends React.Component {
     onClickButton = (event) => {
         if (event === "cancel") {
             this.setState({
-                search: false
+                searchButton: false
             })
         }
         if (event === "search") {
+            console.log("search ")
             this.setState({
-                search: true
+                searchButton: true
             })
 
         }
         if (event === "add_new_apartment") {
             this.props.history.push("/apartment/grid/add")
         }
-        
     }
     onClickEditButton = () => {
-
         this.setState({
             flagdisabled: true
         })
-
-
     }
     render() {
         var url = "/tenant/apartment/grid" + this.props.location.search
+        console.log(this.state)
         return (
             <div>
                 <div className="" style={{ margin:"16px" }}>
@@ -210,11 +202,7 @@ class Apartment extends React.Component {
                     </div>
                     <br/>
                     <div className="apartment_grid_toolbar_div">
-                        <ExcelExport
-                            data={this.state.data}
-                            ref={exporter => this._export = exporter}
-                        >
-                            <div
+                    <div
                                     style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", float: "left", marginBottom:"10px", fontSize: "20px", fontWeight: "500", color: "rgba (0,0,0,0.87)" }}
                                 >
                                     {this.state.tenant=== true ? 
@@ -223,31 +211,26 @@ class Apartment extends React.Component {
                                     <label style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", marginLeft: "10px", color: "rgba (0,0,0,0.87)" }}>{this.state.count} row(s) selected</label>
                                     : null}
                                 </div>
-                            
-
-                            <GridToolbar className="Grid_excel_button">
-
-                            
-                            {this.state.search === true ? 
-                                    
-                                    <Input
-                                        className="search-input2"
-                                        onChange={this.handleChange}
-                                        placeholder="search"
-                                        style={{ float: "center", marginLeft: "20px" }}
-                                    />
-                                 : null}
-                            {this.state.search === true ? 
-                                <button
-                                className="k-button"
-                                name="hello"
-                                onClick={() => { this.onClickButton("cancel") }}
-                                style={{ float: "center", boxShadow: "none", color: "#586069",position: "relative", padding: '0px',
-                                backgroundColor: "#efefef", border: "none", marginLeft:"-25px" }}
-                            >X
-                            </button> : null}
-                            <div style={{display:"flex", float: "right"}}>
-                                 {this.state.deleteButton === true ? 
+                                {this.state.searchButton === true ? 
+                                            
+                                            <Input
+                                                className="search-input2"
+                                                onChange={this.handleChange}
+                                                placeholder="search"
+                                                style={{ float: "center", marginLeft: "20px" }}
+                                            />
+                                        : null}
+                                    {this.state.searchButton === true ? 
+                                        <button
+                                        className="k-button"
+                                        name="hello"
+                                        onClick={() => { this.onClickButton("cancel") }}
+                                        style={{ float: "center", boxShadow: "none", color: "#586069",position: "relative", padding: '0px',
+                                        backgroundColor: "#efefef", border: "none", marginLeft:"-25px" }}
+                                    >X
+                                    </button> : null}
+                                    <div style={{display:"flex", float: "right"}}>
+                                {this.state.deleteButton === true ? 
                                  <div>
                                 {this.state.count > 1 ? 
                                     <div className="editDiv">
@@ -258,13 +241,6 @@ class Apartment extends React.Component {
 
                                         ><span className="k-icon k-i-pencil"></span>
                                         </button>
-                                        {/* <Link
-                                            className="k-button"
-                                            style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
-                                            disabled
-
-                                        >Add Unit
-                                        </Link> */}
                                     </div> :
                                     <div>
                                     <Link
@@ -274,12 +250,6 @@ class Apartment extends React.Component {
                                     >
                                         <span className="k-icon k-i-pencil"></span>
                                     </Link>
-                                    {/* <Link
-                                            className="k-button"
-                                            style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
-                                            to="/apartment/add-unit"
-                                        >Add Unit
-                                        </Link> */}
                                     </div>
                                     
                             }</div> : null}
@@ -330,14 +300,17 @@ class Apartment extends React.Component {
                                         style={{ marginLeft: "0px" }}>
                                     </span>
                                 </button>
-                            </div>
-                            
-                            </GridToolbar>
-
-                            <Grid
-                                className="apartment_grid_data"
+                                </div>
+            <ExcelExport
+                data={products}
+                ref={exporter => this._export = exporter}
+            >
+                    <GridToolbar  className="Grid_excel_button">
+                               
+                    </GridToolbar>
+                    <Grid className="apartment_grid_data"
                                 style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", fontSize: "14px", fontWeight: "400" }}
-                                data={this.state.items}
+                                data={this.state.data}
                                 // data={orderBy(this.state.data.slice(this.state.skip, this.state.take + this.state.skip), this.state.sort)}
                                 skip={this.state.skip}
                                 selectedField="selected"
@@ -356,15 +329,14 @@ class Apartment extends React.Component {
                                     this.setState({
                                         sort: e.sort
                                     });
-                                }}
-                            >   
+                                }}>
                                 <Column
                                     className="check-box-color"
                                     field="selected"
                                     width="50px"
                                     marginLeft="100px"
                                     headerSelectionValue={
-                                        this.state.items.findIndex(dataItem => dataItem.selected === false) === -1
+                                        this.state.data.findIndex(dataItem => dataItem.selected === false) === -1
                                     }
                                 />
                                 <Column filterable={false} cell={this.CommandCell} title="Name"/>
@@ -374,19 +346,20 @@ class Apartment extends React.Component {
                                 <Column field="orderDate" title="Created Date" />
                                 <Column field="Opened_units" title="Opened Units" />
                                 <Column field="Rented_units" title="Rented Units" />
-                            </Grid>
-                        </ExcelExport>
+                    
+                </Grid>
+            </ExcelExport>
 
-                    </div>
-                    <footer className="footer-grid" style={{ textAlign: "center" }}>
-                        <hr />
-                        &copy; Copyright  {new Date().getFullYear()} All rights reserved
-    </footer>
+</div>
+<footer className="footer-grid" style={{ textAlign: "center" }}>
+    <hr />
+    &copy; Copyright  {new Date().getFullYear()} All rights reserved
+</footer>
 
-                </div >
+</div >
 
-            </div>
+</div>
         );
     }
 }
-export default Apartment;
+export default App;
