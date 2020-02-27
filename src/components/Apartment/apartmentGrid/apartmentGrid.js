@@ -10,6 +10,7 @@ import { formatDate } from '@telerik/kendo-intl';
 // import '../../css/inventerGrid.css'
 import '../../../css/inventerGrid.css'
 import { Link } from "react-router-dom";
+// import { orderBy } from '@progress/kendo-data-query';
 
 products.forEach(o => {    o.orderDate = formatDate(new Date(o.orderDate), { date: "long" });
     o.expiryDate = formatDate(new Date(o.expiryDate), { date: "long" });
@@ -20,7 +21,6 @@ class App extends React.Component {
         super(props);
         this.state = this.createState(0, 10);
         this.state.searchButton= false;
-        this.state.data= products.map(dataItem => Object.assign({ selected: false }, dataItem));
         this.pageChange = this.pageChange.bind(this);
         this.state.tenant = false;
         if(this.props.location.pathname === "/all-apartment/grid"){
@@ -49,7 +49,7 @@ class App extends React.Component {
     AnchorTag = MyInventoryAnchorTag("inEdit");
     createState(skip, take) {
         return {
-            data: products.slice(skip, skip + take),
+            data: products.map(dataItem => Object.assign({ selected: false }, dataItem)).slice(skip, skip + take),
             total: products.length,
             skip: skip,
             pageSize: take,
@@ -62,17 +62,17 @@ class App extends React.Component {
             }
         };
     }
-    // state = {
-    //     skip: 0, take: 10,
-    //     sort: [
-    //         { field: '', dir: 'asc' }
-    //     ],
-    //     search: false,
-    //     deleteButton: false,
-    //     tenant: this.props,
-    //     count: 0,
-    //     flagdisabled: ""
-    // }
+    state = {
+        skip: 0, take: 10,
+        sort: [
+            { field: '', dir: 'asc' }
+        ],
+        search: false,
+        deleteButton: false,
+        tenant: this.props,
+        count: 0,
+        flagdisabled: ""
+    }
     pageChange(event) {
         this.setState(this.createState(event.page.skip, event.page.take));
     }
@@ -161,9 +161,10 @@ class App extends React.Component {
                 { field: "Opened_units", operator: "contains", value: event.target.value },
                 { field: "Rented_units", operator: "contains", value: event.target.value },
                 ]
-                
-            })
+            }),
+            
         });
+        
     };
     onClickButton = (event) => {
         if (event === "cancel") {
@@ -176,7 +177,6 @@ class App extends React.Component {
             this.setState({
                 searchButton: true
             })
-
         }
         if (event === "add_new_apartment") {
             this.props.history.push("/apartment/grid/add")
@@ -189,7 +189,6 @@ class App extends React.Component {
     }
     render() {
         var url = "/tenant/apartment/grid" + this.props.location.search
-        console.log(this.state)
         return (
             <div>
                 <div className="" style={{ margin:"16px" }}>
@@ -311,15 +310,13 @@ class App extends React.Component {
                     <Grid className="apartment_grid_data"
                                 style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", fontSize: "14px", fontWeight: "400" }}
                                 data={this.state.data}
-                                // data={orderBy(this.state.data.slice(this.state.skip, this.state.take + this.state.skip), this.state.sort)}
+                                // data={orderBy(this.state.data,this.state.sort)}
                                 skip={this.state.skip}
                                 selectedField="selected"
                                 onSelectionChange={this.selectionChange}
                                 onHeaderSelectionChange={this.headerSelectionChange}
                                 take={this.state.take}
                                 total={this.state.total}
-                                // total={this.state.data.length}
-                                // pageable={true}
                                 pageable={this.state.pageable}
                                 pageSize={this.state.pageSize}
                                 onPageChange={this.pageChange}
