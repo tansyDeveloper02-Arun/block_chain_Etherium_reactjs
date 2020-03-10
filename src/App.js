@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-// import logo from './logo.svg';
 import './App.css';
-// import web3 from './web3';
-// import lottery from './lottery';
 import './css/telerikCssBootstrap/all.css';
 import { Landing } from "./components/layouts/landing";
 import apartmentGrid from "./components/Apartment/apartmentGrid/apartmentGrid";
@@ -36,7 +33,6 @@ class App extends Component{
             <Route exact path='/all-unit-owner/grid' component={unitOwnerGrid} />
             <Route exact path='/rented-paid/grid' component={rentPaidGrid} />
             <Route exact path='/apartment/detail/grid' component={apartmentDetailGrid} />
-            
             <Route exact path='/apartment/detail/grid/details' component={apartmentDetailGridDetail} />
             <Route exact path='/apartment/detail/grid/details/Payment' component={apartmentDetailPaymentDetail} />
             <Route exact path='/contract-code' component={contract} />
@@ -47,7 +43,6 @@ class App extends Component{
             <Route exact path='/apartment/new-unit/add' component={addNewUnit} />
             <Route exact path='/apartment/unit/edit' component={addNewUnit} />
             {/* Tenant */}
-            
             <Route exact path='/tenant/grid' component={tenantDetailGrid} />
             <Route exact path='/tenant/apartment/grid' component={apartmentGrid} />
             <Route exact path='/tenant/apartment/detail/grid' component={apartmentDetailGrid} />

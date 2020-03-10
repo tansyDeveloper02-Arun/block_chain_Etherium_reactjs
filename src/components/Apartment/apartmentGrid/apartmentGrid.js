@@ -17,6 +17,7 @@ products.forEach(o => {    o.orderDate = formatDate(new Date(o.orderDate), { dat
     o.expiryDate = formatDate(new Date(o.expiryDate), { date: "long" });
     o.shippedDate = o.shippedDate === 'NULL' ? undefined : new Date(o.shippedDate);
 });
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -40,6 +41,7 @@ class App extends React.Component {
             }
         }
     }
+    
     lastSelectedIndex = 0;
     CommandCell;
     AnchorTag;
@@ -83,6 +85,7 @@ class App extends React.Component {
         editField: this.editField,
         tenant:this.props
     });
+
     selectionChange = (event) => {
         event.dataItem.selected = !event.dataItem.selected;
         this.forceUpdate();
@@ -126,6 +129,7 @@ class App extends React.Component {
         }
         this.forceUpdate();
     }
+
     enterEdit = (dataItem) => {
         this.setState({
             data: this.state.data.map(item =>
@@ -134,6 +138,7 @@ class App extends React.Component {
             )
         });
     }
+
     headerSelectionChange = (event) => {
         const checked = event.syntheticEvent.target.checked;
 
@@ -151,6 +156,7 @@ class App extends React.Component {
         this.state.data.forEach(item => item.selected = checked);
         this.forceUpdate();
     }
+
     handleChange = (event) => {
         this.setState({
             data: filterBy(products.map(dataItem => Object.assign({ selected: false }, dataItem)), {
@@ -163,10 +169,9 @@ class App extends React.Component {
                 { field: "Rented_units", operator: "contains", value: event.target.value },
                 ]
             }),
-            
         });
-        
     };
+
     onClickButton = (event) => {
         if (event === "cancel") {
             this.setState({
@@ -183,11 +188,13 @@ class App extends React.Component {
             this.props.history.push("/apartment/grid/add")
         }
     }
+
     onClickEditButton = () => {
         this.setState({
             flagdisabled: true
         })
     }
+
     render() {
         var url = "/tenant/apartment/grid" + this.props.location.search
         return (

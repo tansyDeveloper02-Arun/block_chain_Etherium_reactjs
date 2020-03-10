@@ -7,10 +7,10 @@ import {
 
 
 
-export const fnApartmentGrid = (userData, history) => dispatch => {
+export const fnApartmentGrid = (history) => dispatch => {
   dispatch(clearErrors());
   axios
-    .post("https://55wqpnop60.execute-api.us-east-1.amazonaws.com/latest/apl-lookup-admin-company-post-update", userData)
+    .post("https://tssflaskrestfulapis-twuhyuvm5a-de.a.run.app/api/lkp/city-area")
     .then(res => {
       dispatch(setGetAllInsertUpdateData(res));
       history.push("/home/lookup-company")
