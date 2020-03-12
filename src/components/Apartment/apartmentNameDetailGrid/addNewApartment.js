@@ -10,6 +10,8 @@ import { Button } from '@progress/kendo-react-buttons';
 import products from './apartments.json';
 import { Link } from "react-router-dom";
 // import { DatePicker } from '@progress/kendo-react-dateinputs';
+import web3 from '../../../web3';
+import apartment_Abi_address from '../../../lottery';
 
 class ProductDetail extends React.Component {
   constructor(props) {
@@ -52,6 +54,18 @@ class ProductDetail extends React.Component {
     }
     
   }
+  // componentDidMount(){
+
+  //   console.log(apartment_Abi_address.methods.getApartments().call())
+
+  // }
+  onChange = e => {
+    const value = e.target.value;
+    this.setState({
+      [e.target.name]: value
+
+    })
+  }
   render() {
     var url = "/apartment/grid/add"
     
@@ -88,40 +102,32 @@ class ProductDetail extends React.Component {
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                         <Input
                           className="input_field"
-                          name="username"
+                          name="apartment_name"
                           style={{ width: "100%" }}
                           label="Name"
-                          // placeholder="First Name"
-                          pattern={"[A-Za-z]+"}
-                          minLength={2}
-                          
+                          value={this.state.apartment_name}
+                          onChange={this.onChange}
                         />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
-                        name="username"
+                        name="Apartment_owner_address"
                         style={{ width: "100%" }}
                         label="Apartment Owner"
-                        // placeholder="First Name"
-                        pattern={"[A-Za-z]+"}
-                        minLength={2}
-                        
+                        value={this.state.Apartment_owner_address}
+                        onChange={this.onChange}
                       />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                           className="input_field"
-                          name="username"
+                          name="start_date"
                           style={{ width: "100%" }}
                           label="Start Date"
-                          value={new Date()}
-                          onChange={event => this.setState({ Floor: event.target.value})}
                           type="date"
-                          // placeholder="First Name"
-                          // pattern={"[A-Za-z]+"}
-                          // minLength={2}
-                          // required
+                          value={this.state.start_date ? this.state.start_date:new Date()}
+                          onChange={this.onChange}
                         />
                       </div>
                       
@@ -130,37 +136,32 @@ class ProductDetail extends React.Component {
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                         <Input
                           className="input_field"
-                          name="username"
+                          name="door_number"
                           style={{ width: "100%" }}
                           label="Door #"
-                          // placeholder="First Name"
-                          pattern={"[A-Za-z]+"}
-                          minLength={2}
+                          value={this.state.door_number}
+                          onChange={this.onChange}
                           
                         />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                         <Input
                           className="input_field"
-                          name="username"
+                          name="street"
                           style={{ width: "100%" }}
                           label="Street"
-                          // placeholder="First Name"
-                          pattern={"[A-Za-z]+"}
-                          minLength={2}
-                          required
+                          value={this.state.street}
+                          onChange={this.onChange}
                         />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                         <Input
                           className="input_field"
-                          name="username"
+                          name="locality"
                           style={{ width: "100%" }}
                           label="Locality"
-                          // placeholder="First Name"
-                          pattern={"[A-Za-z]+"}
-                          minLength={2}
-                          required
+                          value={this.state.locality}
+                          onChange={this.onChange}
                         />
                       </div>
                       
@@ -170,38 +171,33 @@ class ProductDetail extends React.Component {
                     <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
-                        name="username"
+                        name="city"
                         style={{ width: "100%" }}
                         label="City"
-                        // placeholder="First Name"
-                        pattern={"[A-Za-z]+"}
-                        minLength={2}
+                        value={this.state.city}
+                        onChange={this.onChange}
                         
                       />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                         <Input
                           className="input_field"
-                          name="username"
+                          name="country"
                           style={{ width: "100%" }}
                           label="Country"
-                          // placeholder="First Name"
-                          pattern={"[A-Za-z]+"}
-                          minLength={2}
-                          
+                          value={this.state.country}
+                          onChange={this.onChange}
                         />
                         
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
-                        name="username"
+                        name="postal_code"
                         style={{ width: "100%" }}
                         label="Postal Code"
-                        // placeholder="First Name"
-                        pattern={"[A-Za-z]+"}
-                        minLength={2}
-                        
+                        value={this.state.postal_code}
+                        onChange={this.onChange}
                       />
                       </div>
                     </div>
@@ -262,9 +258,17 @@ class ProductDetail extends React.Component {
     );
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
-    this.setState({ success: true });
+    const account = await web3.eth.personal.getAccounts();
+    const contractor =  await apartment_Abi_address.options.address;
+    await apartment_Abi_address.methods.createApartment(this.state.apartment_name,  this.state.door_number, this.state.street, this.state.locality, this.state.postal_code, this.state.start_date)
+    .send({
+        from:account[0],
+        to:contractor
+      });
+
+    this.setState({ success: true,  });
     setTimeout(() => { this.setState({ success: false }); }, 3000);
   }
 }

@@ -12,7 +12,7 @@ export default function MyRoleAnchorTag(editField) {
         ? (
           <td>
             <Link type="text" to={ANCHOR_TAG_URL}  >
-              {this.props.dataItem["ProductName"]}</Link>
+              {this.props.dataItem["apartment_name"]}</Link>
           </td>
         )
         : null;

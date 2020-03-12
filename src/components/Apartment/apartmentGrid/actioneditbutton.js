@@ -19,7 +19,7 @@ export function MyCommandCell({ editField, tenant }) {
                     title="Edit"
                     className="anchor_tag"
                     style={{ padding: "0px" }}>
-                    {this.props.dataItem.ProductName}
+                    {this.props.dataItem.apartment_name}
                 </Link>
             </td >
             );

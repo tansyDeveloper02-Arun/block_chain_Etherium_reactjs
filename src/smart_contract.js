@@ -14,14 +14,24 @@ class App extends Component{
   }
 
   async componentDidMount(){
-
-    const Owner = web3.currentProvider.selectedAddress;
-    
-    const manager =  await lottery.methods.countUnits().call();
+    // console.log(web3.eth.personal.getAccounts())
+    const account = await web3.eth.personal.getAccounts()
+    console.log(account)
+    const Owner = web3.givenProvider.selectedAddress;
     const contractor =  await lottery.options.address;
-    const owner_balance = await web3.eth.getBalance(web3.currentProvider.selectedAddress);
+    console.log(lottery)
+    const manager =  await lottery.methods.contractOwnerAddress()
+    .call()
+    // .send({
+    //   from:account[0],
+    //   to:contractor
+    // });
+    console.log("manager")
+    console.log(manager)
+    console.log("manager")
+    const owner_balance = await web3.eth.getBalance(web3.givenProvider.selectedAddress);
 
-    const apartment_numbers = await lottery.methods.getAppartmentUnits().call();
+    const apartment_numbers = await lottery.methods.getApartments().call();
     const listItems = apartment_numbers.map((number) =>
       <li key={number.toString()}>
         {number}

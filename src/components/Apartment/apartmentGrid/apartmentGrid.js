@@ -12,6 +12,8 @@ import { formatDate } from '@telerik/kendo-intl';
 import '../../../css/inventerGrid.css'
 import { Link } from "react-router-dom";
 import { fnApartmentGrid } from "../../../actions/apartmentsGridAction";
+import web3 from '../../../web3';
+import apartment_Abi_address from '../../../lottery';
 
 products.forEach(o => {    o.orderDate = formatDate(new Date(o.orderDate), { date: "long" });
     o.expiryDate = formatDate(new Date(o.expiryDate), { date: "long" });
@@ -24,6 +26,7 @@ class App extends React.Component {
         this.state = this.createState(0, 10);
         this.state.searchButton= false;
         this.pageChange = this.pageChange.bind(this);
+        this.state.apartments_data = [];
         this.state.tenant = false;
         if(this.props.location.pathname === "/all-apartment/grid"){
             this.state.apartment = "All Apartments";
@@ -52,10 +55,11 @@ class App extends React.Component {
     AnchorTag = MyInventoryAnchorTag("inEdit");
     createState(skip, take) {
         return {
-            data: products.map(dataItem => Object.assign({ selected: false }, dataItem)).slice(skip, skip + take),
+            data: [],
             total: products.length,
             skip: skip,
             pageSize: take,
+            take:take,
             pageable: {
                 buttonCount: 0,
                 info: true,
@@ -64,6 +68,31 @@ class App extends React.Component {
                 previousNext: true
             }
         };
+    }
+    async componentDidMount(){
+        const account = await web3.eth.personal.getAccounts();
+        const contractor =  apartment_Abi_address.options.address;
+        const manager =  await apartment_Abi_address.methods.contractOwnerAddress().call()
+        const APartments =  await apartment_Abi_address.methods.getApartments().call();
+        this.state.all_accounts= account;
+        this.state.apartment_owner=manager;
+        this.state.contractor=contractor;
+
+        this.setState({
+            data: APartments.map(dataItem => Object.assign({ selected: false }, dataItem)).slice(this.state.skip, this.state.skip + this.state.take),
+            all_accounts:account,
+            apartment_owner:manager,
+            contractor:contractor,
+            total: APartments.length,
+            pageSize: this.state.take,
+            pageable: {
+                buttonCount: 0,
+                info: true,
+                type: 'numeric',
+                pageSizes: true,
+                previousNext: true
+            }
+        })
     }
     state = {
         skip: 0, take: 10,
@@ -76,6 +105,7 @@ class App extends React.Component {
         count: 0,
         flagdisabled: ""
     }
+    
     pageChange(event) {
         this.setState(this.createState(event.page.skip, event.page.take));
     }
@@ -179,7 +209,6 @@ class App extends React.Component {
             })
         }
         if (event === "search") {
-            console.log("search ")
             this.setState({
                 searchButton: true
             })
@@ -197,6 +226,7 @@ class App extends React.Component {
 
     render() {
         var url = "/tenant/apartment/grid" + this.props.location.search
+
         return (
             <div>
                 <div className="" style={{ margin:"16px" }}>
@@ -341,13 +371,13 @@ class App extends React.Component {
                                     width="50px"
                                     marginLeft="100px"
                                     headerSelectionValue={
-                                        this.state.data.findIndex(dataItem => dataItem.selected === false) === -1
+                                        this.state.data.lenght === 0 ? this.state.data:this.state.data.findIndex(dataItem => dataItem.selected === false) === -1
                                     }
                                 />
                                 <Column filterable={false} cell={this.CommandCell} title="Name"/>
 
-                                <Column field="city" title="City" />
-                                <Column field="Country" title="Country" />
+                                <Column field="street" title="City" />
+                                <Column field="locality" title="Country" />
                                 <Column field="orderDate" title="Created Date" />
                                 <Column field="Opened_units" title="Opened Units" />
                                 <Column field="Rented_units" title="Rented Units" />
