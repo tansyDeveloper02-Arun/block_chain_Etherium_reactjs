@@ -1,7 +1,7 @@
 pragma solidity ^0.6.3;
 pragma experimental ABIEncoderV2;
 
-  contract  Apartments{
+contract  Apartments{
     address public contractOwnerAddress;
     uint256 apartment_id_generator;
     uint256 unit_id_generator;
@@ -45,6 +45,7 @@ pragma experimental ABIEncoderV2;
         uint256 contract_id;
         uint256 unit_id;
         address tenant_address;
+        uint256 advance_payment;
         address unit_owner;
         string start_date;
         string end_date;
@@ -130,10 +131,11 @@ pragma experimental ABIEncoderV2;
         distinctOwnership(_unit_id, 2, _new_owner);
     }
 
-function AssignTenant(uint256 _apartment_id,
+    function AssignTenant(uint256 _apartment_id,
                     uint256 _unit_id,
                     address _tenant_address,
                     address _unit_owner,
+                    uint256 _advance_payment,
                     string memory _start_date,
                     string memory _end_date,
                     string memory _contract_timestamp) public{
@@ -146,6 +148,7 @@ function AssignTenant(uint256 _apartment_id,
         unit_contracts.push(unit_contract(_unit_id,
                                         contract_id_generator++,
                                         _tenant_address,
+                                        _advance_payment,
                                         _unit_owner,
                                         _start_date,
                                         _end_date,
@@ -258,6 +261,7 @@ function AssignTenant(uint256 _apartment_id,
 
     function myUnitsRentHistory(uint256 _unit_id) public view returns(rent_payment[] memory){
         require(getCurrentContract(_unit_id) >= 0,"contract not found");
+        require(Units[_unit_id].unit_owner == msg.sender);
         uint256 contract_id = uint256(getCurrentContract(_unit_id));
         rent_payment[] memory temp3 = new rent_payment[](personal[msg.sender][4].length);
         for(uint128 i; i<rents.length; i++){
@@ -280,6 +284,7 @@ function AssignTenant(uint256 _apartment_id,
 
     function clickToRent(uint256 _unit_id,
                     address _unit_owner,
+                    uint256 _advance_payment,
                     string memory _start_date,
                     string memory _end_date,
                     string memory _contract_timestamp) public payable{
@@ -291,6 +296,7 @@ function AssignTenant(uint256 _apartment_id,
         unit_contracts.push(unit_contract(_unit_id,
                                         contract_id_generator++,
                                         msg.sender,
+                                        _advance_payment,
                                         _unit_owner,
                                         _start_date,
                                         _end_date,
@@ -306,9 +312,9 @@ function AssignTenant(uint256 _apartment_id,
         Units[uint256(indexOfUnit(_unit_id))].current_tenent_address = address(0);
     }
 
-//=========================================
-//===========helper methods================
-//=========================================
+    //=========================================
+    //===========helper methods================
+    //=========================================
 
     function checkApartmentOwnership(address _address,uint256 _apartment_id) public view returns(bool){
         if(apartment_buildings[_apartment_id].apartment_owner == _address){

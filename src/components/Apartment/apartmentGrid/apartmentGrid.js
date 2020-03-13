@@ -70,14 +70,16 @@ class App extends React.Component {
         };
     }
     async componentDidMount(){
+
         const account = await web3.eth.personal.getAccounts();
         const contractor =  apartment_Abi_address.options.address;
         const manager =  await apartment_Abi_address.methods.contractOwnerAddress().call()
+        
         const APartments =  await apartment_Abi_address.methods.getApartments().call();
         this.state.all_accounts= account;
         this.state.apartment_owner=manager;
         this.state.contractor=contractor;
-
+        
         this.setState({
             data: APartments.map(dataItem => Object.assign({ selected: false }, dataItem)).slice(this.state.skip, this.state.skip + this.state.take),
             all_accounts:account,
@@ -189,11 +191,11 @@ class App extends React.Component {
 
     handleChange = (event) => {
         this.setState({
-            data: filterBy(products.map(dataItem => Object.assign({ selected: false }, dataItem)), {
+            data: filterBy(this.state.data.map(dataItem => Object.assign({ selected: false }, dataItem)), {
                 logic: "or",
-                filters: [{ field: "ProductName", operator: "contains", value: event.target.value },
-                { field: "city", operator: "contains", value: event.target.value },
-                { field: "Country", operator: "contains", value: event.target.value },
+                filters: [{ field: "apartment_name", operator: "contains", value: event.target.value },
+                { field: "street", operator: "contains", value: event.target.value },
+                { field: "locality", operator: "contains", value: event.target.value },
                 { field: "orderDate", operator: "contains", value: event.target.value },
                 { field: "Opened_units", operator: "contains", value: event.target.value },
                 { field: "Rented_units", operator: "contains", value: event.target.value },
@@ -339,7 +341,7 @@ class App extends React.Component {
                                 </button>
                                 </div>
             <ExcelExport
-                data={products}
+                data={this.state.data}
                 ref={exporter => this._export = exporter}
             >
                     <GridToolbar  className="Grid_excel_button">
@@ -374,8 +376,7 @@ class App extends React.Component {
                                         this.state.data.lenght === 0 ? this.state.data:this.state.data.findIndex(dataItem => dataItem.selected === false) === -1
                                     }
                                 />
-                                <Column filterable={false} cell={this.CommandCell} title="Name"/>
-
+                                <Column field="apartment_name" filterable={false} cell={this.CommandCell} title="Name"/>
                                 <Column field="street" title="City" />
                                 <Column field="locality" title="Country" />
                                 <Column field="orderDate" title="Created Date" />

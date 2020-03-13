@@ -5,7 +5,10 @@ import ApartmentDetails1 from "./contracts/Apartments.json"
 // console.log(ApartmentDetails1)
 // const address = Web3.currentProvider.selectedAddress;
 // const address = ApartmentDetails2.networks['5777'].address;
+
 const address = ApartmentDetails1.networks['5777'].address;
+// const address = "0x30227ddd4d95789455BaF5dBf012Ec50A8ee1463";
+
 // console.log(ApartmentDetails2.networks['5777'].address)
 // console.log(typeof(address))
 const abi = ApartmentDetails1.abi;

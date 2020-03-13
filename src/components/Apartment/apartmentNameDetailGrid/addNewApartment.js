@@ -2,7 +2,7 @@ import React from "react";
 import '../../../css/header.css';
 import '../../../css/Productdetail.css';
 import { Input } from '@progress/kendo-react-inputs';
-// import { DropDownList } from '@progress/kendo-react-dropdowns';
+import { DropDownList } from '@progress/kendo-react-dropdowns';
 // import { Ripple } from '@progress/kendo-react-ripple';
 import { Button } from '@progress/kendo-react-buttons';
 // import { Upload } from '@progress/kendo-react-upload';
@@ -20,6 +20,7 @@ class ProductDetail extends React.Component {
     this.state = {
       success: false,
       value: new Date(),
+      apartment_owner_address_data:[],
       tenant: false,
       label:"New"
     };
@@ -44,6 +45,13 @@ class ProductDetail extends React.Component {
   inventory=["Finished goods","inventory asset","Work in progress"]
   purchase=["Advetising and marketing","Automobile expenses","Bad debt","bank fees and charges","Consult expenses","contract assets","salaries and employee wages","internet expenses","other expenses"]
   sizes = ["Discount", "income", "general income", "interest income","late fee income","other charges","sales","Shipping charge"];
+  async componentDidMount(){
+    const account = await web3.eth.personal.getAccounts();
+
+    this.setState({
+      apartment_owner_address_data:account
+    })
+  }
   onClickButton = (event) => {
     if(event === "cancel"){
       this.props.history.push('/apartment/grid');
@@ -54,11 +62,6 @@ class ProductDetail extends React.Component {
     }
     
   }
-  // componentDidMount(){
-
-  //   console.log(apartment_Abi_address.methods.getApartments().call())
-
-  // }
   onChange = e => {
     const value = e.target.value;
     this.setState({
@@ -110,14 +113,16 @@ class ProductDetail extends React.Component {
                         />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                      <Input
+                      {/* <Input
                         className="input_field"
                         name="Apartment_owner_address"
                         style={{ width: "100%" }}
                         label="Apartment Owner"
                         value={this.state.Apartment_owner_address}
                         onChange={this.onChange}
-                      />
+                      /> */}
+                      <DropDownList data={this.state.apartment_owner_address_data} label="Apartment Owner" name="Apartment_owner_address" style={{ width: '100%' }} value={this.state.Apartment_owner_address}
+                        onChange={this.onChange}/>
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
@@ -261,13 +266,13 @@ class ProductDetail extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     const account = await web3.eth.personal.getAccounts();
+
     const contractor =  await apartment_Abi_address.options.address;
     await apartment_Abi_address.methods.createApartment(this.state.apartment_name,  this.state.door_number, this.state.street, this.state.locality, this.state.postal_code, this.state.start_date)
     .send({
         from:account[0],
         to:contractor
       });
-
     this.setState({ success: true,  });
     setTimeout(() => { this.setState({ success: false }); }, 3000);
   }
