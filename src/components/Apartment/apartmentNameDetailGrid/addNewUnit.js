@@ -9,6 +9,8 @@ import { Button } from '@progress/kendo-react-buttons';
 // import { ImageUpload } from "../../imageUpload";
 import products from './apartments.json';
 import { Link } from "react-router-dom";
+import web3 from '../../../web3';
+import apartment_Abi_address from '../../../lottery';
 
 class NewUnit extends React.Component {
   constructor(props) {
@@ -19,6 +21,7 @@ class NewUnit extends React.Component {
       value: new Date(),
       tenant: false,
       label: "Add Unit",
+      apartment_owner_address_data:[],
       assign_tenant : false
     };
     for (let i = 0; i <= products.length; i++) {
@@ -58,7 +61,25 @@ class NewUnit extends React.Component {
   inventory=["East","West","North","South"]
   purchase=["Advetising and marketing","Automobile expenses","Bad debt","bank fees and charges","Consult expenses","contract assets","salaries and employee wages","internet expenses","other expenses"]
   sizes = ["Discount", "income", "general income", "interest income","late fee income","other charges","sales","Shipping charge"];
+  async componentDidMount(){
+    const account = await web3.eth.personal.getAccounts();
+    // const get_apartments = await apartment_Abi_address.methods.getApartments().call();
+    var count = 0;
+    var address_length = account.map(dataItem => Object.assign({id:count++, address:dataItem}))
+    const address = account.filter(item => item.toLowerCase() !== web3.givenProvider.selectedAddress)
+    var apartment_owner_address_length = [];
+    address_length.map(item => {if(item.address.toLowerCase() === web3.givenProvider.selectedAddress){
+      apartment_owner_address_length = item
+    }})
+    // item !== web3.givenProvider.selectedAddress
+    // console.log(web3.givenProvider.selectedAddress)
+    this.setState({
+      apartment_owner_address_data:address,
+      apartment_owner_address_length:apartment_owner_address_length.address
+    })
+  }
   onClickButton = (event) => {
+
     if(event === "cancel"){
       this.props.history.push('/apartment/detail/grid' + this.props.location.search);
     }
@@ -68,7 +89,13 @@ class NewUnit extends React.Component {
     }
     
   }
-  
+  onChange = e => {
+    const value = e.target.value;
+    this.setState({
+      [e.target.name]: value
+
+    })
+  }
   render() {
     var url = "/apartment/detail/grid"  + this.props.location.search;
     var url2 = "/apartment/new-unit/add";
@@ -109,11 +136,11 @@ class NewUnit extends React.Component {
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
-                        name="username"
+                        name="tenant_name"
                         style={{ width: "100%" }}
                         label="Tenant Name"
                         value={this.state.tenant_name}
-                        onChange={event => this.setState({ tenant_name: event.target.value})}
+                        onChange={this.onChange}
                       />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
@@ -128,29 +155,22 @@ class NewUnit extends React.Component {
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
-                        name="username"
+                        name="unit_number"
                         style={{ width: "100%" }}
                         label="Unit #"
-                        value={this.state.Unit_Number}
-                        onChange={event => this.setState({ Unit_Number: event.target.value})}
-                        // placeholder="First Name"
-                        // pattern={"[A-Za-z]+"}
-                        // minLength={1}
+                        value={this.state.unit_number}
+                        onChange={this.onChange}
                       />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                      <Input
-                        className="input_field"
-                        name="username"
-                        style={{ width: "100%" }}
-                        label="Unit Owner"
-                        value={this.state.unit_owner}
-                        onChange={event => this.setState({ unit_owner: event.target.value})}
-                        // placeholder="First Name"
-                        pattern={"[A-Za-z]+"}
-                        // minLength={2}
-                        // required
-                      />
+                        <DropDownList 
+                          data={this.state.apartment_owner_address_data} 
+                          name="tenant_address" 
+                          label="Tenant Address" 
+                          style={{ width: '100%' }} 
+                          value={this.state.tenant_address}
+                          onChange={this.onChange}
+                          />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       
@@ -161,57 +181,47 @@ class NewUnit extends React.Component {
                     {this.state.assign_tenant === true ? <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                           className="input_field"
-                          name="username"
+                          name="lease_start_data"
                           style={{ width: "100%" }}
                           label="Lease Start Date"
-                          value={new Date()}
-                          onChange={event => this.setState({ Floor: event.target.value})}
+                          value={this.state.lease_start_data ? this.state.lease_start_data:new Date()}
+                           onChange={this.onChange}
                           type="date"
                         />
                       </div>:<div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
-                        name="username"
+                        name="Floor"
                         style={{ width: "100%" }}
                         label="Floor"
                         value={this.state.Floor}
-                        onChange={event => this.setState({ Floor: event.target.value})}
-                        // placeholder="First Name"
-                        // pattern={"[A-Za-z]+"}
-                        // minLength={2}
-                        // required
+                        onChange={this.onChange}
                       />
                       </div>}
                       {this.state.assign_tenant === true ? <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                         <Input
                           className="input_field"
-                          name="username"
+                          name="lease_end_date"
                           style={{ width: "100%" }}
                           label="Lease End Date"
-                          value={new Date()}
-                          onChange={event => this.setState({ Floor: event.target.value})}
+                          value={this.state.lease_end_date ? this.state.lease_end_date:new Date()}
+                          onChange={this.onChange}
                           type="date"
-                          // placeholder="First Name"
-                          // pattern={"[A-Za-z]+"}
-                          // minLength={2}
-                          // required
                         />
                       </div>
                       :<div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                        <DropDownList data={this.inventory} label="Direction" style={{ width: '100%' }} value={this.state.direction}  onChange={event => this.setState({ direction: event.target.value})}/>
+                        <DropDownList data={this.inventory} name="Direction" label="Direction" style={{ width: '100%' }} value={this.state.Direction}
+                        onChange={this.onChange}/>
                       </div>}
                       
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
-                        name="username"
+                        name="monthly_rent"
                         style={{ width: "100%" }}
                         label="Monthly Rent"
-                        value={this.state.Amount}  onChange={event => this.setState({ Amount: event.target.value})}
-                        // placeholder="First Name"
-                        // pattern={"[A-Za-z]+"}
-                        // minLength={2}
-                        // required
+                        value={this.state.monthly_rent}
+                        onChange={this.onChange}
                       />
                       </div>
                     </div>
@@ -221,17 +231,19 @@ class NewUnit extends React.Component {
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
-                        name="username"
+                        name="Sqft"
                         style={{ width: "100%" }}
                         label="Sqft"
-                        value={this.state.Sqft}  onChange={event => this.setState({ Sqft: event.target.value})}
+                        value={this.state.Sqft}
+                        onChange={this.onChange}
                       />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
-                        name="username"
-                        value={this.state.bed_rooms}  onChange={event => this.setState({ bed_rooms: event.target.value})}
+                        name="bed_rooms"
+                        value={this.state.bed_rooms}
+                        onChange={this.onChange}
                         style={{ width: "100%" }}
                         label="Bed rooms"
                       />
@@ -239,8 +251,9 @@ class NewUnit extends React.Component {
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
-                        name="username"
-                        value={this.state.bath_rooms}  onChange={event => this.setState({ bath_rooms: event.target.value})}
+                        name="bath_rooms"
+                        value={this.state.bath_rooms}
+                        onChange={this.onChange}
                         style={{ width: "100%" }}
                         label="Bath rooms"
                       />
@@ -250,10 +263,20 @@ class NewUnit extends React.Component {
                     {this.state.assign_tenant === true ? null: 
                     <div className="row">
                     <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                        <Checkbox label={'Closed For Maintanence'}/>
+                        <Checkbox 
+                          label={'Closed For Maintanence'} 
+                          name="closed_for_maintanence"
+                          value={this.state.closed_for_maintanence}
+                          onChange={event => this.setState({ closed_for_maintanence: event.value})}
+                          />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                      <Checkbox label={'Already Rented'}/>
+                        <Checkbox 
+                          label={'Already Rented'}
+                          name="already_rented"
+                          value={this.state.already_rented}
+                          onChange={event => this.setState({ already_rented: event.value})}
+                        />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       </div>
@@ -309,8 +332,17 @@ class NewUnit extends React.Component {
     );
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
+    // const account = await web3.eth.personal.getAccounts();
+    const contractor =  await apartment_Abi_address.options.address;
+    console.log(this.state) 
+    console.log(this.state.apartment_owner_address_length)
+    await apartment_Abi_address.methods.createUnit(0,this.state.unit_number,  this.state.Floor,   this.state.Direction, this.state.monthly_rent, this.state.Sqft, this.state.bed_rooms, this.state.bath_rooms, this.state.closed_for_maintanence, this.state.already_rented, this.state.tenant_address)
+    .send({
+        from:this.state.apartment_owner_address_length, 
+        to:contractor  
+      });
     this.setState({ success: true });
     setTimeout(() => { this.setState({ success: false }); if(this.props.location.pathname === "/apartment/assign-unit"){this.props.history.push("/unit-owner/grid")}}, 3000);
   }

@@ -29,6 +29,13 @@ class ProductDetail extends React.Component {
       this.state.Unit_Number = "101"
       this.state.Floor = "Ground"
     }
+    if(this.props.location.pathname === "/all-apartment/grid/add"){
+      this.state.apartment = "All Apartments";
+      this.state.link = "/all-apartment/grid";
+    }else{
+      this.state.apartment = "My Apartments";
+      this.state.link = "/apartment/grid";
+    }
     for (let i = 0; i <= products.length; i++) {
       if(products[i] !== undefined){
           if(products[i]['ProductID'].toString() === this.props.location.search.slice(4)){
@@ -71,7 +78,14 @@ class ProductDetail extends React.Component {
   }
   render() {
     var url = "/apartment/grid/add"
-    
+    if(this.props.location.pathname === "/all-apartment/grid/add"){
+      url = "/all-apartment/grid/add"
+    }else{
+      url = "/apartment/grid/add"
+    }
+    if(this.props.location.pathname === "/apartment/grid/edit"){
+      url = "/apartment/grid/edit"
+    }
     return (
       <div>
         <div>
@@ -84,7 +98,7 @@ class ProductDetail extends React.Component {
               color: "black"
             }}> 
             <Link className="link_tag" to=""><span className="k-icon k-i-pencils">H</span></Link>
-            {this.state.tenant === false ? <Link className="link_tag_2" to="/apartment/grid"><span> Apartments</span><span className="link_tag_2_curve"></span></Link>: 
+            {this.state.tenant === false ? <Link className="link_tag_2" to={this.state.link}><span> {this.state.apartment}</span><span className="link_tag_2_curve"></span></Link>: 
             <Link className="link_tag_2" to="/tenant/grid"><span> Tenants</span><span className="link_tag_2_curve"></span></Link>}
             {this.state.tenant === true ? null: 
             <Link className="link_tag_3" to={url}><span>  {this.state.label} Apartment Building</span><span className="link_tag_3_curve"></span></Link>}
@@ -270,7 +284,7 @@ class ProductDetail extends React.Component {
     const contractor =  await apartment_Abi_address.options.address;
     await apartment_Abi_address.methods.createApartment(this.state.apartment_name,  this.state.door_number, this.state.street, this.state.locality, this.state.postal_code, this.state.start_date)
     .send({
-        from:account[0],
+        from:account[3],
         to:contractor
       });
     this.setState({ success: true,  });

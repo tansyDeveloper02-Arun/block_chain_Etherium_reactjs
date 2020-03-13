@@ -11,6 +11,8 @@ import { formatDate } from '@telerik/kendo-intl';
 // import '../../css/inventerGrid.css'
 import '../../../css/inventerGrid.css'
 import { Link } from "react-router-dom";
+import web3 from '../../../web3';
+import apartment_Abi_address from '../../../lottery';
 
 products.forEach(o => {
     o.orderDate = formatDate(new Date(o.orderDate), { date: "long" });
@@ -24,14 +26,7 @@ class Apartment extends React.Component {
         this.state.search= false;
         
         this.pageChange = this.pageChange.bind(this);
-        
-        for (let i = 0; i <= products.length; i++) {
-            if(products[i] !== undefined){
-                if(products[i]['ProductID'].toString() === this.props.location.search.slice(4)){
-                    this.state.apartmentName = products[i]['ProductName']
-                }
-            }
-        }
+
         if(this.props.location.pathname === "/tenant/apartment/detail/grid"){
             this.state.tenant = true;
         }else{
@@ -79,10 +74,12 @@ class Apartment extends React.Component {
 
     createState(skip, take) {
         return {
-            items: products.slice(skip, skip + take),
+            // items: products.slice(skip, skip + take),
+            items: [],
             total: products.length,
             skip: skip,
             pageSize: take,
+            take:take,
             pageable: {
                 buttonCount: 0,
                 info: true,
@@ -92,7 +89,35 @@ class Apartment extends React.Component {
             }
         };
     }
+    async componentDidMount(){
 
+        const account = await web3.eth.personal.getAccounts();
+        const contractor =  apartment_Abi_address.options.address;
+        const manager =  await apartment_Abi_address.methods.contractOwnerAddress().call()
+        const get_APartments =  await apartment_Abi_address.methods.getApartments().call();
+        const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.location.search.slice(4)).call();
+        const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
+        this.state.all_accounts= account;
+        this.state.apartment_owner=manager;
+        this.state.contractor=contractor;
+        
+        this.setState({
+            items: APartments.map(dataItem => Object.assign({ selected: false }, dataItem)).slice(this.state.skip, this.state.skip + this.state.take),
+            all_accounts:account,
+            apartment_owner:manager,
+            contractor:contractor,
+            total: APartments.length,
+            pageSize: this.state.take,
+            pageable: {
+                buttonCount: 0,
+                info: true,
+                type: 'numeric',
+                pageSizes: true,
+                previousNext: true
+            },
+            apartmentName:get_APartments[this.props.location.search.slice(4)]['apartment_name']
+        })
+    }
     selectionChange = (event) => {
         event.dataItem.selected = !event.dataItem.selected;
         this.forceUpdate();
@@ -201,8 +226,7 @@ class Apartment extends React.Component {
         var url4 = "/apartment/assign-unit" + this.props.location.search
         var url5 = "/apartment/assign-tenant" + this.props.location.search
         var url6 = "/apartment/new-unit/add" + this.props.location.search
-        
-  
+
         return (
             <div>
                 <div className="" style={{ margin:"16px" }}>
@@ -403,7 +427,7 @@ class Apartment extends React.Component {
                                 />
                                 <Column filterable={false} cell={this.CommandCell2} title="Unit #"/>
                                 <Column field="floor" title="Floor" />
-                                <Column field="Discontinued" title="Occupied" />
+                                <Column field="rented" title="Occupied" />
                                 {/* <Column field="address" title="Tenant Address" /> */}
                                 <Column filterable={false} cell={this.CommandCell} title="Monthly Rent"/>
                                 {/* <Column field="Inventory" title="Inventory" /> */}

@@ -79,9 +79,9 @@ class App extends React.Component {
         this.state.all_accounts= account;
         this.state.apartment_owner=manager;
         this.state.contractor=contractor;
-        
+        var count = 0;
         this.setState({
-            data: APartments.map(dataItem => Object.assign({ selected: false }, dataItem)).slice(this.state.skip, this.state.skip + this.state.take),
+            data: APartments.map(dataItem => Object.assign({ selected: false, id: count++}, dataItem)).slice(this.state.skip, this.state.skip + this.state.take),
             all_accounts:account,
             apartment_owner:manager,
             contractor:contractor,
@@ -216,7 +216,12 @@ class App extends React.Component {
             })
         }
         if (event === "add_new_apartment") {
-            this.props.history.push("/apartment/grid/add")
+            
+            if(this.props.location.pathname === "/all-apartment/grid"){
+                this.props.history.push("/all-apartment/grid/add")
+            }else{
+                this.props.history.push("/apartment/grid/add")
+            }
         }
     }
 

@@ -10,6 +10,8 @@ import { formatDate } from '@telerik/kendo-intl';
 // import '../../css/inventerGrid.css'
 import '../../../css/inventerGrid.css'
 import { Link } from "react-router-dom";
+import web3 from '../../../web3';
+import apartment_Abi_address from '../../../lottery';
 
 products.forEach(o => {
     o.orderDate = formatDate(new Date(o.orderDate), { date: "long" });
@@ -30,14 +32,7 @@ class Apartment extends React.Component {
             this.state.units = "My Units";
             this.state.all_units = false
         }
-       
-            for (let i = 0; i <= products.length; i++) {
-                if(products[i] !== undefined){
-                    if(products[i]['ProductID'].toString() === this.props.location.search.slice(4)){
-                        this.state.buildingName = products[i]['ProductName']
-                    }
-                }
-            }
+
             if(this.props.location.pathname === "/tenant/apartment/grid"){
                 this.state.tenant = true;
             }
@@ -78,10 +73,11 @@ class Apartment extends React.Component {
 
     createState(skip, take) {
         return {
-            items: products.slice(skip, skip + take),
+            items: [],
             total: products.length,
             skip: skip,
             pageSize: take,
+            take:take,
             pageable: {
                 buttonCount: 0,
                 info: true,
@@ -91,7 +87,37 @@ class Apartment extends React.Component {
             }
         };
     }
+    async componentDidMount(){
 
+        const account = await web3.eth.personal.getAccounts();
+        const contractor =  apartment_Abi_address.options.address;
+        const manager =  await apartment_Abi_address.methods.contractOwnerAddress().call()
+        const get_APartments =  await apartment_Abi_address.methods.getApartments().call();
+        console.log(get_APartments[this.props.location.search.slice(4)]['apartment_name'])
+        
+        const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.location.search.slice(4)).call();
+        const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
+        this.state.all_accounts= account;
+        this.state.apartment_owner=manager;
+        this.state.contractor=contractor;
+        
+        this.setState({
+            items: APartments.map(dataItem => Object.assign({ selected: false,city:get_APartments[this.props.location.search.slice(4)]["street"] }, dataItem)).slice(this.state.skip, this.state.skip + this.state.take),
+            all_accounts:account,
+            apartment_owner:manager,
+            contractor:contractor,
+            total: APartments.length,
+            pageSize: this.state.take,
+            pageable: {
+                buttonCount: 0,
+                info: true,
+                type: 'numeric',
+                pageSizes: true,
+                previousNext: true
+            },
+            buildingName:get_APartments[this.props.location.search.slice(4)]['apartment_name']
+        })
+    }
     selectionChange = (event) => {
         event.dataItem.selected = !event.dataItem.selected;
         this.forceUpdate();
@@ -203,6 +229,7 @@ class Apartment extends React.Component {
     render() {
         var url = "/tenant/apartment/grid" + this.props.location.search
         var url3 = "/apartment/unit/edit" + this.props.location.search
+        console.log(this.state.items)
         return (
             <div>
                 <div className="" style={{ margin:"16px" }}>
@@ -399,12 +426,12 @@ class Apartment extends React.Component {
                                     }
                                 />
                                 {this.state.all_units === false ? <Column field="product" title="Apartment Name" /> :null}
-                                <Column field="UnitsInStock" title="Unit #" />
+                                <Column field="unit_number" title="Unit #" />
                                 <Column field="city" title="City" />
                                 
-                                <Column field="Amount" title="Monthly Rent" />
-                                <Column field="MaintainInventory" title="Rented" />
-                                <Column field="Occupied" title="Undermaintainance" />
+                                <Column field="monthly_rent" title="Monthly Rent" />
+                                <Column field="rented" title="Rented" />
+                                <Column field="maintainance" title="Undermaintainance" />
 
                                  
                             </Grid>

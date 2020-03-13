@@ -29,6 +29,7 @@ class App extends Component{
             <Route exact path='/' component={Landing} />
             <Route exact path='/apartment/grid' component={apartmentGrid} />
             <Route exact path='/all-apartment/grid' component={apartmentGrid} />
+            <Route exact path='/all-apartment/grid/add' component={addNewApartment} />
             <Route exact path='/unit-owner/grid' component={unitOwnerGrid} />
             <Route exact path='/all-unit-owner/grid' component={unitOwnerGrid} />
             <Route exact path='/rented-paid/grid' component={rentPaidGrid} />
