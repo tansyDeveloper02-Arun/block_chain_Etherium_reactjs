@@ -65,7 +65,7 @@ class ProductDetail extends React.Component {
     }
     
     if(event === "add_new_unit"){
-      this.props.history.push('/apartment/new-unit/add');
+      this.props.history.push("/apartment/new-unit/add");
     }
     
   }
@@ -279,12 +279,12 @@ class ProductDetail extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    const account = await web3.eth.personal.getAccounts();
+    // const account = await web3.eth.personal.getAccounts();
 
     const contractor =  await apartment_Abi_address.options.address;
     await apartment_Abi_address.methods.createApartment(this.state.apartment_name,  this.state.door_number, this.state.street, this.state.locality, this.state.postal_code, this.state.start_date)
     .send({
-        from:account[3],
+        from:web3.givenProvider.selectedAddress,
         to:contractor
       });
     this.setState({ success: true,  });

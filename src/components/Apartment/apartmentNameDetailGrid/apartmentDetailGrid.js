@@ -24,7 +24,7 @@ class Apartment extends React.Component {
         super(props);
         this.state = this.createState(0, 10);
         this.state.search= false;
-        
+        this.state.selected_unit_id = [];
         this.pageChange = this.pageChange.bind(this);
 
         if(this.props.location.pathname === "/tenant/apartment/detail/grid"){
@@ -66,12 +66,9 @@ class Apartment extends React.Component {
         editField: this.editField,
         tenant:this.props
     });
-
-
     pageChange(event) {
         this.setState(this.createState(event.page.skip, event.page.take));
     }
-
     createState(skip, take) {
         return {
             // items: products.slice(skip, skip + take),
@@ -90,13 +87,15 @@ class Apartment extends React.Component {
         };
     }
     async componentDidMount(){
-
         const account = await web3.eth.personal.getAccounts();
         const contractor =  apartment_Abi_address.options.address;
         const manager =  await apartment_Abi_address.methods.contractOwnerAddress().call()
         const get_APartments =  await apartment_Abi_address.methods.getApartments().call();
-        const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.location.search.slice(4)).call();
+       
+        const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
         const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
+        console.log(APartments_owner)
+        console.log(APartments)
         this.state.all_accounts= account;
         this.state.apartment_owner=manager;
         this.state.contractor=contractor;
@@ -115,30 +114,36 @@ class Apartment extends React.Component {
                 pageSizes: true,
                 previousNext: true
             },
-            apartmentName:get_APartments[this.props.location.search.slice(4)]['apartment_name']
+            apartmentName:get_APartments[this.props.match.params.id]['apartment_name']
         })
     }
     selectionChange = (event) => {
         event.dataItem.selected = !event.dataItem.selected;
         this.forceUpdate();
         const countingData = []
+        const Unit_id = []
         for (let i = 0; i <= this.state.items.length; i++) {
             if (this.state.items[i] !== undefined) {
                 if (this.state.items[i]['selected'] === true) {
                     countingData.push(this.state.items[i])
+                    Unit_id.push(this.state.items[i]['unit_id'])
                 }
             }
         }
+
+
         var counting = countingData.length;
         if (counting !== 0) {
             this.setState({
                 deleteButton: true,
-                count: countingData.length
+                count: countingData.length,
+                selected_unit_id:Unit_id[0]
             })
         } else {
             this.setState({
                 deleteButton: false,
-                count: 0
+                count: 0,
+                selected_unit_id:[]
             })
         }
     }
@@ -146,7 +151,7 @@ class Apartment extends React.Component {
     rowClick = (event) => {
         let last = this.lastSelectedIndex;
         const current = this.state.data.findIndex(dataItem => dataItem === event.dataItem);
-
+        
         if (!event.nativeEvent.shiftKey) {
             this.lastSelectedIndex = last = current;
         }
@@ -171,7 +176,7 @@ class Apartment extends React.Component {
     }
     headerSelectionChange = (event) => {
         const checked = event.syntheticEvent.target.checked;
-
+        
         if (checked === true) {
             this.setState({
                 deleteButton: true,
@@ -184,6 +189,7 @@ class Apartment extends React.Component {
             })
         }
         this.state.items.forEach(item => item.selected = checked);
+        
         this.forceUpdate();
     }
     handleChange = (event) => {
@@ -219,14 +225,14 @@ class Apartment extends React.Component {
         })
     }
     render() {
-        var url1 = "/apartment/detail/grid" + this.props.location.search
+        var url1 = "/apartment/detail/grid/" + this.props.match.params.id
         var url = "/tenant/apartment/grid" + this.props.location.search
         var url2 = "/tenant/apartment/detail/grid" + this.props.location.search
         var url3 = "/apartment/unit/edit" + this.props.location.search
-        var url4 = "/apartment/assign-unit" + this.props.location.search
+        var url4 = "/apartment/assign-unit/" + this.props.match.params.id+"/"+ this.state.selected_unit_id
         var url5 = "/apartment/assign-tenant" + this.props.location.search
-        var url6 = "/apartment/new-unit/add" + this.props.location.search
-
+        var url6 = "/apartment/new-unit/add/" + this.props.match.params.id
+        console.log(this.props.location.search)
         return (
             <div>
                 <div className="" style={{ margin:"16px" }}>
