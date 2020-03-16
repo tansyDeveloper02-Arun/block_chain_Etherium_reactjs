@@ -117,6 +117,7 @@ class Apartment extends React.Component {
     }
     selectionChange = (event) => {
         event.dataItem.selected = !event.dataItem.selected;
+        
         this.forceUpdate();
         const countingData = []
         const Unit_id = []
@@ -135,19 +136,22 @@ class Apartment extends React.Component {
             this.setState({
                 deleteButton: true,
                 count: countingData.length,
-                selected_unit_id:Unit_id[0]
+                selected_unit_id:Unit_id[0],
+                unit_owner_address:countingData[0]['unit_owner']
             })
         } else {
             this.setState({
                 deleteButton: false,
                 count: 0,
-                selected_unit_id:[]
+                selected_unit_id:[],
+                unit_owner_address:[]
             })
         }
     }
 
     rowClick = (event) => {
         let last = this.lastSelectedIndex;
+        
         const current = this.state.data.findIndex(dataItem => dataItem === event.dataItem);
         
         if (!event.nativeEvent.shiftKey) {
@@ -215,11 +219,24 @@ class Apartment extends React.Component {
             })
 
         }
-
     }
     onClickEditButton = () => {
         this.setState({
             flagdisabled: true
+        })
+    }
+    
+    vacateSubmit = async (event) => {
+        
+        await apartment_Abi_address.methods.vacateTenant(this.props.match.params.id,this.state.selected_unit_id[0])
+        .send({
+            from:this.state.unit_owner_address, 
+            gas:3000000
+          });
+        const APartments_owner_after_vacate_submit =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
+        const APartments_after_vacate_submit =  await apartment_Abi_address.methods.myUnits(APartments_owner_after_vacate_submit).call();
+        this.setState({
+            items: APartments_after_vacate_submit.map(dataItem => Object.assign({ selected: false }, dataItem)).slice(this.state.skip, this.state.skip + this.state.take)
         })
     }
     render() {
@@ -230,7 +247,7 @@ class Apartment extends React.Component {
         var url4 = "/apartment/assign-unit/" + this.props.match.params.id+"/"+ this.state.selected_unit_id
         var url5 = "/apartment/assign-tenant/" + this.props.match.params.id+"/"+ this.state.selected_unit_id
         var url6 = "/apartment/new-unit/add/" + this.props.match.params.id
-        console.log(this.props.location.search)
+
         return (
             <div>
                 <div className="" style={{ margin:"16px" }}>
@@ -299,20 +316,20 @@ class Apartment extends React.Component {
                                             className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
                                             disabled
-
+                                            to="#"
                                         >Assign Unit
                                         </Link>
                                         <Link
                                             className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
                                             disabled
-
+                                            to="#"
                                         >Assign Tenant
                                         </Link>
                                         <Link
                                             className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
-                                            // to={url1}
+                                            to="#"
                                             disabled
                                         >Vacate Tenant
                                         </Link>
@@ -340,7 +357,8 @@ class Apartment extends React.Component {
                                         <Link
                                             className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
-                                            to={url1}
+                                            to="#"
+                                            onClick={this.vacateSubmit}
                                         >Vacate Tenant
                                         </Link>
                                     </div>
