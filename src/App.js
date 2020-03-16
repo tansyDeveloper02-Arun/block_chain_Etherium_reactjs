@@ -34,13 +34,13 @@ class App extends Component{
             <Route exact path='/all-unit-owner/grid' component={unitOwnerGrid} />
             <Route exact path='/rented-paid/grid' component={rentPaidGrid} />
             <Route exact path='/apartment/detail/grid/:id' component={apartmentDetailGrid} />
-            <Route exact path='/apartment/detail/grid/details' component={apartmentDetailGridDetail} />
+            <Route exact path='/apartment/detail/grid/details/:id/:unit_id' component={apartmentDetailGridDetail} />
             <Route exact path='/apartment/detail/grid/details/Payment' component={apartmentDetailPaymentDetail} />
             <Route exact path='/contract-code' component={contract} />
             <Route exact path='/apartment/grid/add' component={addNewApartment} />
             <Route exact path='/apartment/grid/edit' component={addNewApartment} />
             <Route exact path='/apartment/assign-unit/:id/:unit_id' component={addNewUnit} />
-            <Route exact path='/apartment/assign-tenant' component={addNewUnit} />
+            <Route exact path='/apartment/assign-tenant/:id/:unit_id' component={addNewUnit} />
             <Route exact path='/apartment/new-unit/add/:id' component={addNewUnit} />
             <Route exact path='/apartment/unit/edit' component={addNewUnit} />
             {/* Tenant */}
@@ -48,7 +48,7 @@ class App extends Component{
             <Route exact path='/tenant/apartment/grid' component={apartmentGrid} />
             <Route exact path='/tenant/apartment/detail/grid' component={apartmentDetailGrid} />
             <Route exact path='/tenant/apartment/detail/grid/details/Payment' component={apartmentDetailPaymentDetail} />
-            <Route exact path='/apartment/detail/lease' component={apartmentDetailPaymentDetail} />
+            <Route exact path='/apartment/detail/lease/:id/:unit_id' component={apartmentDetailPaymentDetail} />
             
             {/* <Route exact path='/login' component={Login} />
             <Route exact path='/forgot-password' component={forgotPassword} />

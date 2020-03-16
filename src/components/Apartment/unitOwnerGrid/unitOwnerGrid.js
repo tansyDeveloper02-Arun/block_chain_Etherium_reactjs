@@ -93,7 +93,6 @@ class Apartment extends React.Component {
         const contractor =  apartment_Abi_address.options.address;
         const manager =  await apartment_Abi_address.methods.contractOwnerAddress().call()
         const get_APartments =  await apartment_Abi_address.methods.getApartments().call();
-        console.log(get_APartments[this.props.location.search.slice(4)]['apartment_name'])
         
         const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.location.search.slice(4)).call();
         const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();

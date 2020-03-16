@@ -5,9 +5,8 @@ export function MyCommandCell({ editField, tenant }) {
     return class extends GridCell {
         render() {
             const { dataItem } = this.props;
-
             const inEdit = dataItem[editField];
-            var UPDATE_URL = "/apartment/detail/lease?id=" + this.props.dataItem.unit_id
+            var UPDATE_URL = "/apartment/detail/lease/" + tenant.match.params.id + "/" + this.props.dataItem.unit_id
 
             if(tenant.location.pathname ==="/tenant/apartment/detail/grid"){
                 UPDATE_URL = "/tenant/apartment/detail/grid/details/Payment?id=" + this.props.dataItem.unit_id 

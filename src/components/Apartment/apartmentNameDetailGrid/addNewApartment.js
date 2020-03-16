@@ -279,13 +279,13 @@ class ProductDetail extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    // const account = await web3.eth.personal.getAccounts();
 
-    const contractor =  await apartment_Abi_address.options.address;
+    // const contractor =  await apartment_Abi_address.options.address;
     await apartment_Abi_address.methods.createApartment(this.state.apartment_name,  this.state.door_number, this.state.street, this.state.locality, this.state.postal_code, this.state.start_date)
     .send({
-        from:web3.givenProvider.selectedAddress,
-        to:contractor
+        from:this.state.Apartment_owner_address,
+        gas:3000000
+        // to:contractor
       });
     this.setState({ success: true,  });
     setTimeout(() => { this.setState({ success: false }); }, 3000);

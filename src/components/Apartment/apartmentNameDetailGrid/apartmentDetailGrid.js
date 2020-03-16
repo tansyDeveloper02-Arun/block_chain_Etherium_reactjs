@@ -94,8 +94,6 @@ class Apartment extends React.Component {
        
         const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
         const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
-        console.log(APartments_owner)
-        console.log(APartments)
         this.state.all_accounts= account;
         this.state.apartment_owner=manager;
         this.state.contractor=contractor;
@@ -230,7 +228,7 @@ class Apartment extends React.Component {
         var url2 = "/tenant/apartment/detail/grid" + this.props.location.search
         var url3 = "/apartment/unit/edit" + this.props.location.search
         var url4 = "/apartment/assign-unit/" + this.props.match.params.id+"/"+ this.state.selected_unit_id
-        var url5 = "/apartment/assign-tenant" + this.props.location.search
+        var url5 = "/apartment/assign-tenant/" + this.props.match.params.id+"/"+ this.state.selected_unit_id
         var url6 = "/apartment/new-unit/add/" + this.props.match.params.id
         console.log(this.props.location.search)
         return (

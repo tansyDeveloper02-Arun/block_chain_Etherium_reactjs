@@ -7,7 +7,7 @@ export function MyCommandCell2({ editField, tenant }) {
             const { dataItem } = this.props;
 
             const inEdit = dataItem[editField];
-            var UPDATE_URL = "/apartment/detail/grid/details?id=" + this.props.dataItem.unit_id
+            var UPDATE_URL = "/apartment/detail/grid/details/" + tenant.match.params.id + "/" + this.props.dataItem.unit_id
             if(tenant.location.pathname ==="/tenant/apartment/detail/grid"){
                 UPDATE_URL = "/tenant/apartment/detail/grid/details/Payment?id=" + this.props.dataItem.unit_id
             }

@@ -49,7 +49,7 @@ class NewUnit extends React.Component {
       this.state.label = "Assign Unit Owner"
       this.state.input_label = "Address"
     }
-    if(this.props.location.pathname === "/apartment/assign-tenant"){
+    if(this.props.location.pathname === "/apartment/assign-tenant/"+ this.props.match.params.id+"/"+ this.props.match.params.unit_id){
       this.state.label = "Assign Tenant"
       this.state.unit_owner = "Rich"
       this.state.assign_tenant = true
@@ -60,14 +60,31 @@ class NewUnit extends React.Component {
   inventory=["East","West","North","South"]
   purchase=["Advetising and marketing","Automobile expenses","Bad debt","bank fees and charges","Consult expenses","contract assets","salaries and employee wages","internet expenses","other expenses"]
   sizes = ["Discount", "income", "general income", "interest income","late fee income","other charges","sales","Shipping charge"];
+  
   async componentDidMount(){
     const account = await web3.eth.personal.getAccounts();
+    const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
+    const APartments_units =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
     
-    if(this.props.location.pathname === "/apartment/assign-unit/"+ this.props.match.params.id+"/"+ this.props.match.params.unit_id){
-      const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
-      const APartments_units =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
-      const selected_unit_id = APartments_units.filter(item => item.unit_id === this.props.match.params.unit_id)
+    const selected_unit_id = APartments_units.filter(item => item.unit_id === this.props.match.params.unit_id)
+    var count = 0;
+    console.log(selected_unit_id)
+    var address_length = account.map(dataItem => Object.assign({id:count++, address:dataItem}))
+    const address = account.filter(item => item !== APartments_owner)
+    
+    
+    var apartment_owner_address_length = [];
+    address_length.map(item => {if(item.address === APartments_owner){
+      apartment_owner_address_length = item
       
+    }})
+
+    this.setState({
+      apartment_owner_address_data:address,
+      apartment_owner_address_length:apartment_owner_address_length.address
+    })
+    if(this.props.location.pathname === "/apartment/assign-unit/"+ this.props.match.params.id+"/"+ this.props.match.params.unit_id){
+      var tenant_address = address.filter(item => item !== selected_unit_id[0]["current_tenent_address"])
       this.setState({
         unit_number:selected_unit_id[0]["unit_number"],
         Floor:selected_unit_id[0]["floor"],
@@ -79,25 +96,29 @@ class NewUnit extends React.Component {
         closed_for_maintanence:selected_unit_id[0]["maintainance"],
         already_rented:selected_unit_id[0]["rented"],
         tenant_address:selected_unit_id[0]["current_tenent_address"],
-        owner_address:true
+        owner_address:true,
+        apartment_owner_address_data:tenant_address,
+        unit_address:selected_unit_id[0]["unit_owner"]
       })
-      
     }
-    
-    var count = 0;
-    
-    var address_length = account.map(dataItem => Object.assign({id:count++, address:dataItem}))
-    const address = account.filter(item => item.toLowerCase() !== web3.givenProvider.selectedAddress)
-    var apartment_owner_address_length = [];
-    address_length.map(item => {if(item.address.toLowerCase() === web3.givenProvider.selectedAddress){
-      apartment_owner_address_length = item
-    }})
-    // item !== web3.givenProvider.selectedAddress
-    // console.log(web3.givenProvider.selectedAddress)
-    this.setState({
-      apartment_owner_address_data:address,
-      apartment_owner_address_length:apartment_owner_address_length.address
-    })
+    if(this.props.location.pathname === "/apartment/assign-tenant/"+ this.props.match.params.id+"/"+ this.props.match.params.unit_id){
+      var tenant_address2 = address.filter(item => item !== selected_unit_id[0]["current_tenent_address"])
+      this.setState({
+        unit_number:selected_unit_id[0]["unit_number"],
+        Floor:selected_unit_id[0]["floor"],
+        Direction:selected_unit_id[0]["direction"],
+        monthly_rent:selected_unit_id[0]["monthly_rent"],
+        Sqft:selected_unit_id[0]["sqft"],
+        bed_rooms:selected_unit_id[0]["bed_rooms"],
+        bath_rooms:selected_unit_id[0]["bath_rooms"],
+        closed_for_maintanence:selected_unit_id[0]["maintainance"],
+        already_rented:selected_unit_id[0]["rented"],
+        tenant_address:selected_unit_id[0]["current_tenent_address"],
+        owner_address:false,
+        apartment_owner_address_data:tenant_address2,
+        unit_address:selected_unit_id[0]["unit_owner"]
+      })
+    }
   }
   onClickButton = (event) => {
     if(event === "cancel"){
@@ -161,7 +182,6 @@ class NewUnit extends React.Component {
                       
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                      
                       </div>
                     </div>:null}
                     
@@ -356,14 +376,16 @@ class NewUnit extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    // const account = await web3.eth.personal.getAccounts();
-    const contractor =  await apartment_Abi_address.options.address;
+
+    // const contractor =  await apartment_Abi_address.options.address;
 
     if(this.props.location.pathname === "/apartment/new-unit/add/"+this.props.match.params.id){
+
       await apartment_Abi_address.methods.createUnit(this.props.match.params.id,this.state.unit_number,  this.state.Floor,   this.state.Direction, this.state.monthly_rent, this.state.Sqft, this.state.bed_rooms, this.state.bath_rooms, this.state.closed_for_maintanence, this.state.already_rented, this.state.tenant_address)
       .send({
           from:this.state.apartment_owner_address_length, 
-          to:contractor  
+          gas:3000000
+          // to:contractor  
         });
     }
     if(this.props.location.pathname === "/apartment/assign-unit/"+ this.props.match.params.id+"/"+ this.props.match.params.unit_id){
@@ -371,9 +393,17 @@ class NewUnit extends React.Component {
       await apartment_Abi_address.methods.AssignUnitOwner(this.props.match.params.id, this.props.match.params.unit_id, this.state.unit_owner_address)
       .send({
           from:this.state.apartment_owner_address_length, 
-          to:contractor  
+          gas:3000000
+          // to:contractor  
         });
-      console.log(this.state.apartment_owner_address_length)
+    }
+    if(this.props.location.pathname === "/apartment/assign-tenant/"+ this.props.match.params.id+"/"+ this.props.match.params.unit_id){
+      await apartment_Abi_address.methods.AssignTenant(this.props.match.params.id, this.props.match.params.unit_id,this.state.tenant_address, this.state.unit_address, this.state.monthly_rent,this.state.lease_start_data,this.state.lease_end_date,this.state.lease_start_data)
+      .send({
+          from:this.state.unit_address, 
+          gas:3000000
+          // to:contractor  
+        });
     }
     this.setState({ success: true });
     setTimeout(() => { this.setState({ success: false }); if(this.props.location.pathname === "/apartment/assign-unit/:id/:unit_id"){this.props.history.push("/unit-owner/grid")}}, 3000);

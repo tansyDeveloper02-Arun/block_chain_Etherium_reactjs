@@ -24,12 +24,6 @@
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 const path = require("path");
-const fs = require('fs');
-let secrets;
-
-if (fs.existsSync('secrets.json')) {
- secrets = JSON.parse(fs.readFileSync('secrets.json', 'utf8'));
-}
 
 module.exports = {
   /**
@@ -52,7 +46,7 @@ module.exports = {
     development: {
      host: "127.0.0.1",     // Localhost (default: none)
      port: 8545,            // Standard Ethereum port (default: none)
-     network_id: "*",       // Any network (default: none)
+     network_id: "1584332680772",       // Any network (default: none)
     },
 
     // Another network with more advanced options...

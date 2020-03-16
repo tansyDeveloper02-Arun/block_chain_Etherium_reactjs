@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { Input } from '@progress/kendo-react-inputs';
 // import { DropDownList } from '@progress/kendo-react-dropdowns';
 // import { DatePicker } from '@progress/kendo-react-dateinputs';
+import apartment_Abi_address from '../../../lottery';
 
 class ProductDetail extends React.Component {
   constructor(props) {
@@ -32,12 +33,13 @@ class ProductDetail extends React.Component {
           }
       }
   }
-  if(this.props.location.pathname === "/tenant/apartment/detail/grid/details/Payment"){
+    if(this.props.location.pathname === "/tenant/apartment/detail/grid/details/Payment"){
         this.state.tenant = true;
     }else{
         this.state.tenant = false;
     }
-    if(this.props.location.pathname === "/apartment/detail/lease"){
+
+    if(this.props.location.pathname === "/apartment/detail/lease/" + this.props.match.params.id + "/" + this.props.match.params.unit_id){
       this.state.lease = true;
     }else{
       this.state.lease = false;
@@ -48,17 +50,42 @@ class ProductDetail extends React.Component {
   inventory=["Finished goods","inventory asset","Work in progress"]
   purchase=["Advetising and marketing","Automobile expenses","Bad debt","bank fees and charges","Consult expenses","contract assets","salaries and employee wages","internet expenses","other expenses"]
   sizes = ["Discount", "income", "general income", "interest income","late fee income","other charges","sales","Shipping charge"];
+  
+  async componentDidMount(){
+
+      const get_APartments =  await apartment_Abi_address.methods.getApartments().call();
+      const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
+      const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
+      this.setState({
+        apartmentName:get_APartments[this.props.match.params.id]['apartment_name'],
+        unitName:APartments[this.props.match.params.unit_id]["unit_number"],
+        unit_data:APartments[this.props.match.params.unit_id],
+        monthly_rent:APartments[this.props.match.params.unit_id]["monthly_rent"],
+        current_tenent_address:APartments[this.props.match.params.unit_id]["current_tenent_address"]
+      })
+     
+  }
+
   onClickButton = (event) => {
     if(event === "cancel"){
-      this.props.history.push('/apartment/detail/grid/details'+ this.props.location.search);
+      this.props.history.push("/apartment/detail/grid/details/" + this.props.match.params.id + "/" + this.props.match.params.unit_id);
     }
     if(event === "cancel-2"){
-      this.props.history.push('/apartment/detail/grid'+ this.props.location.search);
+      this.props.history.push("/apartment/detail/grid/" + this.props.match.params.id);
     }
   }
+  onChange = e => {
+    const value = e.target.value;
+    this.setState({
+      [e.target.name]: value
+    })
+  }
+
   render() {
-    var url = "/apartment/detail/grid" + this.props.location.search
-    var url2 = "/apartment/detail/grid/details" + this.props.location.search
+    var url = "/apartment/detail/grid/" + this.props.match.params.id
+
+    var url_lease = "/apartment/detail/lease/" + this.props.match.params.id + "/" + this.props.match.params.unit_id;
+    var url2 = "/apartment/detail/grid/details/" + this.props.location.search
     var url3 = "/apartment/detail/grid/details/Payment" + this.props.location.search
     var url4 = "/tenant/apartment/grid" + this.props.location.search
     var url5 = "/tenant/apartment/detail/grid" + this.props.location.search
@@ -82,7 +109,7 @@ class ProductDetail extends React.Component {
                         {this.state.tenant === false ? <Link className="link_tag_3" to={url}> <span>Apartment Units</span><span className="link_tag_3_curve"></span> </Link>: 
                         <Link className="link_tag_3" to={url4}><span> Tenants Name Grid</span><span className="link_tag_3_curve"></span></Link>}
                         {this.state.lease === false ? <span>
-                        {this.state.tenant === false ? <Link className="link_tag_2" to={url2}><span> Payment History</span><span className="link_tag_2_curve"></span> </Link>: null}</span>:<Link className="link_tag_2" to={url2}><span> Lease Apartment Unit</span><span className="link_tag_2_curve"></span> </Link>}
+                        {this.state.tenant === false ? <Link className="link_tag_2" to={url2}><span> Payment History</span><span className="link_tag_2_curve"></span> </Link>: null}</span>:<Link className="link_tag_2" to={url_lease}><span> Lease Apartment Unit</span><span className="link_tag_2_curve"></span> </Link>}
 
                         {this.state.lease === false ? <span>
                         {this.state.tenant === false ? 
@@ -111,50 +138,49 @@ class ProductDetail extends React.Component {
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       {this.state.lease === false ? <Input
                           className="input_field"
-                          name="username"
+                          name="Year"
                           style={{ width: "100%" }}
                           label="Year"
-                          value={this.state.Floor}
-                          onChange={event => this.setState({ Floor: event.target.value})}
+                          value={this.state.Year}
+                          onChange={this.onChange}
                         />: <Input
                         className="input_field"
-                        name="username"
+                        name="start_date"
                         style={{ width: "100%" }}
                         label="Start date"
                         type="date"
-                        value={new Date()}
-                        onChange={event => this.setState({ Floor: event.target.value})}
+                        value={this.state.start_date ? this.state.start_date:new Date()}
+                        onChange={this.onChange}
 
                       />}
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       {this.state.lease === false ? <Input
                           className="input_field"
-                          name="username"
+                          name="Month"
                           style={{ width: "100%" }}
                           label="Month"
-                          value={this.state.Floor}
-                          onChange={event => this.setState({ Floor: event.target.value})}
+                          value={this.state.Month}
+                          onChange={this.onChange}
 
                         />: <Input
                         className="input_field"
-                        name="username"
+                        name="end_date"
                         style={{ width: "100%" }}
                         label="End date"
                         type="date"
-                        value={new Date()}
-                        onChange={event => this.setState({ Floor: event.target.value})}
-
+                        value={this.state.end_date ? this.state.end_date:new Date()}
+                        onChange={this.onChange}
                       />}
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       {this.state.lease === true ? <Input
                           className="input_field"
-                          name="username"
+                          name="advance_amount"
                           style={{ width: "100%" }}
                           label="Advance Amount"
-                          value={this.state.Floor}
-                          onChange={event => this.setState({ Floor: event.target.value})}
+                          value={this.state.advance_amount}
+                          onChange={this.onChange}
                         />: null}
                       </div>
                     </div>
@@ -164,32 +190,32 @@ class ProductDetail extends React.Component {
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
-                        name="username"
+                        name="monthly_rent"
                         style={{ width: "100%" }}
                         label="Monthly Rent"
-                        value={this.state.Amount}
-                        onChange={event => this.setState({ Amount: event.target.value})}
+                        value={this.state.monthly_rent}
+                        onChange={this.onChange}
                       />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                         className="input_field"
-                        name="username"
+                        name="paid_amount"
                         style={{ width: "100%" }}
                         label="Paid Amount"
-                        value={this.state.Floor}
-                        onChange={event => this.setState({ Floor: event.target.value})}
+                        value={this.state.paid_amount}
+                        onChange={this.onChange}
                       />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
                           className="input_field"
-                          name="username"
+                          name="payment_date"
                           style={{ width: "100%" }}
                           label="Payment Date"
-                          value={new Date()}
-                          onChange={event => this.setState({ Floor: event.target.value})}
                           type="date"
+                          value={this.state.payment_date? this.state.payment_date:new Date()}
+                          onChange={this.onChange}
                         />
                       </div>
                     </div>
@@ -243,8 +269,16 @@ class ProductDetail extends React.Component {
     );
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
+    if(this.props.location.pathname === "/apartment/detail/lease/" + this.props.match.params.id + "/" + this.props.match.params.unit_id){
+
+      await apartment_Abi_address.methods.clickToRent(this.state.unit_data.unit_id,this.state.unit_data.unit_owner,this.state.advance_amount,this.state.start_date,this.state.end_date,this.state.payment_date).send({
+        from:this.state.current_tenent_address, 
+        gas:3000000
+        // to:contractor  
+      });
+    }
     this.setState({ success: true });
     setTimeout(() => { this.setState({ success: false }); }, 3000);
   }

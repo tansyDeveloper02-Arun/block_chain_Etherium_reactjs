@@ -10,6 +10,7 @@ import { formatDate } from '@telerik/kendo-intl';
 // import '../../css/inventerGrid.css'
 import '../../../css/inventerGrid.css'
 import { Link } from "react-router-dom";
+import apartment_Abi_address from '../../../lottery';
 
 products.forEach(o => {
     o.orderDate = formatDate(new Date(o.orderDate), { date: "long" });
@@ -58,7 +59,16 @@ class Apartment extends React.Component {
     CommandCell = MyCommandCell({
         editField: this.editField
     });
+    async componentDidMount(){
+        const get_APartments =  await apartment_Abi_address.methods.getApartments().call();
+        const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
+        const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
 
+        this.setState({
+            apartmentName:get_APartments[this.props.match.params.id]['apartment_name'],
+            unitName:APartments[this.props.match.params.unit_id]["unit_number"]
+        })
+      }
 
     pageChange(event) {
         this.setState(this.createState(event.page.skip, event.page.take));
@@ -181,8 +191,8 @@ class Apartment extends React.Component {
         })
     }
     render() {
-        var url = "/apartment/detail/grid" + this.props.location.search
-        var url2 = "/apartment/detail/grid/details" + this.props.location.search
+        var url = "/apartment/detail/grid/" +this.props.match.params.id
+        var url2 = "/apartment/detail/grid/details/"+this.props.match.params.id+'/' + this.props.match.params.unit_id
         return (
             <div>
                 
