@@ -13,7 +13,7 @@ import { Input } from '@progress/kendo-react-inputs';
 // import { DropDownList } from '@progress/kendo-react-dropdowns';
 // import { DatePicker } from '@progress/kendo-react-dateinputs';
 import apartment_Abi_address from '../../../lottery';
-
+import web3 from '../../../web3';
 class ProductDetail extends React.Component {
   constructor(props) {
     super(props);
@@ -56,6 +56,7 @@ class ProductDetail extends React.Component {
       const get_APartments =  await apartment_Abi_address.methods.getApartments().call();
       const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
       const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
+      
       this.setState({
         apartmentName:get_APartments[this.props.match.params.id]['apartment_name'],
         unitName:APartments[this.props.match.params.unit_id]["unit_number"],
@@ -85,8 +86,8 @@ class ProductDetail extends React.Component {
     var url = "/apartment/detail/grid/" + this.props.match.params.id
 
     var url_lease = "/apartment/detail/lease/" + this.props.match.params.id + "/" + this.props.match.params.unit_id;
-    var url2 = "/apartment/detail/grid/details/" + this.props.location.search
-    var url3 = "/apartment/detail/grid/details/Payment" + this.props.location.search
+    var url2 = "/apartment/detail/grid/details/" + this.props.match.params.id + "/" + this.props.match.params.unit_id;
+    var url3 = "/apartment/detail/grid/details/Payment/" + this.props.match.params.id + "/" + this.props.match.params.unit_id;
     var url4 = "/tenant/apartment/grid" + this.props.location.search
     var url5 = "/tenant/apartment/detail/grid" + this.props.location.search
     var url6 = "/tenant/apartment/detail/grid/details/Payment" + this.props.location.search
@@ -271,12 +272,22 @@ class ProductDetail extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
+    const contractor =  await apartment_Abi_address.options.address;
     if(this.props.location.pathname === "/apartment/detail/lease/" + this.props.match.params.id + "/" + this.props.match.params.unit_id){
 
       await apartment_Abi_address.methods.clickToRent(this.state.unit_data.unit_id,this.state.unit_data.unit_owner,this.state.advance_amount,this.state.start_date,this.state.end_date,this.state.payment_date).send({
         from:this.state.current_tenent_address, 
         gas:3000000
         // to:contractor  
+      });
+    }
+    console.log(web3)
+    if(this.props.location.pathname === "/apartment/detail/grid/details/Payment/" + this.props.match.params.id + "/" + this.props.match.params.unit_id){
+      await apartment_Abi_address.methods.payRent(this.props.match.params.id, this.props.match.params.unit_id,this.state.Year,this.state.Month,this.state.monthly_rent,this.state.paid_amount,this.state.payment_date).send({
+        from:this.state.current_tenent_address, 
+        gas:3000000,
+        to:contractor,
+        value: web3.utils.toWei("5", "ether")
       });
     }
     this.setState({ success: true });

@@ -57,7 +57,8 @@ class Apartment extends React.Component {
         flagdisabled: ""
     }
     CommandCell = MyCommandCell({
-        editField: this.editField
+        editField: this.editField,
+        tenant: this.props
     });
     async componentDidMount(){
         const get_APartments =  await apartment_Abi_address.methods.getApartments().call();

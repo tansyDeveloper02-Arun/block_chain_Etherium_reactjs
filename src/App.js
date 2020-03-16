@@ -35,7 +35,7 @@ class App extends Component{
             <Route exact path='/rented-paid/grid' component={rentPaidGrid} />
             <Route exact path='/apartment/detail/grid/:id' component={apartmentDetailGrid} />
             <Route exact path='/apartment/detail/grid/details/:id/:unit_id' component={apartmentDetailGridDetail} />
-            <Route exact path='/apartment/detail/grid/details/Payment' component={apartmentDetailPaymentDetail} />
+            <Route exact path='/apartment/detail/grid/details/Payment/:id/:unit_id' component={apartmentDetailPaymentDetail} />
             <Route exact path='/contract-code' component={contract} />
             <Route exact path='/apartment/grid/add' component={addNewApartment} />
             <Route exact path='/apartment/grid/edit' component={addNewApartment} />
