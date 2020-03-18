@@ -16,20 +16,18 @@ class App extends Component{
   async componentDidMount(){
     // console.log(web3.eth.personal.getAccounts())
     const account = await web3.eth.personal.getAccounts()
-    console.log(account)
-    const Owner = web3.givenProvider.selectedAddress;
+
+    // const Owner = web3.givenProvider.selectedAddress;
+    const Owner = account[0];
     const contractor =  await lottery.options.address;
-    console.log(lottery)
     const manager =  await lottery.methods.contractOwnerAddress()
     .call()
     // .send({
     //   from:account[0],
     //   to:contractor
     // });
-    console.log("manager")
-    console.log(manager)
-    console.log("manager")
-    const owner_balance = await web3.eth.getBalance(web3.givenProvider.selectedAddress);
+
+    const owner_balance = await web3.eth.getBalance(Owner);
 
     const apartment_numbers = await lottery.methods.getApartments().call();
     const listItems = apartment_numbers.map((number) =>

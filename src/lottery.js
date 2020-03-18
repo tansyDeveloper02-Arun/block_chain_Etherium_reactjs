@@ -1,12 +1,15 @@
 import Web3 from './web3';
 import ApartmentDetails1 from "./contracts/Apartments.json"
-// import ApartmentDetails2 from "./contracts/Migrations.json"
-// const contract_address = ApartmentDetails.networks['5777'].address
-// console.log(ApartmentDetails1)
-// const address = Web3.currentProvider.selectedAddress;
-// const address = ApartmentDetails2.networks['5777'].address;
-console.log()
-const address = ApartmentDetails1.networks['1584332680772'].address;
+console.log(Web3.givenProvider)
+console.log(Web3.eth.givenProvider)
+var count = null
+if(Web3.eth.givenProvider.networkVersion === undefined){
+  count = Web3.givenProvider.networkVersion
+}else{
+  count = Web3.eth.givenProvider.networkVersion
+}
+console.log(count)
+const address = ApartmentDetails1.networks[Web3.eth.givenProvider.networkVersion].address;
 // const address = "0x30227ddd4d95789455BaF5dBf012Ec50A8ee1463";
 
 // console.log(ApartmentDetails2.networks['5777'].address)
