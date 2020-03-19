@@ -74,7 +74,10 @@ class App extends React.Component {
         const account = await web3.eth.personal.getAccounts();
         const contractor =  apartment_Abi_address.options.address;
         const manager =  await apartment_Abi_address.methods.contractOwnerAddress().call()
+        
         const APartments =  await apartment_Abi_address.methods.getApartments().call();
+        
+        // const my_apartments =  await apartment_Abi_address.methods.myApartments().call()
         this.state.all_accounts= account;
         this.state.apartment_owner=manager;
         this.state.contractor=contractor;

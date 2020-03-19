@@ -200,7 +200,7 @@ class Apartment extends React.Component {
             })
         });
     };
-    onClickButton = (event) => {
+    onClickButton = async (event) => {
         if (event === "cancel") {
             this.setState({
                 search: false
@@ -215,7 +215,12 @@ class Apartment extends React.Component {
         if (event === "add_new_apartment") {
             this.props.history.push("/apartment/new-unit/add")
         }
-        
+        if (event === "maintenance_close") {
+            await apartment_Abi_address.methods.unitMaintainanceClose(this.state.count).call()
+        }
+        if (event === "maintenance_open") {
+            await apartment_Abi_address.methods.unitMaintainanceOpen(this.state.count).call()
+        }
     }
     onClickEditButton = () => {
 
@@ -228,7 +233,7 @@ class Apartment extends React.Component {
     render() {
         var url = "/tenant/apartment/grid" + this.props.location.search
         var url3 = "/apartment/unit/edit" + this.props.location.search
-        console.log(this.state.items)
+
         return (
             <div>
                 <div className="" style={{ margin:"16px" }}>
@@ -319,23 +324,17 @@ class Apartment extends React.Component {
                                     <Link
                                             className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
-                                            
-
+                                            onClick={() => { this.onClickButton("maintenance_close") }}
+                                            to={this.props.location.pathname + this.props.location.search}
                                         >Maintenance Close
                                         </Link>
                                         <Link
                                             className="k-button"
                                             style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
-                                            
-
+                                            onClick={() => { this.onClickButton("maintenance_open") }}
+                                            to={this.props.location.pathname + this.props.location.search}
                                         >Maintenance Open
                                         </Link>
-                                    {/* <Link
-                                            className="k-button"
-                                            style={{ float: "right", boxShadow: "none", color: "#fff", backgroundColor:"#215CA0", padding:"2px", marginRight:"5px" }}
-                                            to="/apartment/add-unit"
-                                        >Add Unit
-                                        </Link> */}
                                     </div>
                                     
                             }</div> : null}

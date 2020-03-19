@@ -264,7 +264,7 @@ class ProductDetail extends React.Component {
             >
               <div style={{ display: "flex" }}>
                 <div className="success_message_circle">
-                  <i className="fa fa-check-square-o check_squre_icon" aria-hidden="true"></i>
+                  <span class="k-icon k-i-check k-i-checkmark check_squre_icon"></span>
                 </div>
                 <div className="success_message_content_div">
                   <h6 className="success_message_h6">SUCCESS!</h6>
@@ -279,7 +279,6 @@ class ProductDetail extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-
     // const contractor =  await apartment_Abi_address.options.address;
     await apartment_Abi_address.methods.createApartment(this.state.apartment_name,  this.state.door_number, this.state.street, this.state.locality, this.state.postal_code, this.state.start_date)
     .send({
@@ -288,7 +287,7 @@ class ProductDetail extends React.Component {
         // to:contractor
       });
     this.setState({ success: true,  });
-    setTimeout(() => { this.setState({ success: false }); }, 3000);
+    setTimeout(() => { this.setState({ success: false }); this.props.history.push("/apartment/grid") }, 3000);
   }
 }
 export default ProductDetail;

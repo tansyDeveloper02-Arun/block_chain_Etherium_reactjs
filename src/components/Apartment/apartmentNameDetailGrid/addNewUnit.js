@@ -361,7 +361,7 @@ class NewUnit extends React.Component {
             >
               <div style={{ display: "flex" }}>
                 <div className="success_message_circle">
-                  <i className="fa fa-check-square-o check_squre_icon" aria-hidden="true"></i>
+                  <span class="k-icon k-i-check k-i-checkmark check_squre_icon"></span>
                 </div>
                 <div className="success_message_content_div">
                   <h6 className="success_message_h6">SUCCESS!</h6>
@@ -406,7 +406,12 @@ class NewUnit extends React.Component {
         });
     }
     this.setState({ success: true });
-    setTimeout(() => { this.setState({ success: false }); if(this.props.location.pathname === "/apartment/assign-unit/:id/:unit_id"){this.props.history.push("/unit-owner/grid")}}, 3000);
+    setTimeout(() => { 
+      this.setState({ success: false }); 
+      if(this.props.location.pathname === "/apartment/assign-unit/:id/:unit_id"){this.props.history.push("/apartment/detail/grid/"+this.props.match.params.id)}
+      if(this.props.location.pathname === "/apartment/new-unit/add/"+this.props.match.params.id){this.props.history.push("/apartment/detail/grid/"+this.props.match.params.id)}
+      if(this.props.location.pathname === "/apartment/assign-tenant/"+ this.props.match.params.id+"/"+ this.props.match.params.unit_id){this.props.history.push("/apartment/detail/grid/"+this.props.match.params.id)}
+    }, 3000);
   }
 }
 export default NewUnit;
