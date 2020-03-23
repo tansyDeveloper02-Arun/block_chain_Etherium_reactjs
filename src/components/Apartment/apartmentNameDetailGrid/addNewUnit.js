@@ -64,11 +64,10 @@ class NewUnit extends React.Component {
   async componentDidMount(){
     const account = await web3.eth.personal.getAccounts();
     const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
-    const APartments_units =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
+    const APartments_units =  await apartment_Abi_address.methods.getApartmentUnits(this.props.match.params.id).call();
     
     const selected_unit_id = APartments_units.filter(item => item.unit_id === this.props.match.params.unit_id)
     var count = 0;
-    console.log(selected_unit_id)
     var address_length = account.map(dataItem => Object.assign({id:count++, address:dataItem}))
     const address = account.filter(item => item !== APartments_owner)
     
@@ -122,7 +121,7 @@ class NewUnit extends React.Component {
   }
   onClickButton = (event) => {
     if(event === "cancel"){
-      this.props.history.push('/apartment/detail/grid' + this.props.location.search);
+      this.props.history.push('/apartment/detail/grid'+this.props.match.params.id);
     }
     if(event === "add_new_unit"){
       this.props.history.push('/apartment/new-unit/add');
@@ -389,6 +388,7 @@ class NewUnit extends React.Component {
         });
     }
     if(this.props.location.pathname === "/apartment/assign-unit/"+ this.props.match.params.id+"/"+ this.props.match.params.unit_id){
+
       // console.log(apartment_Abi_address.methods.AssignUnitOwner())
       await apartment_Abi_address.methods.AssignUnitOwner(this.props.match.params.id, this.props.match.params.unit_id, this.state.unit_owner_address)
       .send({
@@ -408,7 +408,8 @@ class NewUnit extends React.Component {
     this.setState({ success: true });
     setTimeout(() => { 
       this.setState({ success: false }); 
-      if(this.props.location.pathname === "/apartment/assign-unit/:id/:unit_id"){this.props.history.push("/apartment/detail/grid/"+this.props.match.params.id)}
+      console.log(this.props.location.pathname)
+      if(this.props.location.pathname === "/apartment/assign-unit/"+this.props.match.params.id+"/"+ this.props.match.params.unit_id){this.props.history.push("/apartment/detail/grid/"+this.props.match.params.id)}
       if(this.props.location.pathname === "/apartment/new-unit/add/"+this.props.match.params.id){this.props.history.push("/apartment/detail/grid/"+this.props.match.params.id)}
       if(this.props.location.pathname === "/apartment/assign-tenant/"+ this.props.match.params.id+"/"+ this.props.match.params.unit_id){this.props.history.push("/apartment/detail/grid/"+this.props.match.params.id)}
     }, 3000);

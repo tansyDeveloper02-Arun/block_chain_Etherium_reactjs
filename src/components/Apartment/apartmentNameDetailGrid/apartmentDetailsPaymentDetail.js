@@ -13,7 +13,7 @@ import { Input } from '@progress/kendo-react-inputs';
 // import { DropDownList } from '@progress/kendo-react-dropdowns';
 // import { DatePicker } from '@progress/kendo-react-dateinputs';
 import apartment_Abi_address from '../../../lottery';
-import web3 from '../../../web3';
+// import web3 from '../../../web3';
 class ProductDetail extends React.Component {
   constructor(props) {
     super(props);
@@ -280,8 +280,8 @@ class ProductDetail extends React.Component {
         gas:3000000
         // to:contractor  
       });
+      
     }
-    console.log(web3)
     if(this.props.location.pathname === "/apartment/detail/grid/details/Payment/" + this.props.match.params.id + "/" + this.props.match.params.unit_id){
       await apartment_Abi_address.methods.payRent(this.props.match.params.id, this.props.match.params.unit_id,this.state.Year,this.state.Month,this.state.monthly_rent,this.state.paid_amount,this.state.payment_date).send({
         from:this.state.current_tenent_address, 
@@ -289,7 +289,14 @@ class ProductDetail extends React.Component {
       });
     }
     this.setState({ success: true });
-    setTimeout(() => { this.setState({ success: false }); }, 3000);
+    setTimeout(() => { this.setState({ success: false });
+    if(this.props.location.pathname === "/apartment/detail/lease/" + this.props.match.params.id + "/" + this.props.match.params.unit_id){
+      this.props.history.push("/apartment/detail/grid/"+this.props.match.params.id)
+    }
+    if(this.props.location.pathname === "/apartment/detail/grid/details/Payment/" + this.props.match.params.id + "/" + this.props.match.params.unit_id){
+      this.props.history.push("/apartment/detail/grid/details/"+this.props.match.params.id + "/" + this.props.match.params.unit_id)
+    }
+    }, 3000);
   }
 }
 export default ProductDetail;

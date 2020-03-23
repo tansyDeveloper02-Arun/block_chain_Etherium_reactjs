@@ -93,17 +93,25 @@ class Apartment extends React.Component {
         const get_APartments =  await apartment_Abi_address.methods.getApartments().call();
        
         const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
-        const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
+        
+        
+        var APartment_units =  await apartment_Abi_address.methods.getApartmentUnits(this.props.match.params.id).call();
+
+        if(this.props.location.pathname === "/all-unit-owner/grid"){
+            APartment_units =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
+            
+        }
+        
         this.state.all_accounts= account;
         this.state.apartment_owner=manager;
         this.state.contractor=contractor;
-        
+       
         this.setState({
-            items: APartments.map(dataItem => Object.assign({ selected: false }, dataItem)).slice(this.state.skip, this.state.skip + this.state.take),
+            items: APartment_units.map(dataItem => Object.assign({ selected: false }, dataItem)).slice(this.state.skip, this.state.skip + this.state.take),
             all_accounts:account,
             apartment_owner:manager,
             contractor:contractor,
-            total: APartments.length,
+            total: APartment_units.length,
             pageSize: this.state.take,
             pageable: {
                 buttonCount: 0,
@@ -233,8 +241,8 @@ class Apartment extends React.Component {
             from:this.state.unit_owner_address, 
             gas:3000000
           });
-        const APartments_owner_after_vacate_submit =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
-        const APartments_after_vacate_submit =  await apartment_Abi_address.methods.myUnits(APartments_owner_after_vacate_submit).call();
+        // const APartments_owner_after_vacate_submit =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
+        const APartments_after_vacate_submit =  await apartment_Abi_address.methods.getApartmentUnits(this.props.match.params.id).call();
         this.setState({
             items: APartments_after_vacate_submit.map(dataItem => Object.assign({ selected: false }, dataItem)).slice(this.state.skip, this.state.skip + this.state.take)
         })

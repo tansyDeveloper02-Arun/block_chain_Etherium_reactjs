@@ -10,6 +10,8 @@ import { formatDate } from '@telerik/kendo-intl';
 // import '../../css/inventerGrid.css'
 import '../../../css/inventerGrid.css'
 import { Link } from "react-router-dom";
+import web3 from '../../../web3';
+import apartment_Abi_address from '../../../lottery';
 
 products.forEach(o => {
     o.orderDate = formatDate(new Date(o.orderDate), { date: "long" });
@@ -70,7 +72,7 @@ class Apartment extends React.Component {
 
     createState(skip, take) {
         return {
-            items: products.slice(skip, skip + take),
+            items:[],
             total: products.length,
             skip: skip,
             pageSize: take,
@@ -82,6 +84,32 @@ class Apartment extends React.Component {
                 previousNext: true
             }
         };
+    }
+
+    async componentDidMount(){
+        const account = await web3.eth.personal.getAccounts();
+        const contractor =  apartment_Abi_address.options.address;
+        const manager =  await apartment_Abi_address.methods.contractOwnerAddress().call()
+        
+        var APartment_units =  await apartment_Abi_address.methods.getApartmentUnits(0).call();
+        var rented_units =  await apartment_Abi_address.methods.myRentedUnits(APartment_units[0]["current_tenent_address"]).call();
+
+        this.setState({
+            items: rented_units.map(dataItem => Object.assign({ selected: false }, dataItem)).slice(this.state.skip, this.state.skip + this.state.take),
+            all_accounts:account,
+            apartment_owner:manager,
+            contractor:contractor,
+            total: APartment_units.length,
+            pageSize: this.state.take,
+            pageable: {
+                buttonCount: 0,
+                info: true,
+                type: 'numeric',
+                pageSizes: true,
+                previousNext: true
+            },
+            // apartmentName:get_APartments[this.props.match.params.id]['apartment_name']
+        })
     }
 
     selectionChange = (event) => {

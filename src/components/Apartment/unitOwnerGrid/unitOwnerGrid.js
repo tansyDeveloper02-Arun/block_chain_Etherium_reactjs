@@ -94,14 +94,21 @@ class Apartment extends React.Component {
         const manager =  await apartment_Abi_address.methods.contractOwnerAddress().call()
         const get_APartments =  await apartment_Abi_address.methods.getApartments().call();
         
-        const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.location.search.slice(4)).call();
-        const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
+        // const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.location.search.slice(4)).call();
+        const APartments =  await apartment_Abi_address.methods.getApartmentUnits(this.props.location.search.slice(4)).call();
         this.state.all_accounts= account;
         this.state.apartment_owner=manager;
         this.state.contractor=contractor;
-        
+        var ApartmentName = [get_APartments[0]['apartment_name']]
+        if(this.props.location.search !== ""){
+            ApartmentName =get_APartments[this.props.location.search.slice(4)]['apartment_name']
+        }
+        var city = get_APartments[0]["street"]
+        if(this.props.location.search !== ""){
+            city =get_APartments[this.props.location.search.slice(4)]["street"]
+        }
         this.setState({
-            items: APartments.map(dataItem => Object.assign({ selected: false,city:get_APartments[this.props.location.search.slice(4)]["street"] }, dataItem)).slice(this.state.skip, this.state.skip + this.state.take),
+            items: APartments.map(dataItem => Object.assign({ selected: false,apartment_name:ApartmentName,city:city }, dataItem)).slice(this.state.skip, this.state.skip + this.state.take),
             all_accounts:account,
             apartment_owner:manager,
             contractor:contractor,
@@ -114,7 +121,7 @@ class Apartment extends React.Component {
                 pageSizes: true,
                 previousNext: true
             },
-            buildingName:get_APartments[this.props.location.search.slice(4)]['apartment_name']
+            buildingName:ApartmentName
         })
     }
     selectionChange = (event) => {
@@ -423,7 +430,7 @@ class Apartment extends React.Component {
                                         this.state.items.findIndex(dataItem => dataItem.selected === false) === -1
                                     }
                                 />
-                                {this.state.all_units === false ? <Column field="product" title="Apartment Name" /> :null}
+                                {this.state.all_units === false ? <Column field="apartment_name" title="Apartment Name" /> :null}
                                 <Column field="unit_number" title="Unit #" />
                                 <Column field="city" title="City" />
                                 
