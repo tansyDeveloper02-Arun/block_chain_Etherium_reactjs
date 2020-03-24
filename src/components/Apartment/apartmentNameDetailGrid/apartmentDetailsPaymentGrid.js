@@ -62,12 +62,13 @@ class Apartment extends React.Component {
     });
     async componentDidMount(){
         const get_APartments =  await apartment_Abi_address.methods.getApartments().call();
-        const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
-        const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
-
+        // const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
+        // const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
+        const get_Apartment_units =  await apartment_Abi_address.methods.getApartmentUnits(this.props.match.params.id).call();
+        
         this.setState({
             apartmentName:get_APartments[this.props.match.params.id]['apartment_name'],
-            unitName:APartments[this.props.match.params.unit_id]["unit_number"]
+            unitName:get_Apartment_units[this.props.match.params.unit_id]["unit_number"]
         })
       }
 
@@ -168,7 +169,6 @@ class Apartment extends React.Component {
                 { field: "Amount", operator: "contains", value: event.target.value },
                 { field: "Payment_status", operator: "contains", value: event.target.value },
                 ]
-                
             })
         });
     };
@@ -182,9 +182,7 @@ class Apartment extends React.Component {
             this.setState({
                 search: true
             })
-
         }
-
     }
     onClickEditButton = () => {
         this.setState({
@@ -209,8 +207,9 @@ class Apartment extends React.Component {
                             ref={exporter => this._export = exporter}
                         >
                             <div
-                                    style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", float: "left", marginBottom:"10px", fontSize: "20px", fontWeight: "500", color: "rgba (0,0,0,0.87)" }}
-        ><span className="Grid-header" style={{color:"#4285F4 !important"}}>{this.state.apartmentName}- Apartment, Unit - {this.state.unitName}</span> 
+                                style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", float: "left", marginBottom:"10px", fontSize: "20px", fontWeight: "500", color: "rgba (0,0,0,0.87)" }}
+                                >
+                                    <span className="Grid-header" style={{color:"#4285F4 !important"}}>{this.state.apartmentName}- Apartment, Unit - {this.state.unitName}</span> 
                                 {this.state.deleteButton === true ? 
                                     <label style={{ fontFamily: "Roboto ,Helvetica, Arial, sans-serif ", marginLeft: "10px", color: "rgba (0,0,0,0.87)" }}>{this.state.count} row(s) selected</label>
                                     : null}

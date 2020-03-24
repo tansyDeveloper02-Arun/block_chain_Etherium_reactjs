@@ -1,19 +1,13 @@
 import React from "react";
 import '../../../css/header.css';
 import '../../../css/Productdetail.css';
-// import { Input } from '@progress/kendo-react-inputs';
-// import { DropDownList } from '@progress/kendo-react-dropdowns';
-// import { Ripple } from '@progress/kendo-react-ripple';
 import { Button } from '@progress/kendo-react-buttons';
-// import { Upload } from '@progress/kendo-react-upload';
-// import { ImageUpload } from "../../imageUpload";
 import products from './apartments.json';
 import { Link } from "react-router-dom";
 import { Input } from '@progress/kendo-react-inputs';
-// import { DropDownList } from '@progress/kendo-react-dropdowns';
-// import { DatePicker } from '@progress/kendo-react-dateinputs';
 import apartment_Abi_address from '../../../lottery';
 // import web3 from '../../../web3';
+
 class ProductDetail extends React.Component {
   constructor(props) {
     super(props);
@@ -29,7 +23,6 @@ class ProductDetail extends React.Component {
               this.state.unitName = products[i]['UnitsInStock']
               this.state.Amount = products[i]['Amount']
               this.state.Month = products[i]['Month']
-              
           }
       }
   }
@@ -54,15 +47,16 @@ class ProductDetail extends React.Component {
   async componentDidMount(){
 
       const get_APartments =  await apartment_Abi_address.methods.getApartments().call();
-      const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
-      const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
+      // const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
+      // const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
+      const get_Apartment_units =  await apartment_Abi_address.methods.getApartmentUnits(this.props.match.params.id).call();
       
       this.setState({
         apartmentName:get_APartments[this.props.match.params.id]['apartment_name'],
-        unitName:APartments[this.props.match.params.unit_id]["unit_number"],
-        unit_data:APartments[this.props.match.params.unit_id],
-        monthly_rent:APartments[this.props.match.params.unit_id]["monthly_rent"],
-        current_tenent_address:APartments[this.props.match.params.unit_id]["current_tenent_address"]
+        unitName:get_Apartment_units[this.props.match.params.unit_id]["unit_number"],
+        unit_data:get_Apartment_units[this.props.match.params.unit_id],
+        monthly_rent:get_Apartment_units[this.props.match.params.unit_id]["monthly_rent"],
+        current_tenent_address:get_Apartment_units[this.props.match.params.unit_id]["current_tenent_address"]
       })
      
   }
@@ -257,7 +251,7 @@ class ProductDetail extends React.Component {
             >
               <div style={{ display: "flex" }}>
                 <div className="success_message_circle">
-                  <i className="fa fa-check-square-o check_squre_icon" aria-hidden="true"></i>
+                <span class="k-icon k-i-check k-i-checkmark check_squre_icon"></span>
                 </div>
                 <div className="success_message_content_div">
                   <h6 className="success_message_h6">SUCCESS!</h6>
