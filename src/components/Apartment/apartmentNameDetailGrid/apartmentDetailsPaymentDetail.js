@@ -179,8 +179,6 @@ class ProductDetail extends React.Component {
                         />: null}
                       </div>
                     </div>
-                    
-                    
                   <div className="row">
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
@@ -223,13 +221,10 @@ class ProductDetail extends React.Component {
                       </div>
                     </div>
                   </fieldset>
-                  
                 </form>
               </div>
             </div>
-
           </div>
-
           {
             this.state.success && (<div className="k-loading-mask">
               <span className="k-loading-text">Loading</span>
@@ -237,7 +232,6 @@ class ProductDetail extends React.Component {
               <div className="k-loading-color"></div>
             </div>)
           }
-
           {this.state.success && (
             <div
               className="alert alert-success"
