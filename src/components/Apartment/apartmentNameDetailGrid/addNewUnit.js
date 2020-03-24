@@ -76,8 +76,9 @@ class NewUnit extends React.Component {
     address_length.map(item => {if(item.address === APartments_owner){
       apartment_owner_address_length = item
       
-    }})
-
+    }
+    return apartment_owner_address_length
+  })
     this.setState({
       apartment_owner_address_data:address,
       apartment_owner_address_length:apartment_owner_address_length.address
@@ -379,7 +380,6 @@ class NewUnit extends React.Component {
     // const contractor =  await apartment_Abi_address.options.address;
 
     if(this.props.location.pathname === "/apartment/new-unit/add/"+this.props.match.params.id){
-
       await apartment_Abi_address.methods.createUnit(this.props.match.params.id,this.state.unit_number,  this.state.Floor,   this.state.Direction, this.state.monthly_rent, this.state.Sqft, this.state.bed_rooms, this.state.bath_rooms, this.state.closed_for_maintanence, this.state.already_rented, this.state.tenant_address)
       .send({
           from:this.state.apartment_owner_address_length, 
@@ -408,7 +408,6 @@ class NewUnit extends React.Component {
     this.setState({ success: true });
     setTimeout(() => { 
       this.setState({ success: false }); 
-      console.log(this.props.location.pathname)
       if(this.props.location.pathname === "/apartment/assign-unit/"+this.props.match.params.id+"/"+ this.props.match.params.unit_id){this.props.history.push("/apartment/detail/grid/"+this.props.match.params.id)}
       if(this.props.location.pathname === "/apartment/new-unit/add/"+this.props.match.params.id){this.props.history.push("/apartment/detail/grid/"+this.props.match.params.id)}
       if(this.props.location.pathname === "/apartment/assign-tenant/"+ this.props.match.params.id+"/"+ this.props.match.params.unit_id){this.props.history.push("/apartment/detail/grid/"+this.props.match.params.id)}
