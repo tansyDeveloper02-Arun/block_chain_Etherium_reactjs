@@ -127,6 +127,7 @@ class Apartment extends React.Component {
     selectionChange = (event) => {
         event.dataItem.selected = !event.dataItem.selected;
         this.forceUpdate();
+        
         const countingData = []
         for (let i = 0; i <= this.state.items.length; i++) {
             if (this.state.items[i] !== undefined) {
@@ -136,21 +137,31 @@ class Apartment extends React.Component {
             }
         }
         var counting = countingData.length;
+        // console.log(countingData[0]['unit_id'])
+       
+        var id = undefined;
+        if(countingData[0] !== undefined){
+            id = countingData[0]['unit_id']
+        }
+        console.log(id)
         if (counting !== 0) {
             this.setState({
                 deleteButton: true,
-                count: countingData.length
+                count: countingData.length,
+                id:id
             })
         } else {
             this.setState({
                 deleteButton: false,
-                count: 0
+                count: 0,
+                id:undefined
             })
         }
     }
 
     rowClick = (event) => {
         let last = this.lastSelectedIndex;
+        
         const current = this.state.data.findIndex(dataItem => dataItem === event.dataItem);
 
         if (!event.nativeEvent.shiftKey) {
@@ -223,7 +234,8 @@ class Apartment extends React.Component {
             this.props.history.push("/apartment/new-unit/add")
         }
         if (event === "maintenance_close") {
-            await apartment_Abi_address.methods.unitMaintainanceClose(this.state.count).call()
+            console.log(this.state.id)
+            await apartment_Abi_address.methods.unitMaintainanceClose(this.state.id).call()
         }
         if (event === "maintenance_open") {
             await apartment_Abi_address.methods.unitMaintainanceOpen(this.state.count).call()

@@ -6,7 +6,7 @@ import products from './apartments.json';
 import { Link } from "react-router-dom";
 import { Input } from '@progress/kendo-react-inputs';
 import apartment_Abi_address from '../../../lottery';
-// import web3 from '../../../web3';
+import web3 from '../../../web3';
 
 class ProductDetail extends React.Component {
   constructor(props) {
@@ -169,18 +169,19 @@ class ProductDetail extends React.Component {
                       />}
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                      {this.state.lease === true ? <Input
+                      {/* {this.state.lease === true ? <Input
                           className="input_field"
                           name="advance_amount"
                           style={{ width: "100%" }}
                           label="Advance Amount"
                           value={this.state.advance_amount}
                           onChange={this.onChange}
-                        />: null}
+                        />: null} */}
                       </div>
                     </div>
                   <div className="row">
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
+                      
                       <Input
                         className="input_field"
                         name="monthly_rent"
@@ -191,14 +192,29 @@ class ProductDetail extends React.Component {
                       />
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
-                      <Input
+                      {this.state.lease === true ? <Input
+                          className="input_field"
+                          name="advance_amount"
+                          style={{ width: "100%" }}
+                          label="Advance Amount"
+                          value={this.state.advance_amount}
+                          onChange={this.onChange}
+                        />: <Input
                         className="input_field"
                         name="paid_amount"
                         style={{ width: "100%" }}
                         label="Paid Amount"
                         value={this.state.paid_amount}
                         onChange={this.onChange}
-                      />
+                      />}
+                      {/* <Input
+                        className="input_field"
+                        name="paid_amount"
+                        style={{ width: "100%" }}
+                        label="Paid Amount"
+                        value={this.state.paid_amount}
+                        onChange={this.onChange}
+                      /> */}
                       </div>
                       <div className="col-sm-12 col-xs-12 col-md-4 col-lg-4">
                       <Input
@@ -265,15 +281,16 @@ class ProductDetail extends React.Component {
 
       await apartment_Abi_address.methods.clickToRent(this.state.unit_data.unit_id,this.state.unit_data.unit_owner,this.state.advance_amount,this.state.start_date,this.state.end_date,this.state.payment_date).send({
         from:this.state.current_tenent_address, 
-        gas:3000000
-        // to:contractor  
+        gas:3000000,
+        value: web3.utils.toWei(this.state.advance_amount, 'ether') 
       });
       
     }
     if(this.props.location.pathname === "/apartment/detail/grid/details/Payment/" + this.props.match.params.id + "/" + this.props.match.params.unit_id){
       await apartment_Abi_address.methods.payRent(this.props.match.params.id, this.props.match.params.unit_id,this.state.Year,this.state.Month,this.state.monthly_rent,this.state.paid_amount,this.state.payment_date).send({
         from:this.state.current_tenent_address, 
-        gas:3000000
+        gas:3000000,
+        value: web3.utils.toWei(this.state.paid_amount, 'ether')
       });
     }
     this.setState({ success: true });

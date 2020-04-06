@@ -102,11 +102,8 @@ contract  Apartments{
                         uint128 _bed_rooms,
                         uint128 _bath_rooms,
                         bool _maintainance,
-                        bool _rented,
-                        address _current_tenent_address) public{
-            
-            require(checkApartmentOwnership(msg.sender,_apartment_id),"The person trying to create unit is not the owner of building");
-
+                        bool _rented) public{
+        require(apartment_buildings[_apartment_id].apartment_owner == msg.sender,"The person trying to create unit is not the owner of building");
             Units.push(unit(unit_id_generator++,
                         _apartment_id,
                         _unit_number,
@@ -119,19 +116,19 @@ contract  Apartments{
                         _bath_rooms,
                         _maintainance,
                         _rented,
-                        _current_tenent_address));
+                        address(0)));
 
             personal[msg.sender][2].push(unit_id_generator);
     }
 
     function AssignUnitOwner(uint256 _apartment_id, uint256 _unit_id,address payable _new_owner) public{
-        require(checkApartmentOwnership(msg.sender,_apartment_id),"The person trying to create unit is not the owner of building");
-        require(indexOfUnit(_unit_id)>=0,"unit not found");
-        Units[uint256(indexOfUnit(_unit_id))].unit_owner = _new_owner;
+        require(apartment_buildings[_apartment_id].apartment_owner == msg.sender,"The person trying to assign unit owner is not the owner of building");
+        require(_unit_id < unit_id_generator,"unit not found");
+        Units[_unit_id].unit_owner = _new_owner;
         distinctOwnership(_unit_id, 2, _new_owner);
     }
 
-    function AssignTenant(uint256 _apartment_id,
+function AssignTenant(uint256 _apartment_id,
                     uint256 _unit_id,
                     address _tenant_address,
                     address _unit_owner,
@@ -140,11 +137,10 @@ contract  Apartments{
                     string memory _end_date,
                     string memory _contract_timestamp) public{
         require(Units[_unit_id].unit_owner == msg.sender,"The person trying to assign tenant is not the owner of building");
-        require(indexOfUnit(_unit_id)>=0,"unit not found");
-        require(Units[uint256(indexOfUnit(_unit_id))].rented == false,"The selected unit is already rented");
-        Units[uint256(indexOfUnit(_unit_id))].current_tenent_address = _tenant_address;
-        Units[uint256(indexOfUnit(_unit_id))].rented = true;
-        distinctOwnership(_unit_id, 2, _tenant_address);
+        require(_unit_id < unit_id_generator,"unit not found");
+        require(Units[_unit_id].rented == false,"The selected unit is already rented");
+        Units[_unit_id].current_tenent_address = _tenant_address;
+        Units[_unit_id].rented = true;
         unit_contracts.push(unit_contract(_unit_id,
                                         contract_id_generator++,
                                         _tenant_address,
@@ -158,11 +154,10 @@ contract  Apartments{
 
     function vacateTenant(uint256 _apartment_id,uint256 _unit_id) public{
         require(Units[_unit_id].unit_owner == msg.sender,"The person trying to vacate tenant is not Unit Owner");
-        require(indexOfUnit(_unit_id)>=0,"unit not found");
-        require(Units[uint256(indexOfUnit(_unit_id))].rented, "The unit you are trying to vacate is already vacant");
-        require(Units[uint256(indexOfUnit(_unit_id))].apartment_id == _apartment_id, "unit doesnot belong to the said apartment");
-        Units[uint256(indexOfUnit(_unit_id))].rented = false;
-        Units[uint256(indexOfUnit(_unit_id))].current_tenent_address = address(0);
+        require(_unit_id < unit_id_generator,"unit not found");
+        require(Units[_unit_id].apartment_id == _apartment_id, "unit doesnot belong to the said apartment");
+        Units[_unit_id].rented = false;
+        Units[_unit_id].current_tenent_address = address(0);
     }
 
     function payRent(uint256 _apartment_id, uint256 _unit_id,
@@ -171,8 +166,8 @@ contract  Apartments{
                         uint256 _total_rent,
                         uint256 _paid_ammount,
                         string memory _payment_timestamp) public payable{  //requires metadata {from: account, value: value}
-        require(indexOfUnit(_unit_id)>=0,"unit not found");
-        require(Units[uint256(indexOfUnit(_unit_id))].current_tenent_address == msg.sender,"The person paying rent is not tenent");
+        require(_unit_id < unit_id_generator,"unit not found");
+        require(Units[_unit_id].current_tenent_address == msg.sender,"The person paying rent is not tenent");
         require(getContract(_unit_id,msg.sender)>=0,"Contract not found");
         require(msg.sender.balance >= msg.value,"Insufficient funds");
         Units[_unit_id].unit_owner.transfer(msg.value);
@@ -187,19 +182,20 @@ contract  Apartments{
     }
 
     function unitMaintainanceClose(uint256 _unit_id) public{
-        require(indexOfUnit(_unit_id)>=0,"unit not found");
+        require(_unit_id < unit_id_generator,"unit not found");
         require(Units[_unit_id].unit_owner == msg.sender,"The person trying to vacate tenant is not Unit Owner");
-        Units[uint256(indexOfUnit(_unit_id))].maintainance = true;
+        Units[_unit_id].maintainance = true;
     }
 
     function unitMaintainanceOpen(uint256 _unit_id) public{
-        require(indexOfUnit(_unit_id)>=0,"unit not found");
+        require(_unit_id < unit_id_generator,"unit not found");
         require(Units[_unit_id].unit_owner == msg.sender,"The person trying to vacate tenant is not Unit Owner");
-        Units[uint256(indexOfUnit(_unit_id))].maintainance = false;
-        Units[uint256(indexOfUnit(_unit_id))].rented = false;
+        Units[_unit_id].maintainance = false;
+        Units[_unit_id].rented = false;
     }
 
     struct apartment_bundle{
+        uint256 apartment_id;
         string apartment_name;
         string door_number;
         string street;
@@ -211,8 +207,9 @@ contract  Apartments{
 
     function getApartments() public view returns(apartment_bundle[] memory){
         apartment_bundle[] memory temp = new apartment_bundle[](apartment_buildings.length);
-        for(uint128 i; i < apartment_buildings.length;i++){
-            temp[i] = apartment_bundle(apartment_buildings[i].apartment_name,
+        for(uint128 i=0; i < apartment_buildings.length;i++){
+            temp[i] = apartment_bundle(apartment_buildings[i].apartment_id,
+                                        apartment_buildings[i].apartment_name,
                                         apartment_buildings[i].door_number,
                                         apartment_buildings[i].street,
                                         apartment_buildings[i].locality,
@@ -224,26 +221,34 @@ contract  Apartments{
     }
 
     function getApartmentUnits(uint256 _apartment_id)public view returns(unit[] memory){
-        uint256 counter;
-        for(uint128 i; i<Units.length; i++){
+        uint256 counter=0;
+        for(uint128 i=0; i<Units.length; i++){
             if(Units[i].apartment_id == _apartment_id){
                 counter++;
             }
         }
         unit[] memory temp = new unit[](counter);
-        for(uint128 i; i<Units.length; i++){
+        uint temp_index=0;
+        for(uint128 i=0; i<Units.length; i++){
             if(Units[i].apartment_id == _apartment_id){
-                temp[i] = Units[i];
+                temp[temp_index] = Units[i];
+                temp_index++;
             }
         }
         return temp;
     }
+    
+    function getApartmentUnit(uint256 _apartment_id, uint256 _uint_id)public view returns(unit memory){
+        return Units[_uint_id];
+    }
 
     function myApartments(address _owner)public view returns(Apartment[] memory){
         Apartment[] memory temp1 = new Apartment[](personal[_owner][1].length);
-        for(uint128 i; i < personal[_owner][1].length ; i++){
-            if(apartment_buildings[i].apartment_owner == _owner){
-                temp1[i] = apartment_buildings[i];
+        uint256 temp1counter=0;
+        for(uint128 i=0; i < personal[_owner][1].length ; i++){
+            if(apartment_buildings[i].apartment_owner==_owner){
+                temp1[temp1counter] = apartment_buildings[i];
+                temp1counter++;
             }
         }
         return temp1;
@@ -251,9 +256,11 @@ contract  Apartments{
 
     function myUnits(address payable _owner)public view returns(unit[] memory){
         unit[] memory temp2 = new unit[](personal[_owner][2].length);
+        uint256 temp2counter=0;
         for(uint256 i; i < personal[_owner][2].length ; i++){
-            if(Units[i].unit_owner == _owner){
-                temp2[i] = Units[i];
+            if(Units[i].unit_owner==_owner){
+                temp2[temp2counter] = Units[i];
+                temp2counter++;
             }
         }
         return temp2;
@@ -263,10 +270,18 @@ contract  Apartments{
         require(getCurrentContract(_unit_id) >= 0,"contract not found");
         require(Units[_unit_id].unit_owner == msg.sender);
         uint256 contract_id = uint256(getCurrentContract(_unit_id));
-        rent_payment[] memory temp3 = new rent_payment[](personal[msg.sender][4].length);
-        for(uint128 i; i<rents.length; i++){
+        uint128 counter=0;
+        for(uint128 i=0; i<rents.length; i++){
             if(rents[i].contract_id == contract_id){
-                temp3[i] = rents[i];
+                counter++;
+            }
+        }
+        uint temp3counter=0;
+        rent_payment[] memory temp3 = new rent_payment[](counter);
+        for(uint128 i=0; i<rents.length; i++){
+            if(rents[i].contract_id == contract_id){
+                temp3[temp3counter] = rents[i];
+                temp3counter++;
             }
         }
         return temp3;
@@ -274,9 +289,11 @@ contract  Apartments{
 
     function myRentedUnits(address _tenant)public view returns(unit[] memory){
         unit[] memory temp4 = new unit[](personal[_tenant][4].length);
-        for(uint128 i; i < personal[_tenant][4].length ; i++){
+        uint256 temp4counter=0;
+        for(uint128 i=0; i < Units.length ; i++){
             if(Units[i].current_tenent_address == _tenant){
-                temp4[i] = Units[i];
+                temp4[temp4counter] = Units[i];
+                temp4counter++;
             }
         }
         return temp4;
@@ -288,39 +305,41 @@ contract  Apartments{
                     string memory _start_date,
                     string memory _end_date,
                     string memory _contract_timestamp) public payable{
-        require(indexOfUnit(_unit_id)>=0,"unit not found");
-        Units[uint256(indexOfUnit(_unit_id))].current_tenent_address = msg.sender;
-        Units[uint256(indexOfUnit(_unit_id))].rented = true;
-        distinctOwnership(_unit_id, 2, msg.sender);
+        require(_unit_id < unit_id_generator,"unit not found");
+        Units[_unit_id].current_tenent_address = msg.sender;
+        Units[_unit_id].rented = true;
         Units[_unit_id].unit_owner.transfer(msg.value);
         unit_contracts.push(unit_contract(_unit_id,
-                                        contract_id_generator++,
+                                        contract_id_generator,
                                         msg.sender,
                                         _advance_payment,
                                         _unit_owner,
                                         _start_date,
                                         _end_date,
                                         _contract_timestamp));
-        distinctOwnership(contract_id_generator, 3, msg.sender);
+        uint year =0;
+        rents.push(rent_payment(payment_id_generator,
+                        contract_id_generator,
+                        year,
+                        _start_date,
+                        _advance_payment,
+                        _advance_payment,
+                        _contract_timestamp));
+        distinctOwnership(contract_id_generator++, 3, msg.sender);
+        distinctOwnership(payment_id_generator++, 4, msg.sender);
     }
 
-    function returnAdvance(uint256 _unit_id) public{
+    function returnAdvance(uint256 _unit_id) public payable{
         require(Units[_unit_id].unit_owner == msg.sender,"The person trying to vacate tenant is not Unit Owner");
-        require(indexOfUnit(_unit_id)>=0,"unit not found");
-        require(Units[uint256(indexOfUnit(_unit_id))].rented, "The unit you are trying to vacate is already vacant");
-        Units[uint256(indexOfUnit(_unit_id))].rented = false;
-        Units[uint256(indexOfUnit(_unit_id))].current_tenent_address = address(0);
+        require(_unit_id < unit_id_generator,"unit not found");
+        Units[_unit_id].rented = false;
+        address(uint160(address(Units[_unit_id].current_tenent_address))).transfer(msg.value);
+        Units[_unit_id].current_tenent_address = address(0);
     }
 
-    //=========================================
-    //===========helper methods================
-    //=========================================
-
-    function checkApartmentOwnership(address _address,uint256 _apartment_id) public view returns(bool){
-        if(apartment_buildings[_apartment_id].apartment_owner == _address){
-                return true;
-            }
-    }
+//=========================================
+//===========helper methods================
+//=========================================
 
     function getContract(uint256 _unit_id, address _tenant_address)public view returns(int256){
         for(uint128 i; i<unit_contracts.length; i++){
@@ -340,10 +359,6 @@ contract  Apartments{
         return 0;
     }
 
-    function multiply(uint x, uint y) internal pure returns (uint z) {
-        require(y == 0 || (z = x * y) / y == x);
-    }
-
     function getApartmentOwner(uint256 _apartment_id) public view returns(address payable){
         for(uint128 i; i < apartment_buildings.length ;i++){
             if(apartment_buildings[i].apartment_id == _apartment_id){
@@ -352,23 +367,9 @@ contract  Apartments{
         }
         return address(0);
     }
-
-    function checkUnitOwnership(address _address,uint256 _unit_id) public view returns(bool){
-        for(uint128 i; i < personal[_address][2].length ;i++){
-            if(personal[_address][1][i] == _unit_id){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function indexOfUnit(uint256 _unit_id) public view returns(int256){
-        for(uint128 i; i < Units.length ;i++){
-            if(Units[i].unit_id == _unit_id){
-                return i;
-            }
-        }
-        return -1;
+    
+    function distinctOwnershiplength(uint256 _type, address _person) public view returns(uint){
+        return personal[_person][_type].length;
     }
 
     function distinctOwnership(uint256 _id, uint256 _type, address _person) public{
@@ -380,3 +381,5 @@ contract  Apartments{
         personal[_person][_type].push(_id);
     }
  }
+
+ 

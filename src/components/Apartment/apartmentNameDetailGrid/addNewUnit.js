@@ -380,7 +380,10 @@ class NewUnit extends React.Component {
     // const contractor =  await apartment_Abi_address.options.address;
 
     if(this.props.location.pathname === "/apartment/new-unit/add/"+this.props.match.params.id){
-      await apartment_Abi_address.methods.createUnit(this.props.match.params.id,this.state.unit_number,  this.state.Floor,   this.state.Direction, this.state.monthly_rent, this.state.Sqft, this.state.bed_rooms, this.state.bath_rooms, this.state.closed_for_maintanence, this.state.already_rented, this.state.tenant_address)
+      console.log("this.state.apartment_owner_address_length")
+      console.log(this.state.apartment_owner_address_length)
+      console.log("this.state.apartment_owner_address_length")
+      await apartment_Abi_address.methods.createUnit(this.props.match.params.id,this.state.unit_number,  this.state.Floor,   this.state.Direction, this.state.monthly_rent, this.state.Sqft, this.state.bed_rooms, this.state.bath_rooms, this.state.closed_for_maintanence, this.state.already_rented)
       .send({
           from:this.state.apartment_owner_address_length, 
           gas:3000000

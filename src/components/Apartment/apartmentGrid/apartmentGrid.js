@@ -72,18 +72,19 @@ class App extends React.Component {
     async componentDidMount(){
 
         const account = await web3.eth.personal.getAccounts();
-        const contractor =  apartment_Abi_address.options.address;
-        const manager =  await apartment_Abi_address.methods.contractOwnerAddress().call()
         
+        const contractor =  apartment_Abi_address.options.address;
+        
+        const manager =  await apartment_Abi_address.methods.contractOwnerAddress().call()
         var APartments =  await apartment_Abi_address.methods.getApartments().call();
-
+        
         if(this.props.location.pathname !== "/all-apartment/grid"){
             
             if(APartments.length !== 0){
                 APartments =  await apartment_Abi_address.methods.myApartments(APartments[0]['apartment_owner']).call();
-              
             }
         }
+        
         // const my_apartments =  await apartment_Abi_address.methods.myApartments().call()
         this.state.all_accounts= account;
         this.state.apartment_owner=manager;

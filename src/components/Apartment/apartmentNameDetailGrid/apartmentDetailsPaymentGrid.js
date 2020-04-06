@@ -62,10 +62,7 @@ class Apartment extends React.Component {
     });
     async componentDidMount(){
         const get_APartments =  await apartment_Abi_address.methods.getApartments().call();
-        // const APartments_owner =  await apartment_Abi_address.methods.getApartmentOwner(this.props.match.params.id).call();
-        // const APartments =  await apartment_Abi_address.methods.myUnits(APartments_owner).call();
         const get_Apartment_units =  await apartment_Abi_address.methods.getApartmentUnits(this.props.match.params.id).call();
-        
         this.setState({
             apartmentName:get_APartments[this.props.match.params.id]['apartment_name'],
             unitName:get_Apartment_units[this.props.match.params.unit_id]["unit_number"]
